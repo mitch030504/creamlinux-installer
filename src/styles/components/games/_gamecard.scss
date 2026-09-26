@@ -46,6 +46,12 @@
       0 0 24px rgba(255, 200, 150, 0.25);
   }
 
+  &:has(.status-badge.lepton) {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.3),
+      0 0 24px rgba(110, 198, 184, 0.25);
+  }
+
   &:has(.status-badge.cream) {
     box-shadow:
       0 6px 18px rgba(0, 0, 0, 0.3),
@@ -72,6 +78,10 @@
 
   .status-badge.proton {
     box-shadow: 0 0 10px rgba(255, 200, 150, 0.5);
+  }
+
+  .status-badge.lepton {
+    box-shadow: 0 0 10px rgba(110, 198, 184, 0.5);
   }
 
   .status-badge.cream {
@@ -139,6 +149,11 @@
   color: var(--text-heavy);
 }
 
+.status-badge.lepton {
+  background-color: var(--lepton);
+  color: var(--text-heavy);
+}
+
 .status-badge.cream {
   background-color: var(--cream);
   color: var(--text-heavy);
@@ -179,6 +194,23 @@
   gap: 0.5rem;
   position: relative;
   z-index: 3;
+}
+
+// Steam Frame / Lepton detection message
+.lepton-detected-message {
+  display: flex;
+  align-items: center;
+  background-color: rgba(140, 200, 147, 0.16);
+  border: 1px solid rgba(140, 200, 147, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.8rem;
+  width: 100%;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+
+  span {
+    flex: 1;
+  }
 }
 
 // API not found message

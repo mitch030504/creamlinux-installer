@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useAppContext } from '@/contexts/useAppContext'
+import { getGameRuntime } from '@/types'
 
 /**
  * Main application logic hook
@@ -19,11 +20,14 @@ export function useAppLogic() {
   // Filter games based on current filter and search
   const filteredGames = useCallback(() => {
     return games.filter((game) => {
-      // First filter by platform type
+      // First filter by Steam runtime type
+      const runtime = getGameRuntime(game)
+
       const platformMatch =
         filter === 'all' ||
-        (filter === 'native' && game.native) ||
-        (filter === 'proton' && !game.native)
+        (filter === 'native' && runtime === 'linux_native') ||
+        (filter === 'proton' && runtime === 'proton') ||
+        (filter === 'lepton' && runtime === 'lepton_android')
 
       // Then filter by search query
       const searchMatch =

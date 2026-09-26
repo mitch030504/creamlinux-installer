@@ -197,12 +197,25 @@ async fn scan_steam_games(
 
     info!("Games scan complete - Found {} games", games_info.len());
     info!(
-        "Native games: {}",
-        games_info.iter().filter(|g| g.native).count()
+        "Linux native games: {}",
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::LinuxNative))
+            .count()
     );
     info!(
         "Proton games: {}",
-        games_info.iter().filter(|g| !g.native).count()
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::Proton))
+            .count()
+    );
+    info!(
+        "Lepton/Android games: {}",
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::LeptonAndroid))
+            .count()
     );
     info!(
         "Games with CreamLinux: {}",
@@ -226,8 +239,11 @@ async fn scan_steam_games(
             id: game_info.id,
             title: game_info.title,
             path: game_info.path.to_string_lossy().to_string(),
+            runtime: game_info.runtime,
             native: game_info.native,
             api_files: game_info.api_files,
+            android_package: game_info.android_package,
+            lepton_context: game_info.lepton_context,
             cream_installed: game_info.cream_installed,
             smoke_installed: game_info.smoke_installed,
             installing: false,
@@ -282,6 +298,13 @@ async fn process_game_action(
             .cloned()
             .ok_or_else(|| format!("Game with ID {} not found", game_action.game_id))?
     };
+
+    if game.runtime == searcher::GameRuntime::LeptonAndroid {
+        return Err(format!(
+            "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+            game.title
+        ));
+    }
 
     let (installer_type, action) = match game_action.action.as_str() {
         "install_cream" => (InstallerType::Cream, InstallerAction::Install),
@@ -640,6 +663,13 @@ async fn resolve_platform_conflict(
             .cloned()
             .ok_or_else(|| format!("Game with ID {} not found", game_id))?
     };
+
+    if game.runtime == searcher::GameRuntime::LeptonAndroid {
+        return Err(format!(
+            "{} is a Steam Frame Lepton/Android game with no platform conflicts.",
+            game.title
+        ));
+    }
 
     let game_title = game.title.clone();
 
