@@ -83,6 +83,18 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [optInDialog, setOptInDialog] = useState(false)
   const [reportingEnabled, setReportingEnabled] = useState(false)
 
+  // Lepton inspector full-page state (for embedded mode / Steam Frame fallback)
+  const [inspectingLeptonGame, setInspectingLeptonGame] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+  const inspectLeptonGame = (game: { id: string; title: string }) => {
+    setInspectingLeptonGame(game)
+  }
+  const closeLeptonInspector = () => {
+    setInspectingLeptonGame(null)
+  }
+
   // Recent activity feed (session-only) shown on the Overview page
   const [activityFeed, setActivityFeed] = useState<ActivityItem[]>([])
   const pushActivity = (message: string, type: ActivityItem['type']) => {
@@ -580,6 +592,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       }
     },
     closeUnlockerDialog,
+
+    // Lepton inspector
+    inspectingLeptonGame,
+    inspectLeptonGame,
+    closeLeptonInspector,
   }
 
   return (

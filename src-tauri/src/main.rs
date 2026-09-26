@@ -16,6 +16,7 @@ mod epic_scanner;
 mod pe_inspector;
 mod screamapi_config;
 mod system_info;
+mod lepton;
 
 use crate::config::Config;
 use crate::unlockers::{CreamLinux, SmokeAPI, Unlocker};
@@ -283,6 +284,37 @@ fn get_game_info(game_id: String, state: State<AppState>) -> Result<Game, String
         .get(&game_id)
         .cloned()
         .ok_or_else(|| format!("Game with ID {} not found", game_id))
+}
+
+#[tauri::command]
+async fn get_lepton_info(
+    game_id: String,
+    state: State<'_, AppState>,
+) -> Result<lepton::LeptonIntrospection, String> {
+    let game = {
+        let games = state.games.lock();
+        games
+            .get(&game_id)
+            .cloned()
+            .ok_or_else(|| format!("Game with ID {} not found", game_id))?
+    };
+
+    if !game.runtime.is_lepton() {
+        return Err(format!(
+            "Game {} is not a Lepton / Android game (runtime: {:?})",
+            game_id, game.runtime
+        ));
+    }
+
+    Ok(lepton::inspect_game(&game).await)
+}
+
+#[tauri::command]
+async fn inspect_lepton_game(
+    game_id: String,
+    state: State<'_, AppState>,
+) -> Result<lepton::LeptonIntrospection, String> {
+    get_lepton_info(game_id, state).await
 }
 
 #[tauri::command]
@@ -914,6 +946,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             scan_steam_games,
             get_game_info,
+            get_lepton_info,
+            inspect_lepton_game,
             process_game_action,
             fetch_game_dlcs,
             stream_game_dlcs,

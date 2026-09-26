@@ -3,6 +3,8 @@ import { findBestGameImage } from '@/services/ImageService'
 import { Game, getGameRuntime } from '@/types'
 import { ActionButton, ActionType, Button } from '@/components/buttons'
 import { Icon } from '@/components/icons'
+import { openLeptonInspectorWindow } from '@/services/LeptonInspectorWindow'
+import { useAppContext } from '@/contexts/useAppContext'
 
 interface GameItemProps {
   game: Game
@@ -18,8 +20,10 @@ interface GameItemProps {
  * Displays game information and action buttons
  */
 const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportingEnabled }: GameItemProps) => {
+  const { inspectLeptonGame } = useAppContext()
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isInspecting, setIsInspecting] = useState(false)
 
   useEffect(() => {
     // Function to fetch the game cover/image
@@ -104,6 +108,20 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
       onRate(game.id)
     }
   }
+
+  // Lepton introspection handler
+  const handleInspect = async () => {
+    setIsInspecting(true)
+    try {
+      await openLeptonInspectorWindow(game.id, game.title)
+    } catch (err) {
+      console.warn('Failed to open dedicated inspector window, falling back to in-window view:', err)
+      inspectLeptonGame({ id: game.id, title: game.title })
+    } finally {
+      setIsInspecting(false)
+    }
+  }
+
 
   // Determine background image
   const backgroundImage =
@@ -206,7 +224,17 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
                   : undefined
               }
             >
-              <span>Steam Frame Android game detected</span>
+              <span>Steam Frame Android game</span>
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={handleInspect}
+                disabled={isInspecting}
+                className="inspect-button"
+                title="Inspect Lepton runtime"
+              >
+                {isInspecting ? 'Inspecting...' : 'Inspect'}
+              </Button>
             </div>
           )}
 

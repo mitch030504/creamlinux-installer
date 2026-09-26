@@ -2,6 +2,16 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "enables the default permissions",
-  "windows": ["main"],
-  "permissions": ["core:default", "updater:default", "process:default", "dialog:default"]
+  "windows": ["main", "lepton-inspect-*"],
+  "permissions": [
+    "core:default",
+    "updater:default",
+    "process:default",
+    "dialog:default",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-set-focus",
+    "core:window:allow-center",
+    "core:window:allow-unminimize",
+    "core:window:allow-show"
+  ]
 }

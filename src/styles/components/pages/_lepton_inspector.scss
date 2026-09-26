@@ -1,0 +1,542 @@
+@use '../../themes/index' as *;
+@use '../../abstracts/index' as *;
+
+/*
+  Lepton Inspector Page Styles
+  Dedicated Full-Page & Separate WebviewWindow Layout
+*/
+
+.lepton-inspector-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  overflow-y: auto;
+  @include custom-scrollbar;
+
+  &.child-window-mode {
+    min-height: 100vh;
+  }
+
+  &.embedded-mode {
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+// Sticky / prominent top header
+.lepton-inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: clamp(1.25rem, 2.5vh, 2rem) clamp(1.5rem, 3.5vw, 3rem);
+  border-bottom: 1px solid var(--border-soft);
+  background-color: var(--secondary-bg);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+
+  .lepton-inspector-title-area {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    min-width: 0;
+    flex: 1;
+
+    .lepton-inspector-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(44px, 5vh, 56px);
+      height: clamp(44px, 5vh, 56px);
+      border-radius: var(--radius-md);
+      background-color: rgba(110, 198, 184, 0.15);
+      border: 1px solid rgba(110, 198, 184, 0.35);
+      color: var(--lepton);
+      flex-shrink: 0;
+
+      svg {
+        width: clamp(26px, 3.2vw, 34px);
+        height: clamp(26px, 3.2vw, 34px);
+      }
+    }
+
+    .lepton-inspector-headings {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-width: 0;
+
+      .lepton-title-text {
+        margin: 0;
+        font-size: clamp(1.4rem, 2.4vw, 2rem);
+        font-weight: var(--bold);
+        color: var(--text-primary);
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .lepton-badges {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+
+        .lepton-meta-pill {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.2rem 0.65rem;
+          border-radius: var(--radius-sm);
+          font-size: clamp(0.78rem, 1vw, 0.9rem);
+          font-weight: var(--semibold);
+
+          &.appid {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-family: var(--font-family-mono, ui-monospace, monospace);
+          }
+
+          &.runtime {
+            background-color: rgba(110, 198, 184, 0.15);
+            color: var(--lepton);
+            border: 1px solid rgba(110, 198, 184, 0.35);
+          }
+        }
+      }
+    }
+  }
+
+  .lepton-inspector-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    flex-shrink: 0;
+
+    .lepton-btn-refresh,
+    .lepton-btn-close {
+      min-height: clamp(42px, 5vh, 48px);
+      padding: 0 clamp(1.2rem, 2vw, 1.75rem);
+      font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+      font-weight: var(--bold);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all var(--duration-normal) var(--easing-ease-out);
+
+      &:focus-visible {
+        outline: 2px solid var(--lepton);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 3px rgba(110, 198, 184, 0.35);
+      }
+    }
+
+    .lepton-btn-refresh {
+      background-color: rgba(110, 198, 184, 0.18);
+      border: 1px solid var(--lepton);
+      color: var(--lepton);
+
+      &:hover:not(:disabled) {
+        background-color: var(--lepton);
+        color: var(--text-heavy);
+      }
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Refresh spin animation
+.lepton-spin {
+  animation: lepton-spin-kf 1s linear infinite;
+}
+
+@keyframes lepton-spin-kf {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Main scrollable body
+.lepton-inspector-body {
+  flex: 1;
+  padding: clamp(1.5rem, 3vh, 2.75rem) clamp(1.5rem, 3.5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 2.5vh, 2.25rem);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// Status Banner
+.lepton-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  padding: clamp(1rem, 2vh, 1.5rem) clamp(1.25rem, 2vw, 1.75rem);
+  border-radius: var(--radius-md);
+
+  .lepton-banner-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    width: clamp(28px, 3.5vw, 36px);
+    height: clamp(28px, 3.5vw, 36px);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .lepton-banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    h3 {
+      margin: 0;
+      font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+      font-weight: var(--bold);
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(0.92rem, 1.2vw, 1.1rem);
+      line-height: 1.5;
+    }
+  }
+
+  &.running {
+    background-color: rgba(110, 198, 184, 0.14);
+    border: 1px solid rgba(110, 198, 184, 0.45);
+
+    .lepton-banner-icon svg,
+    h3 {
+      color: var(--lepton);
+    }
+
+    p {
+      color: var(--text-primary);
+    }
+  }
+
+  &.not-running {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    .lepton-banner-icon svg {
+      color: var(--text-secondary);
+    }
+
+    h3 {
+      color: var(--text-primary);
+    }
+
+    p {
+      color: var(--text-secondary);
+    }
+  }
+
+  &.error {
+    background-color: rgba(217, 107, 107, 0.12);
+    border: 1px solid rgba(217, 107, 107, 0.35);
+
+    .lepton-banner-icon svg,
+    h3 {
+      color: var(--danger);
+    }
+
+    p {
+      color: var(--text-primary);
+    }
+  }
+}
+
+// Vertical sections
+.lepton-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--elevated-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 2.2vh, 1.75rem);
+
+  .lepton-section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+      font-weight: var(--bold);
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// Cards grid for metadata items
+.lepton-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+
+  .lepton-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+
+    .lepton-card-label {
+      font-size: clamp(0.75rem, 0.95vw, 0.85rem);
+      font-weight: var(--bold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+
+    .lepton-card-value {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      min-width: 0;
+
+      .lepton-card-subtext {
+        font-size: clamp(0.8rem, 1vw, 0.9rem);
+        color: var(--text-soft);
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+// Inline code box with copy button
+.lepton-inline-code-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+
+  .lepton-code {
+    flex: 1;
+    min-width: 0;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.65rem;
+    font-family: var(--font-family-mono, ui-monospace, monospace);
+    font-size: clamp(0.88rem, 1.1vw, 1rem);
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: all;
+  }
+}
+
+.lepton-code {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  font-family: var(--font-family-mono, ui-monospace, monospace);
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  color: var(--text-primary);
+  user-select: all;
+  width: fit-content;
+}
+
+.lepton-dim {
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+// Copy button
+.lepton-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  padding: 0.35rem 0.75rem;
+  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  font-weight: var(--semibold);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-ease-out);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--lepton);
+    outline-offset: 1px;
+  }
+
+  &.copied {
+    background: rgba(110, 198, 184, 0.2);
+    color: var(--lepton);
+    border-color: rgba(110, 198, 184, 0.5);
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Container Filesystem Paths Stack
+.lepton-paths-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .lepton-path-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+
+    &.highlight {
+      border-color: rgba(110, 198, 184, 0.25);
+      background: rgba(110, 198, 184, 0.04);
+    }
+
+    .lepton-path-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+
+      .lepton-path-label {
+        font-size: clamp(0.8rem, 1vw, 0.9rem);
+        font-weight: var(--bold);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-primary);
+      }
+
+      .lepton-path-desc {
+        font-size: clamp(0.8rem, 1vw, 0.9rem);
+        color: var(--text-secondary);
+      }
+    }
+
+    .lepton-path-box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: clamp(0.75rem, 1.5vh, 1rem) clamp(0.85rem, 1.5vw, 1.25rem);
+
+      &.highlight {
+        border-color: rgba(110, 198, 184, 0.35);
+        background: rgba(110, 198, 184, 0.08);
+      }
+
+      .lepton-path-text {
+        flex: 1;
+        min-width: 0;
+        font-family: var(--font-family-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+        font-size: clamp(0.88rem, 1.15vw, 1.05rem);
+        line-height: 1.5;
+        white-space: normal;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+        user-select: all;
+        color: var(--text-primary);
+
+        &.highlight {
+          color: var(--lepton);
+          font-weight: var(--medium);
+        }
+      }
+
+      .lepton-path-empty {
+        font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+        color: var(--text-secondary);
+        font-style: italic;
+      }
+    }
+  }
+}
+
+// Status pills
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  font-weight: var(--bold);
+  letter-spacing: 0.03em;
+  user-select: none;
+  width: fit-content;
+
+  &.available {
+    background: rgba(110, 198, 184, 0.22);
+    color: var(--lepton);
+    border: 1px solid rgba(110, 198, 184, 0.4);
+  }
+
+  &.unavailable {
+    background: rgba(255, 100, 100, 0.2);
+    color: var(--danger);
+    border: 1px solid rgba(255, 100, 100, 0.35);
+  }
+
+  &.running {
+    background: rgba(110, 198, 184, 0.28);
+    color: var(--lepton);
+    border: 1px solid rgba(110, 198, 184, 0.5);
+    box-shadow: 0 0 10px rgba(110, 198, 184, 0.2);
+  }
+
+  &.idle {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}

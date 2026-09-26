@@ -116,6 +116,11 @@ export interface AppContextType {
   handleSelectCreamLinux: () => void
   handleSelectSmokeAPI: () => void
   closeUnlockerDialog: () => void
+
+  // Lepton inspector
+  inspectingLeptonGame: { id: string; title: string } | null
+  inspectLeptonGame: (game: { id: string; title: string }) => void
+  closeLeptonInspector: () => void
 }
 
 // Create the context with a default value
