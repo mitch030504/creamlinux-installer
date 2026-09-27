@@ -1,0 +1,16 @@
+{
+  "reference_sha256_unchanged": true,
+  "manifest_symbols_checked_against_gnu_readelf": 1096,
+  "export_names_values_sizes_checked_against_llvm_nm": 1049,
+  "function_types_checked": 1045,
+  "unsupported_export_names_checked": 4,
+  "no_shared_objects_in_poc_directory": true,
+  "host_analysis_validation": "PASS",
+  "android_ndk_found": false,
+  "proxy_built": false,
+  "mock_built": false,
+  "mock_runtime_tested": false,
+  "real_loader_built": false,
+  "real_loader_runtime_tested": false,
+  "device_commands_executed": false
+}
