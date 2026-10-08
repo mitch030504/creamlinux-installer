@@ -1,0 +1,60 @@
+name: Steam Frame ephemeral signing rehearsal (never publishes)
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Successful manual Frame validation run from this exact commit
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.16.0'
+      - name: Prepare patched checksum-pinned npm (no global installation)
+        run: |
+          npm_bin="$(python3 scripts/release/prepare-npm.py "$RUNNER_TEMP/frame-npm-${{ github.job }}")"
+          echo "$npm_bin" >> "$GITHUB_PATH"
+      - uses: dtolnay/rust-toolchain@3db9de313aa3e84732d075f6fd8938cc0d6d4b58 # resolved 1.96.0 action
+        with:
+          toolchain: '1.96.0'
+      - name: Reject untrusted or mismatched producer runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRODUCER_RUN: ${{ inputs.build_run_id }}
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess
+          run=os.environ['PRODUCER_RUN']
+          assert run.isdigit(), 'Run ID must be numeric'
+          r=json.loads(subprocess.check_output(['gh','api',f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{run}"]))
+          assert r['event']=='workflow_dispatch' and r['conclusion']=='success'
+          assert r['path']=='.github/workflows/steam-frame-release.yml'
+          assert r['head_sha']==os.environ['GITHUB_SHA'], 'Artifact producer must match this exact source commit'
+          PY
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: steam-frame-inspector-${{ inputs.build_run_id }}
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ github.token }}
+          path: tools/android-steam-proxy/build/signing-input
+      - name: Verify provenance before test signing
+        run: python3 scripts/frame_ci.py verify tools/android-steam-proxy/build/signing-input
+      - run: npm ci
+      - name: Ephemeral key, cryptographic verification, tamper rejection
+        run: python3 scripts/frame_signing.py tools/android-steam-proxy/build/signing-input tools/android-steam-proxy/build/signing-output --url https://example.invalid/steam-frame-inspector.AppImage
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: signing-rehearsal-${{ github.run_id }}
+          path: tools/android-steam-proxy/build/signing-output/
+          retention-days: 7
+          if-no-files-found: error

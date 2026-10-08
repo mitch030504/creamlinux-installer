@@ -16,6 +16,10 @@ mod epic_scanner;
 mod pe_inspector;
 mod screamapi_config;
 mod system_info;
+mod lepton;
+mod lepton_compatibility;
+mod lepton_entry;
+mod frame_release_info;
 
 use crate::config::Config;
 use crate::unlockers::{CreamLinux, SmokeAPI, Unlocker};
@@ -197,12 +201,25 @@ async fn scan_steam_games(
 
     info!("Games scan complete - Found {} games", games_info.len());
     info!(
-        "Native games: {}",
-        games_info.iter().filter(|g| g.native).count()
+        "Linux native games: {}",
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::LinuxNative))
+            .count()
     );
     info!(
         "Proton games: {}",
-        games_info.iter().filter(|g| !g.native).count()
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::Proton))
+            .count()
+    );
+    info!(
+        "Lepton/Android games: {}",
+        games_info
+            .iter()
+            .filter(|g| matches!(g.runtime, searcher::GameRuntime::LeptonAndroid))
+            .count()
     );
     info!(
         "Games with CreamLinux: {}",
@@ -226,8 +243,11 @@ async fn scan_steam_games(
             id: game_info.id,
             title: game_info.title,
             path: game_info.path.to_string_lossy().to_string(),
+            runtime: game_info.runtime,
             native: game_info.native,
             api_files: game_info.api_files,
+            android_package: game_info.android_package,
+            lepton_context: game_info.lepton_context,
             cream_installed: game_info.cream_installed,
             smoke_installed: game_info.smoke_installed,
             installing: false,
@@ -270,6 +290,49 @@ fn get_game_info(game_id: String, state: State<AppState>) -> Result<Game, String
 }
 
 #[tauri::command]
+async fn get_lepton_info(
+    game_id: String,
+    state: State<'_, AppState>,
+) -> Result<lepton::LeptonIntrospection, String> {
+    let game = {
+        let games = state.games.lock();
+        games
+            .get(&game_id)
+            .cloned()
+            .ok_or_else(|| format!("Game with ID {} not found", game_id))?
+    };
+
+    if !game.runtime.is_lepton() {
+        return Err(format!(
+            "Game {} is not a Lepton / Android game (runtime: {:?})",
+            game_id, game.runtime
+        ));
+    }
+
+    Ok(lepton::inspect_game(&game).await)
+}
+
+#[tauri::command]
+async fn analyze_lepton_compatibility(
+    game_id: String,
+    state: State<'_, AppState>,
+    app_handle: tauri::AppHandle,
+    artifacts: Option<lepton_compatibility::ArtifactOptions>,
+) -> Result<lepton_compatibility::CompatibilityResult, String> {
+    let game = get_game_info(game_id, state)?;
+    let resources = app_handle.path().resource_dir().ok();
+    Ok(lepton_compatibility::analyze(&game, resources.as_deref(), artifacts.unwrap_or_default()).await)
+}
+
+#[tauri::command]
+async fn inspect_lepton_game(
+    game_id: String,
+    state: State<'_, AppState>,
+) -> Result<lepton::LeptonIntrospection, String> {
+    get_lepton_info(game_id, state).await
+}
+
+#[tauri::command]
 async fn process_game_action(
     game_action: GameAction,
     state: State<'_, AppState>,
@@ -282,6 +345,13 @@ async fn process_game_action(
             .cloned()
             .ok_or_else(|| format!("Game with ID {} not found", game_action.game_id))?
     };
+
+    if game.runtime == searcher::GameRuntime::LeptonAndroid {
+        return Err(format!(
+            "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+            game.title
+        ));
+    }
 
     let (installer_type, action) = match game_action.action.as_str() {
         "install_cream" => (InstallerType::Cream, InstallerAction::Install),
@@ -641,6 +711,13 @@ async fn resolve_platform_conflict(
             .ok_or_else(|| format!("Game with ID {} not found", game_id))?
     };
 
+    if game.runtime == searcher::GameRuntime::LeptonAndroid {
+        return Err(format!(
+            "{} is a Steam Frame Lepton/Android game with no platform conflicts.",
+            game.title
+        ));
+    }
+
     let game_title = game.title.clone();
 
     // Emit progress
@@ -869,21 +946,74 @@ fn setup_logging() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() {
+    if cfg!(feature = "frame-inspector-only")
+        && !lepton_entry::frame_entry_allowed(&std::env::args().skip(1).collect::<Vec<_>>())
+    {
+        eprintln!("Steam Frame read-only inspector: launch with --lepton-inspector APPID or --lepton-compatibility APPID. Legacy startup is disabled in this distribution.");
+        std::process::exit(2);
+    }
+    if std::env::args().nth(1).as_deref() == Some("--lepton-release-info") {
+        if std::env::args().len() != 2 {
+            println!("{}", serde_json::json!({"error": "--lepton-release-info accepts no other arguments"}));
+            std::process::exit(2);
+        }
+        let mut context: tauri::Context<tauri::Wry> = tauri::generate_context!();
+        let report = frame_release_info::inspect(&mut context);
+        println!("{}", report);
+        std::process::exit(if report["release_permissions_valid"] == true { 0 } else { 2 });
+    }
+    let request = match lepton_entry::parse(&std::env::args().skip(1).collect::<Vec<_>>()) {
+        Ok(request) => request,
+        Err(error) => {
+            let result = lepton_compatibility::CompatibilityResult {
+                notes: vec![error], ..Default::default()
+            };
+            println!("{}", serde_json::to_string(&result).unwrap());
+            std::process::exit(2);
+        }
+    };
+    let mut context = tauri::generate_context!();
+    if request.as_ref().is_some_and(|request| request.headless) {
+        let resources = tauri::utils::platform::resource_dir(context.package_info(), &tauri::utils::Env::default()).ok();
+        let runtime = tokio::runtime::Runtime::new().expect("Cannot create compatibility runtime");
+        let request = request.unwrap();
+        // No GTK app, cache, updater or installer command is initialized.
+        let result = runtime.block_on(lepton_compatibility::analyze(&request.game, resources.as_deref(), request.artifacts));
+        println!("{}", serde_json::to_string(&result).unwrap());
+        std::process::exit(result.analysis_exit_code.unwrap_or(2));
+    }
+    let inspector_game = request.map(|request| request.game);
+    let inspector_only = inspector_game.is_some();
+    if let Some(game) = &inspector_game {
+        if let Some(window) = context.config_mut().app.windows.first_mut() {
+            window.url = tauri::WebviewUrl::App(format!("index.html?view=lepton-inspect&appId={}", game.id).into());
+            window.title = "Lepton compatibility inspector".into();
+        }
+    }
     if let Err(e) = setup_logging() {
         eprintln!("Warning: Failed to initialize logging: {}", e);
     }
 
     info!("Initializing CreamLinux application");
 
-    tauri::Builder::default()
-        .plugin(UpdaterBuilder::new().build())
+    let builder = tauri::Builder::default();
+    // Frame distribution has no legacy updater channel or signing identity.
+    let builder = if cfg!(feature = "frame-inspector-only") { builder }
+        else { builder.plugin(UpdaterBuilder::new().build()) };
+    builder
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![
+        .invoke_handler({
+            let read_only: Box<dyn Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Send + Sync> = Box::new(
+                tauri::generate_handler![get_game_info, get_lepton_info, analyze_lepton_compatibility]);
+            let standard: Box<dyn Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Send + Sync> = Box::new(tauri::generate_handler![
             scan_steam_games,
             get_game_info,
+            get_lepton_info,
+            inspect_lepton_game,
+            analyze_lepton_compatibility,
             process_game_action,
             fetch_game_dlcs,
             stream_game_dlcs,
@@ -913,8 +1043,10 @@ fn main() {
             read_screamapi_config,
             write_screamapi_config,
             delete_screamapi_config,
-        ])
-        .setup(|app| {
+        ]);
+            move |invoke| if inspector_only { read_only(invoke) } else { standard(invoke) }
+        })
+        .setup(move |app| {
             info!("Tauri application setup");
 
             #[cfg(debug_assertions)]
@@ -933,6 +1065,11 @@ fn main() {
                 fetch_cancellation: Arc::new(AtomicBool::new(false)),
             };
             app.manage(state);
+            if let Some(game) = &inspector_game {
+                app.state::<AppState>().games.lock().insert(game.id.clone(), game.clone());
+                info!("Read-only Lepton inspector; installer startup tasks disabled");
+                return Ok(());
+            }
 
             // Initialize cache on startup in a background task
             tauri::async_runtime::spawn(async move {
@@ -991,6 +1128,6 @@ fn main() {
 
             Ok(())
         })
-        .run(tauri::generate_context!())
+        .run(context)
         .expect("error while running tauri application");
 }

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "tools": {
+    "linuxdeploy-aarch64.AppImage": {
+      "sha256": "06706ac8189797dccd36bd384105892cb5e6e71f784f4df526cc958adc223cd6",
+      "url": "https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20250213-2/linuxdeploy-aarch64.AppImage"
+    },
+    "appimagetool-x86_64.AppImage": {
+      "sha256": "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0",
+      "url": "https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-x86_64.AppImage"
+    },
+    "runtime-aarch64": {
+      "sha256": "00cbdfcf917cc6c0ff6d3347d59e0ca1f7f45a6df1a428a0d6d8a78664d87444",
+      "url": "https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-aarch64"
+    },
+    "AppRun-aarch64": {
+      "sha256": "072f17c0895a85c490282fe5395c5007e5fc75da727e553b3b8fb680feb11578",
+      "url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-aarch64"
+    },
+    "linuxdeploy-plugin-gtk.sh": {
+      "sha256": "b0f4cbc684a0103a9651f0955b635eaea0096b3a66c0f5a2c2aa337960375171",
+      "url": "https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/3b67a1d1c1b0c8268f57f2bce40fe2d33d409cea/linuxdeploy-plugin-gtk.sh"
+    },
+    "linuxdeploy-plugin-gstreamer.sh": {
+      "sha256": "c107b49d84edbffc6ab226ed1007e0626a4f7aa2c3a36b7782bef62351d49e94",
+      "url": "https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gstreamer/2a2e67491c32995a3f279ad0ecbe77abd512b42a/linuxdeploy-plugin-gstreamer.sh"
+    }
+  },
+  "gtk_patched_sha256": "7804c9eef13e59bf2783aad9882ef9db8f3f3f9e8d631874b1d348d550a3693f"
+}

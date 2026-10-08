@@ -1,5 +1,6 @@
 use log::{debug, error, info, warn};
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::fs;
 use std::io::Read;
@@ -8,14 +9,49 @@ use std::sync::Arc;
 use tokio::sync::mpsc;
 use walkdir::WalkDir;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GameRuntime {
+    LinuxNative,
+    Proton,
+    LeptonAndroid,
+}
+
+impl GameRuntime {
+    pub fn is_linux_native(&self) -> bool {
+        matches!(self, GameRuntime::LinuxNative)
+    }
+
+    pub fn is_proton(&self) -> bool {
+        matches!(self, GameRuntime::Proton)
+    }
+
+    pub fn is_lepton(&self) -> bool {
+        matches!(self, GameRuntime::LeptonAndroid)
+    }
+}
+
+impl std::fmt::Display for GameRuntime {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            GameRuntime::LinuxNative => write!(f, "Linux Native"),
+            GameRuntime::Proton => write!(f, "Proton"),
+            GameRuntime::LeptonAndroid => write!(f, "Lepton / Android"),
+        }
+    }
+}
+
 // Game information structure
 #[derive(Debug, Clone)]
 pub struct GameInfo {
     pub id: String,
     pub title: String,
     pub path: PathBuf,
+    pub runtime: GameRuntime,
     pub native: bool,
     pub api_files: Vec<String>,
+    pub android_package: Option<String>,
+    pub lepton_context: Option<String>,
     pub cream_installed: bool,
     pub smoke_installed: bool,
 }
@@ -344,6 +380,53 @@ fn check_smokeapi_installed(game_path: &Path, api_files: &[String]) -> bool {
     false
 }
 
+/// Detect a Steam Frame / Lepton Android installation.
+///
+/// Lepton stores persistent Android app data below:
+///   steamapps/compatdata/<appid>/external/Android/data/<package>
+///
+/// Store the package name rather than /data/app/... because Android package
+/// install paths are generated and can change after updates.
+fn detect_lepton_android(steamapps_dir: &Path, app_id: &str) -> Option<String> {
+    let android_data = steamapps_dir
+        .join("compatdata")
+        .join(app_id)
+        .join("external")
+        .join("Android")
+        .join("data");
+
+    if !android_data.is_dir() {
+        return None;
+    }
+
+    let entries = fs::read_dir(&android_data).ok()?;
+    let mut packages = Vec::new();
+
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if !path.is_dir() {
+            continue;
+        }
+
+        let package = entry.file_name().to_string_lossy().to_string();
+        if !package.starts_with('.') && package.contains('.') {
+            packages.push(package);
+        }
+    }
+
+    packages.sort();
+
+    if let Some(package) = packages.into_iter().next() {
+        debug!(
+            "Detected Lepton Android package for app {}: {}",
+            app_id, package
+        );
+        Some(package)
+    } else {
+        None
+    }
+}
+
 // Scan a game directory to determine if it's native or needs Proton
 // Also collect any Steam API DLLs for potential SmokeAPI installation
 fn scan_game_directory(game_path: &Path) -> (bool, Vec<String>) {
@@ -636,6 +719,7 @@ pub async fn find_installed_games(steamapps_paths: &[PathBuf]) -> Vec<GameInfo> 
 
     // Use a semaphore to limit concurrency
     let semaphore = Arc::new(tokio::sync::Semaphore::new(max_concurrent));
+    let all_steamapps_paths = Arc::new(steamapps_paths.to_vec());
 
     // Create a Vec to store all our task handles
     let mut handles = Vec::new();
@@ -645,6 +729,7 @@ pub async fn find_installed_games(steamapps_paths: &[PathBuf]) -> Vec<GameInfo> 
         // Clone what we need for the task
         let path = path.clone();
         let steamapps_dir = steamapps_dir.clone();
+        let all_steamapps_paths = Arc::clone(&all_steamapps_paths);
         let skip_patterns = Arc::clone(&skip_patterns);
         let tx = tx.clone();
         let seen_ids = Arc::clone(&seen_ids);
@@ -690,24 +775,66 @@ pub async fn find_installed_games(steamapps_paths: &[PathBuf]) -> Vec<GameInfo> 
                 // Scan the game directory to determine platform and find Steam API DLLs
                 info!("Scanning game: {} at {}", name, game_path.display());
 
-                // Scanning is I/O heavy but not CPU heavy, so we can just do it directly
-                let (is_native, api_files) = scan_game_directory(&game_path);
+                // Steam Frame Android titles run through Lepton. Their actual
+                // libsteam_api.so lives inside the Android package rather than
+                // below steamapps/common, so detect Lepton before applying the
+                // Linux-vs-Proton heuristic.
+                let mut android_package = detect_lepton_android(&steamapps_dir, &id);
+                if android_package.is_none() {
+                    for other_dir in all_steamapps_paths.iter() {
+                        if other_dir != &steamapps_dir {
+                            if let Some(pkg) = detect_lepton_android(other_dir, &id) {
+                                android_package = Some(pkg);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                let lepton_context = android_package
+                    .as_ref()
+                    .map(|_| format!("steamlaunch-{}", id));
+
+                let (runtime, is_native, api_files) = if android_package.is_some() {
+                    info!(
+                        "Detected Steam Frame Lepton/Android game: {} ({}) package={:?}",
+                        name, id, android_package
+                    );
+
+                    (GameRuntime::LeptonAndroid, false, Vec::new())
+                } else {
+                    let (is_native, api_files) = scan_game_directory(&game_path);
+
+                    let runtime = if is_native {
+                        GameRuntime::LinuxNative
+                    } else {
+                        GameRuntime::Proton
+                    };
+
+                    (runtime, is_native, api_files)
+                };
 
                 // Check for CreamLinux installation
-                let cream_installed = check_creamlinux_installed(&game_path);
-
-                // Check for SmokeAPI installation
-                // For Proton games: check if api_files exist
-                // For Native games: ALSO check for orphaned backup files (proton->native switch)
-                let smoke_installed = check_smokeapi_installed(&game_path, &api_files);
+                // For Lepton games, current installer actions and files are not applicable
+                let (cream_installed, smoke_installed) = if runtime.is_lepton() {
+                    (false, false)
+                } else {
+                    (
+                        check_creamlinux_installed(&game_path),
+                        check_smokeapi_installed(&game_path, &api_files),
+                    )
+                };
 
                 // Create the game info
                 let game_info = GameInfo {
                     id,
                     title: name,
                     path: game_path,
+                    runtime,
                     native: is_native,
                     api_files,
+                    android_package,
+                    lepton_context,
                     cream_installed,
                     smoke_installed,
                 };
@@ -803,5 +930,89 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let missing = dir.path().join("does-not-exist");
         assert!(normalize_steam_library_path(&missing).is_err());
+    }
+
+    #[test]
+    fn detects_lepton_android_game() {
+        let dir = tempfile::tempdir().unwrap();
+        let steamapps = dir.path().join("steamapps");
+
+        let package_dir = steamapps
+            .join("compatdata")
+            .join("1408230")
+            .join("external")
+            .join("Android")
+            .join("data")
+            .join("com.MightyCoconut.WalkaboutMiniGolf");
+
+        fs::create_dir_all(&package_dir).unwrap();
+
+        assert_eq!(
+            detect_lepton_android(&steamapps, "1408230"),
+            Some("com.MightyCoconut.WalkaboutMiniGolf".to_string())
+        );
+    }
+
+    #[test]
+    fn does_not_detect_normal_game_as_lepton() {
+        let dir = tempfile::tempdir().unwrap();
+        let steamapps = dir.path().join("steamapps");
+        fs::create_dir_all(&steamapps).unwrap();
+
+        assert_eq!(detect_lepton_android(&steamapps, "123456"), None);
+    }
+
+    #[test]
+    fn ignores_hidden_or_invalid_dirs_when_detecting_lepton() {
+        let dir = tempfile::tempdir().unwrap();
+        let steamapps = dir.path().join("steamapps");
+
+        let compatdata_dir = steamapps
+            .join("compatdata")
+            .join("1408230")
+            .join("external")
+            .join("Android")
+            .join("data");
+
+        // Hidden folder and non-package folder without dot
+        fs::create_dir_all(compatdata_dir.join(".hidden.folder")).unwrap();
+        fs::create_dir_all(compatdata_dir.join("nodots")).unwrap();
+        fs::create_dir_all(compatdata_dir.join("com.MightyCoconut.WalkaboutMiniGolf")).unwrap();
+
+        assert_eq!(
+            detect_lepton_android(&steamapps, "1408230"),
+            Some("com.MightyCoconut.WalkaboutMiniGolf".to_string())
+        );
+    }
+
+    #[test]
+    fn game_runtime_properties_and_serde() {
+        assert!(GameRuntime::LinuxNative.is_linux_native());
+        assert!(!GameRuntime::LinuxNative.is_proton());
+        assert!(!GameRuntime::LinuxNative.is_lepton());
+
+        assert!(!GameRuntime::Proton.is_linux_native());
+        assert!(GameRuntime::Proton.is_proton());
+        assert!(!GameRuntime::Proton.is_lepton());
+
+        assert!(!GameRuntime::LeptonAndroid.is_linux_native());
+        assert!(!GameRuntime::LeptonAndroid.is_proton());
+        assert!(GameRuntime::LeptonAndroid.is_lepton());
+
+        // Display verification
+        assert_eq!(format!("{}", GameRuntime::LinuxNative), "Linux Native");
+        assert_eq!(format!("{}", GameRuntime::Proton), "Proton");
+        assert_eq!(format!("{}", GameRuntime::LeptonAndroid), "Lepton / Android");
+
+        // Serde verification
+        let serialized = serde_json::to_string(&GameRuntime::LeptonAndroid).unwrap();
+        assert_eq!(serialized, "\"lepton_android\"");
+        let deserialized: GameRuntime = serde_json::from_str("\"lepton_android\"").unwrap();
+        assert_eq!(deserialized, GameRuntime::LeptonAndroid);
+
+        let serialized_native = serde_json::to_string(&GameRuntime::LinuxNative).unwrap();
+        assert_eq!(serialized_native, "\"linux_native\"");
+        let serialized_proton = serde_json::to_string(&GameRuntime::Proton).unwrap();
+        assert_eq!(serialized_proton, "\"proton\"");
     }
 }

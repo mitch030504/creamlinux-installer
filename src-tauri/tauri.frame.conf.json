@@ -1,0 +1,19 @@
+{
+  "bundle": {
+    "targets": [
+      "appimage"
+    ],
+    "resources": {
+      "resources/compatibility/runtime/": "compatibility/runtime/"
+    }
+  },
+  "identifier": "com.creamlinux.steam-frame-inspector",
+  "app": {
+    "security": {
+      "capabilities": [
+        "frame-inspector"
+      ],
+      "csp": "default-src 'self'; script-src 'self'; connect-src ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; object-src 'none'; base-uri 'none'; frame-src 'none'"
+    }
+  }
+}

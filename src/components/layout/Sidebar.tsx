@@ -31,8 +31,9 @@ const Sidebar = ({ setFilter, currentFilter }: SidebarProps) => {
 
   const steamFilters: FilterItem[] = [
     { id: 'all', label: 'All Games', icon: layers, variant: 'solid' },
-    { id: 'native', label: 'Native', icon: linux, variant: 'brand' },
+    { id: 'native', label: 'Native Linux', icon: linux, variant: 'brand' },
     { id: 'proton', label: 'Proton', icon: proton, variant: 'brand' },
+    { id: 'lepton', label: 'Lepton / Android', icon: layers, variant: 'solid' },
   ]
 
   const epicFilters: FilterItem[] = [

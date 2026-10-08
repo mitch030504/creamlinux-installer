@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Game } from '@/types'
+import { Game, getGameRuntime } from '@/types'
 
 export interface Conflict {
   gameId: string
@@ -32,8 +32,10 @@ export function useConflictDetection(games: Game[]) {
         return
       }
 
+      const runtime = getGameRuntime(game)
+
       // Conflict 1: CreamLinux installed but game is now Proton
-      if (!game.native && game.cream_installed) {
+      if (runtime === 'proton' && game.cream_installed) {
         detectedConflicts.push({
           gameId: game.id,
           gameTitle: game.title,
@@ -42,7 +44,12 @@ export function useConflictDetection(games: Game[]) {
       }
 
       // Conflict 2: Orphaned Proton SmokeAPI DLL files on a native game
-      if (game.native && game.smoke_installed && game.api_files && game.api_files.length > 0) {
+      if (
+        runtime === 'linux_native' &&
+        game.smoke_installed &&
+        game.api_files &&
+        game.api_files.length > 0
+      ) {
         detectedConflicts.push({
           gameId: game.id,
           gameTitle: game.title,

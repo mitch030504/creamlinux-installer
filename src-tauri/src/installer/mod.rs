@@ -53,8 +53,13 @@ pub struct Game {
     pub id: String,
     pub title: String,
     pub path: String,
+    pub runtime: crate::searcher::GameRuntime,
     pub native: bool,
     pub api_files: Vec<String>,
+    #[serde(default)]
+    pub android_package: Option<String>,
+    #[serde(default)]
+    pub lepton_context: Option<String>,
     pub cream_installed: bool,
     pub smoke_installed: bool,
     pub installing: bool,
@@ -95,6 +100,13 @@ pub async fn process_action(
     game: Game,
     app_handle: AppHandle,
 ) -> Result<(), String> {
+    if game.runtime == crate::searcher::GameRuntime::LeptonAndroid {
+        return Err(format!(
+            "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+            game.title
+        ));
+    }
+
     match (installer_type, action) {
         (InstallerType::Cream, InstallerAction::Install) => {
             install_creamlinux(game_id, game, app_handle).await
@@ -117,7 +129,13 @@ async fn install_creamlinux(
     game: Game,
     app_handle: AppHandle,
 ) -> Result<(), String> {
-    if !game.native {
+    if !game.runtime.is_linux_native() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
         return Err("CreamLinux can only be installed on native Linux games".to_string());
     }
 
@@ -202,7 +220,13 @@ async fn install_creamlinux(
 
 // Uninstall CreamLinux from a game
 async fn uninstall_creamlinux(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    if !game.native {
+    if !game.runtime.is_linux_native() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
         return Err("CreamLinux can only be uninstalled from native Linux games".to_string());
     }
 
@@ -241,26 +265,44 @@ async fn uninstall_creamlinux(game: Game, app_handle: AppHandle) -> Result<(), S
 }
 
 async fn install_smokeapi(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    // Check if native or proton and route accordingly
-    if game.native {
-        install_smokeapi_native(game, app_handle).await
-    } else {
-        install_smokeapi_proton(game, app_handle).await
+    match game.runtime {
+        crate::searcher::GameRuntime::LinuxNative => {
+            install_smokeapi_native(game, app_handle).await
+        }
+        crate::searcher::GameRuntime::Proton => {
+            install_smokeapi_proton(game, app_handle).await
+        }
+        crate::searcher::GameRuntime::LeptonAndroid => Err(format!(
+            "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+            game.title
+        )),
     }
 }
 
 async fn uninstall_smokeapi(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    // Check if native or proton and route accordingly
-    if game.native {
-        uninstall_smokeapi_native(game, app_handle).await
-    } else {
-        uninstall_smokeapi_proton(game, app_handle).await
+    match game.runtime {
+        crate::searcher::GameRuntime::LinuxNative => {
+            uninstall_smokeapi_native(game, app_handle).await
+        }
+        crate::searcher::GameRuntime::Proton => {
+            uninstall_smokeapi_proton(game, app_handle).await
+        }
+        crate::searcher::GameRuntime::LeptonAndroid => Err(format!(
+            "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+            game.title
+        )),
     }
 }
 
 // Install SmokeAPI to a proton game
 async fn install_smokeapi_proton(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    if game.native {
+    if !game.runtime.is_proton() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
         return Err("SmokeAPI can only be installed on Proton/Windows games".to_string());
     }
 
@@ -305,7 +347,13 @@ async fn install_smokeapi_proton(game: Game, app_handle: AppHandle) -> Result<()
 
 // Uninstall SmokeAPI from a proton game
 async fn uninstall_smokeapi_proton(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    if game.native {
+    if !game.runtime.is_proton() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
         return Err("SmokeAPI can only be uninstalled from Proton/Windows games".to_string());
     }
 
@@ -351,6 +399,15 @@ async fn install_smokeapi_native(
     game: Game,
     app_handle: AppHandle,
 ) -> Result<(), String> {
+    if !game.runtime.is_linux_native() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
+        return Err("This function is only for native Linux games".to_string());
+    }
 
     info!("Installing SmokeAPI (native) for game: {}", game.title);
     let game_title = game.title.clone();
@@ -400,7 +457,13 @@ async fn install_smokeapi_native(
 
 // Uninstall SmokeAPI from a native Linux game
 async fn uninstall_smokeapi_native(game: Game, app_handle: AppHandle) -> Result<(), String> {
-    if !game.native {
+    if !game.runtime.is_linux_native() {
+        if game.runtime.is_lepton() {
+            return Err(format!(
+                "{} is a Steam Frame Lepton/Android game. Android installation support is not enabled yet.",
+                game.title
+            ));
+        }
         return Err("This function is only for native Linux games".to_string());
     }
 
@@ -891,4 +954,62 @@ fn write_cream_api_ini(game_path: &str, app_id: &str, dlcs: &[DlcInfo]) -> Resul
 
     info!("Wrote cream_api.ini to {}", cream_api_path.display());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::searcher::GameRuntime;
+
+    #[test]
+    fn game_deserialization_optional_fields_default_to_none() {
+        let json_data = r#"{
+            "id": "440",
+            "title": "Team Fortress 2",
+            "path": "/path/to/tf2",
+            "runtime": "linux_native",
+            "native": true,
+            "api_files": [],
+            "cream_installed": false,
+            "smoke_installed": false,
+            "installing": false
+        }"#;
+
+        let game: Game = serde_json::from_str(json_data).unwrap();
+        assert_eq!(game.runtime, GameRuntime::LinuxNative);
+        assert_eq!(game.android_package, None);
+        assert_eq!(game.lepton_context, None);
+        assert!(game.runtime.is_linux_native());
+    }
+
+    #[test]
+    fn game_deserialization_with_lepton_fields() {
+        let json_data = r#"{
+            "id": "1408230",
+            "title": "Walkabout Mini Golf",
+            "path": "/path/to/game",
+            "runtime": "lepton_android",
+            "native": false,
+            "api_files": [],
+            "android_package": "com.MightyCoconut.WalkaboutMiniGolf",
+            "lepton_context": "steamlaunch-1408230",
+            "cream_installed": false,
+            "smoke_installed": false,
+            "installing": false
+        }"#;
+
+        let game: Game = serde_json::from_str(json_data).unwrap();
+        assert_eq!(game.runtime, GameRuntime::LeptonAndroid);
+        assert_eq!(
+            game.android_package,
+            Some("com.MightyCoconut.WalkaboutMiniGolf".to_string())
+        );
+        assert_eq!(
+            game.lepton_context,
+            Some("steamlaunch-1408230".to_string())
+        );
+        assert!(game.runtime.is_lepton());
+        assert!(!game.runtime.is_linux_native());
+        assert!(!game.runtime.is_proton());
+    }
 }

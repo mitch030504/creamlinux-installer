@@ -75,6 +75,10 @@
   &.proton {
     background-color: var(--proton);
   }
+
+  &.lepton {
+    background-color: var(--lepton);
+  }
 }
 
 .composition-legend {
@@ -100,6 +104,10 @@
 
   &.proton {
     background-color: var(--proton);
+  }
+
+  &.lepton {
+    background-color: var(--lepton);
   }
 }
 

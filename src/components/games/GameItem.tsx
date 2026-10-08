@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { findBestGameImage } from '@/services/ImageService'
-import { Game } from '@/types'
+import { Game, getGameRuntime } from '@/types'
 import { ActionButton, ActionType, Button } from '@/components/buttons'
 import { Icon } from '@/components/icons'
+import { openLeptonInspectorWindow } from '@/services/LeptonInspectorWindow'
+import { useAppContext } from '@/contexts/useAppContext'
 
 interface GameItemProps {
   game: Game
@@ -18,8 +20,10 @@ interface GameItemProps {
  * Displays game information and action buttons
  */
 const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportingEnabled }: GameItemProps) => {
+  const { inspectLeptonGame } = useAppContext()
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isInspecting, setIsInspecting] = useState(false)
 
   useEffect(() => {
     // Function to fetch the game cover/image
@@ -47,17 +51,25 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
     }
   }, [game.id, imageUrl])
 
-  // Determine if we should show CreamLinux buttons (only for native games)
-  const shouldShowCream = game.native && game.cream_installed // Only show if installed (for uninstall)
+  const runtime = getGameRuntime(game)
+  const isLinuxNative = runtime === 'linux_native'
+  const isProton = runtime === 'proton'
+  const isLepton = runtime === 'lepton_android'
 
-  // Determine if we should show SmokeAPI buttons (only for non-native games with API files)
-  const shouldShowSmoke = !game.native && game.api_files && game.api_files.length > 0
+  // Determine if we should show CreamLinux buttons (only for native Linux games)
+  const shouldShowCream = isLinuxNative && game.cream_installed
 
-  // Show generic button if nothing installed
-  const shouldShowUnlocker = game.native && !game.cream_installed && !game.smoke_installed
+  // SmokeAPI DLL flow is currently only valid for Proton games.
+  const shouldShowSmoke =
+    isProton && game.api_files && game.api_files.length > 0
 
-  // Check if this is a Proton game without API files
-  const isProtonNoApi = !game.native && (!game.api_files || game.api_files.length === 0)
+  // Generic unlocker selection is currently only valid for native Linux.
+  const shouldShowUnlocker =
+    isLinuxNative && !game.cream_installed && !game.smoke_installed
+
+  // Only Proton games should ever show the Windows Steam API DLL warning.
+  const isProtonNoApi =
+    isProton && (!game.api_files || game.api_files.length === 0)
 
   const handleCreamAction = () => {
     if (game.installing) return
@@ -97,6 +109,20 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
     }
   }
 
+  // Lepton introspection handler
+  const handleInspect = async () => {
+    setIsInspecting(true)
+    try {
+      await openLeptonInspectorWindow(game.id, game.title)
+    } catch (err) {
+      console.warn('Failed to open dedicated inspector window, falling back to in-window view:', err)
+      inspectLeptonGame({ id: game.id, title: game.title })
+    } finally {
+      setIsInspecting(false)
+    }
+  }
+
+
   // Determine background image
   const backgroundImage =
     !isLoading && imageUrl ? `url(${imageUrl})` : 'linear-gradient(135deg, #232323, #1A1A1A)'
@@ -112,8 +138,16 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
     >
       <div className="game-item-overlay">
         <div className="game-badges">
-          <span className={`status-badge ${game.native ? 'native' : 'proton'}`}>
-            {game.native ? 'Native' : 'Proton'}
+          <span
+            className={`status-badge ${
+              isLinuxNative ? 'native' : isProton ? 'proton' : 'lepton'
+            }`}
+          >
+            {isLinuxNative
+              ? 'Native Linux'
+              : isProton
+                ? 'Proton'
+                : 'Lepton / Android'}
           </span>
           {game.cream_installed && <span className="status-badge cream">CreamLinux</span>}
           {game.smoke_installed && <span className="status-badge smoke">SmokeAPI</span>}
@@ -154,8 +188,8 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
             />
           )}
 
-          {/* Show SmokeAPI uninstall for native games if installed */}
-          {game.native && game.smoke_installed && (
+          {/* Show SmokeAPI uninstall for native Linux games if installed */}
+          {isLinuxNative && game.smoke_installed && (
             <ActionButton
               action="uninstall_smoke"
               isInstalled={true}
@@ -175,6 +209,31 @@ const GameItem = ({ game, onAction, onEdit, onSmokeAPISettings, onRate, reportin
                 title="Attempt to scan again"
               >
                 Rescan
+              </Button>
+            </div>
+          )}
+
+          {isLepton && (
+            <div
+              className="lepton-detected-message"
+              title={
+                game.android_package
+                  ? `Package: ${game.android_package}${
+                      game.lepton_context ? ` (${game.lepton_context})` : ''
+                    }`
+                  : undefined
+              }
+            >
+              <span>Steam Frame Android game</span>
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={handleInspect}
+                disabled={isInspecting}
+                className="inspect-button"
+                title="Inspect Lepton runtime"
+              >
+                {isInspecting ? 'Inspecting...' : 'Inspect'}
               </Button>
             </div>
           )}

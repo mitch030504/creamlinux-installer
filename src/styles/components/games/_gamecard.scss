@@ -46,6 +46,12 @@
       0 0 24px rgba(255, 200, 150, 0.25);
   }
 
+  &:has(.status-badge.lepton) {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.3),
+      0 0 24px rgba(110, 198, 184, 0.25);
+  }
+
   &:has(.status-badge.cream) {
     box-shadow:
       0 6px 18px rgba(0, 0, 0, 0.3),
@@ -72,6 +78,10 @@
 
   .status-badge.proton {
     box-shadow: 0 0 10px rgba(255, 200, 150, 0.5);
+  }
+
+  .status-badge.lepton {
+    box-shadow: 0 0 10px rgba(110, 198, 184, 0.5);
   }
 
   .status-badge.cream {
@@ -139,6 +149,11 @@
   color: var(--text-heavy);
 }
 
+.status-badge.lepton {
+  background-color: var(--lepton);
+  color: var(--text-heavy);
+}
+
 .status-badge.cream {
   background-color: var(--cream);
   color: var(--text-heavy);
@@ -179,6 +194,60 @@
   gap: 0.5rem;
   position: relative;
   z-index: 3;
+}
+
+// Steam Frame / Lepton detection message
+.lepton-detected-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+  background-color: rgba(110, 198, 184, 0.16);
+  border: 1px solid rgba(110, 198, 184, 0.35);
+  border-radius: var(--radius-sm);
+  padding: clamp(0.45rem, 0.8vh, 0.65rem) clamp(0.75rem, 1.2vw, 1rem);
+  width: 100%;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--text-primary);
+  min-height: clamp(38px, 4.5vh, 46px);
+
+  span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--medium);
+  }
+
+  .inspect-button {
+    flex-shrink: 0;
+    min-height: clamp(32px, 3.8vh, 38px);
+    padding: 0 clamp(0.85rem, 1.3vw, 1.25rem);
+    font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+    font-weight: var(--bold);
+    background-color: color-mix(in srgb, var(--lepton) 25%, var(--elevated-bg));
+    border: 1px solid var(--lepton);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-normal) var(--easing-ease-out);
+
+    &:hover:not(:disabled) {
+      background-color: var(--lepton);
+      color: var(--text-heavy);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--lepton);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(110, 198, 184, 0.35);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
 }
 
 // API not found message

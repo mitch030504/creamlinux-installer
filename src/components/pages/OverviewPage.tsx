@@ -2,6 +2,7 @@ import { useState, useEffect, ReactNode } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { useAppContext } from '@/contexts/useAppContext'
 import { Icon, IconName } from '@/components/icons'
+import { getGameRuntime } from '@/types'
 
 interface LocalReport {
   game_id: string
@@ -62,12 +63,14 @@ const OverviewPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const nativeCount = games.filter((g) => g.native).length
-  const protonCount = games.length - nativeCount
+  const nativeCount = games.filter((g) => getGameRuntime(g) === 'linux_native').length
+  const protonCount = games.filter((g) => getGameRuntime(g) === 'proton').length
+  const leptonCount = games.filter((g) => getGameRuntime(g) === 'lepton_android').length
   const creamCount = games.filter((g) => g.cream_installed).length
   const smokeCount = games.filter((g) => g.smoke_installed).length
   const nativePct = games.length ? (nativeCount / games.length) * 100 : 0
   const protonPct = games.length ? (protonCount / games.length) * 100 : 0
+  const leptonPct = games.length ? (leptonCount / games.length) * 100 : 0
 
   return (
     <div className="overview-page">
@@ -91,11 +94,14 @@ const OverviewPage = () => {
           <div className="composition-bar">
             <div className="composition-segment native" style={{ width: `${nativePct}%` }} />
             <div className="composition-segment proton" style={{ width: `${protonPct}%` }} />
+            {leptonCount > 0 && (
+              <div className="composition-segment lepton" style={{ width: `${leptonPct}%` }} />
+            )}
           </div>
           <div className="composition-legend">
             <div className="legend-item">
               <span className="legend-dot native" />
-              <span className="legend-label">Native</span>
+              <span className="legend-label">Native Linux</span>
               <span className="legend-value">{nativeCount}</span>
             </div>
             <div className="legend-item">
@@ -103,6 +109,13 @@ const OverviewPage = () => {
               <span className="legend-label">Proton</span>
               <span className="legend-value">{protonCount}</span>
             </div>
+            {leptonCount > 0 && (
+              <div className="legend-item">
+                <span className="legend-dot lepton" />
+                <span className="legend-label">Lepton / Android</span>
+                <span className="legend-value">{leptonCount}</span>
+              </div>
+            )}
           </div>
         </div>
       )}

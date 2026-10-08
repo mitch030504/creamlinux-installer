@@ -13,7 +13,11 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "optimize-svg": "node scripts/optimize-svg.js",
-    "set-version": "node scripts/set-version.js"
+    "set-version": "node scripts/set-version.js",
+    "release:frame": "bash scripts/build-steam-frame-release.sh",
+    "package:frame": "bash scripts/package-steam-frame-appimage.sh",
+    "prepare:frame": "python3 scripts/prepare-steam-frame-runtime.py",
+    "test:lepton-ui": "node --test scripts/test-lepton-inspector.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.5.0",

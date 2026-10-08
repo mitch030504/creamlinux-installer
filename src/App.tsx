@@ -23,8 +23,8 @@ import {
   UnlockerChoiceDialog,
 } from '@/components/dialogs'
 
-// Page components (Overview and Settings)
-import { OverviewPage, SettingsPage } from '@/components/pages'
+// Page components (Overview, Settings, Lepton Inspector)
+import { OverviewPage, SettingsPage, LeptonInspectorView } from '@/components/pages'
 
 // Game components
 import { GameList, EpicGameList } from '@/components/games'
@@ -80,6 +80,8 @@ function App() {
     handleEpicUninstallScream,
     handleEpicUninstallKoaloader,
     handleEpicSettings,
+    inspectingLeptonGame,
+    closeLeptonInspector,
   } = useAppContext()
 
   // Conflict detection
@@ -156,7 +158,14 @@ function App() {
           {/* Sidebar for filtering */}
           <Sidebar setFilter={handleSetFilter} currentFilter={filter} />
 
-          {filter === 'overview' ? (
+          {inspectingLeptonGame ? (
+            <LeptonInspectorView
+              gameId={inspectingLeptonGame.id}
+              gameTitle={inspectingLeptonGame.title}
+              onBack={closeLeptonInspector}
+              isChildWindow={false}
+            />
+          ) : filter === 'overview' ? (
             <OverviewPage />
           ) : filter === 'settings' ? (
             <SettingsPage />

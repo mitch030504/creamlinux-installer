@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useRef } from 'react'
 import { AppContext, AppContextType, ActivityItem } from './AppContext'
 import { useGames, useDlcManager, useGameActions, useToasts } from '@/hooks'
-import { DlcInfo, Config, EpicGame, Game } from '@/types'
+import { DlcInfo, Config, EpicGame, Game, getGameRuntime } from '@/types'
 import { ActionType } from '@/components/buttons/ActionButton'
 import { ToastContainer } from '@/components/notifications'
 import { ApiSettingsDialog, smokeApiSettingsSpec, screamApiSettingsSpec, OptInDialog, RatingDialog, SmokeAPIVotesDialog, UnlockerChoiceDialog } from '@/components/dialogs'
@@ -82,6 +82,18 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   // Opt-in dialog state
   const [optInDialog, setOptInDialog] = useState(false)
   const [reportingEnabled, setReportingEnabled] = useState(false)
+
+  // Lepton inspector full-page state (for embedded mode / Steam Frame fallback)
+  const [inspectingLeptonGame, setInspectingLeptonGame] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+  const inspectLeptonGame = (game: { id: string; title: string }) => {
+    setInspectingLeptonGame(game)
+  }
+  const closeLeptonInspector = () => {
+    setInspectingLeptonGame(null)
+  }
 
   // Recent activity feed (session-only) shown on the Overview page
   const [activityFeed, setActivityFeed] = useState<ActivityItem[]>([])
@@ -342,6 +354,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       return
     }
 
+    const runtime = getGameRuntime(game)
+    if (runtime === 'lepton_android') {
+      showError(`${game.title} is a Steam Frame Lepton/Android game. Installer actions are not supported yet.`)
+      return
+    }
+
     // For DLC installation, we want to show the DLC selection dialog first
     if (action === 'install_cream') {
       try {
@@ -367,7 +385,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     }
 
     // intercept install_smoke for votes dialog
-    if (action === 'install_smoke' && !game.native) {
+    if (action === 'install_smoke' && runtime === 'proton') {
       setSmokeAPIVotesDialog({
         visible: true,
         gameId: game.id,
@@ -574,6 +592,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       }
     },
     closeUnlockerDialog,
+
+    // Lepton inspector
+    inspectingLeptonGame,
+    inspectLeptonGame,
+    closeLeptonInspector,
   }
 
   return (

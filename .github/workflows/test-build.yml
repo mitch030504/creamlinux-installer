@@ -1,4 +1,4 @@
-name: 'Test Build'
+name: 'Legacy x86_64 Test Build (no signing)'
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 jobs:
   build-tauri:
     permissions:
-      contents: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -18,21 +18,29 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: lts/*
+          node-version: '22.16.0'
           cache: 'npm'
 
+      - name: Prepare patched checksum-pinned npm (no global installation)
+        run: |
+          npm_bin="$(python3 scripts/release/prepare-npm.py "$RUNNER_TEMP/frame-npm-${{ github.job }}")"
+          echo "$npm_bin" >> "$GITHUB_PATH"
       - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@3db9de313aa3e84732d075f6fd8938cc0d6d4b58 # resolved 1.96.0
         with:
+          toolchain: '1.96.0'
           components: rustfmt, clippy
 
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
         with:
           workspaces: './src-tauri -> target'
 
@@ -61,9 +69,6 @@ jobs:
 
       - name: Build Tauri app
         run: npm run tauri build
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
 
       - name: Strip bundled GTK/WebKit/GLib stack, rely on the host's instead
         run: |
@@ -116,14 +121,22 @@ jobs:
             find squashfs-root/usr/lib -maxdepth 1 -name "${lib%.so*}.so*" -delete
           done
 
-          curl -sSL -o appimagetool "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+          # Same checksum-pinned host tool as Frame; no moving continuous download.
+          python3 - <<'PYTOOL'
+          import hashlib,json,urllib.request
+          from pathlib import Path
+          pin=json.loads(Path('../../../../../scripts/release/tools.json').read_text())['tools']['appimagetool-x86_64.AppImage']
+          data=urllib.request.urlopen(pin['url'],timeout=60).read(40*1024*1024+1)
+          assert hashlib.sha256(data).hexdigest()==pin['sha256'], 'appimagetool checksum mismatch'
+          Path('appimagetool').write_bytes(data)
+          PYTOOL
           chmod +x appimagetool
           rm -f "$APPIMAGE"
           ARCH=x86_64 ./appimagetool --appimage-extract-and-run squashfs-root "$APPIMAGE"
           rm -rf squashfs-root
 
       - name: Upload AppImage artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: appimage
           path: src-tauri/target/release/bundle/appimage/*.AppImage

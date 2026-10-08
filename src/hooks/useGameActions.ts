@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
 import { ActionType } from '@/components/buttons/ActionButton'
-import { Game, DlcInfo } from '@/types'
+import { Game, DlcInfo, getGameRuntime } from '@/types'
 import { InstallationInstructions } from '@/contexts/AppContext'
 import { useUnlockerSelection } from './useUnlockerSelection'
 
@@ -96,6 +96,11 @@ export function useGameActions() {
         // Find the game
         const game = games.find((g) => g.id === gameId)
         if (!game) return
+
+        if (getGameRuntime(game) === 'lepton_android') {
+          console.warn(`Installer action ${action} is not supported for Lepton / Android game ${game.title}`)
+          return
+        }
 
         // For CreamLinux installation, DLC dialog is handled in AppProvider
         if (action === 'install_cream') {
