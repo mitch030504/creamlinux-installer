@@ -3,7 +3,8 @@
 
 Requires llvm-readelf (including Android packed relocation support). Never loads
 an ELF. Archives are opened read-only; members are inspected via temporary copies.
-Only the four target names are included in symbol/relocation/string result lists.
+By default the four target names are included in evidence lists; callers may
+supply other names. Public exports are also exposed for compatibility analysis.
 """
 import argparse
 import hashlib
@@ -11,6 +12,7 @@ import io
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import tempfile
@@ -18,6 +20,12 @@ import zipfile
 
 NAMES = ('g_pSteamClientGameServer', '__bss_start', '_edata', '_end')
 ARCHIVES = {'.apk', '.zip', '.apks', '.xapk'}
+LOADER_APIS = {'dlopen', 'dlsym', 'android_dlopen_ext'}
+
+
+def steam_named(name):
+    return name.startswith(('SteamAPI_', 'SteamInternal_', 'SteamGameServer_')) or name in {
+        'SteamClient', 'GetHSteamUser', 'GetHSteamPipe'}
 
 
 def base_name(name):
@@ -35,11 +43,11 @@ def symbol_record(symbol, table, index):
     }
 
 
-def inspect_elf(label, path, data, readelf):
+def inspect_elf(label, path, data, readelf, names=NAMES, runtime_names=()):
     result = subprocess.run(
         [readelf, '--elf-output-style=JSON', '--file-header', '--sections',
-         '--symbols', '--dyn-syms', '--relocations', '--expand-relocs', str(path)],
-        capture_output=True, text=True, env={**os.environ, 'LC_ALL': 'C'})
+         '--symbols', '--dyn-syms', '--dynamic-table', '--relocations', '--expand-relocs', str(path)],
+        capture_output=True, text=True, timeout=60, env={**os.environ, 'LC_ALL': 'C'})
     if result.returncode:
         raise ValueError(result.stderr.strip() or 'llvm-readelf failed')
     obj = json.loads(result.stdout)[0]
@@ -55,6 +63,13 @@ def inspect_elf(label, path, data, readelf):
     if 'SharedObject' in obj['ElfHeader']['Type'] and not dynamic_available:
         issues.append('Shared object has no inspectable dynamic symbol table')
     report = {
+        'elf_format': obj['FileSummary']['Format'],
+        'public_exports': [dict(symbol_record(s['Symbol'], 'DYNSYM', i),
+                                other=s['Symbol']['Other']['Value'])
+                           for i, s in enumerate(obj['DynamicSymbols'])
+                           if s['Symbol']['Section']['Value'] != 0
+                           and s['Symbol']['Binding']['Name'] != 'Local'
+                           and (s['Symbol']['Other']['Value'] & 3) in (0, 3)],
         'file': label, 'architecture': obj['FileSummary']['Arch'],
         'elf_type': obj['ElfHeader']['Type'],
         'sha256': hashlib.sha256(data).hexdigest(),
@@ -68,8 +83,48 @@ def inspect_elf(label, path, data, readelf):
                for i, s in enumerate(obj['DynamicSymbols'])]
     regular = [symbol_record(s['Symbol'], 'SYMTAB', i)
                for i, s in enumerate(obj['Symbols'])]
+    report['dynamic_symbols'] = dynamic
+    report['dt_needed'] = sorted({entry['Library'] for entry in obj['DynamicSection']
+                                  if entry['Type'] == 'NEEDED'})
+    report['soname'] = next((entry['Name'] for entry in obj['DynamicSection']
+                             if entry['Type'] == 'SONAME'), None)
+    dyn_names = {s['name'] for s in dynamic} | {s['symbol'] for s in dynamic}
+    sym_names = {s['name'] for s in regular} | {s['symbol'] for s in regular}
+    imports = {s['symbol'] for s in dynamic if not s['defined']}
+    report['runtime_loader_imports'] = sorted(imports & LOADER_APIS)
+    # Scan printable strings once, requiring an entire string rather than a
+    # substring. Exclude symbol/string/debug tables from literal candidates;
+    # also conservatively exclude names in either of this ELF's symbol tables.
+    targets = set(runtime_names)
+    exact, literal, modules, markers, steam_strings = set(), set(), set(), set(), set()
+    for match in re.finditer(rb'[\x20-\x7e]{4,}', data):
+        raw = match.group()
+        if b'Steam' not in raw and b'steam' not in raw and raw.decode('ascii') not in targets:
+            continue
+        text = raw.decode('ascii')
+        table_string = any(
+            s['Offset'] <= match.start() < s['Offset'] + s['Size'] and
+            (s['Type']['Value'] in (2, 3, 11) or s['Name']['Name'].startswith('.debug'))
+            for s in sections.values() if s['Type']['Value'] != 8)
+        if text in targets:
+            exact.add(text)
+            if text not in dyn_names and text not in sym_names and not table_string:
+                literal.add(text)
+        if not table_string:
+            if 'steam' in text.lower():
+                steam_strings.add(text)
+            if 'steam_api' in text.lower():
+                modules.add(text)
+            if 'steamworks.net' in text.lower():
+                markers.add(text)
+    report.update(raw_exact_provider_export_strings=sorted(exact),
+                  provider_export_strings_explained_by_dynsym=sorted(exact & dyn_names),
+                  provider_export_strings_explained_by_symtab=sorted(exact & sym_names),
+                  runtime_lookup_literal_candidates=sorted(literal),
+                  steam_module_strings=sorted(modules), steamworks_net_markers=sorted(markers),
+                  steam_related_strings=sorted(steam_strings))
     for symbol in dynamic + regular:
-        if symbol['symbol'] not in NAMES:
+        if symbol['symbol'] not in names:
             continue
         if symbol['defined']:
             report['defined_symbols'].append(symbol)
@@ -85,7 +140,7 @@ def inspect_elf(label, path, data, readelf):
         for item in group['Relocs']:
             relocation = item['Relocation']
             name = base_name(relocation['Symbol']['Name'])
-            if name not in NAMES:
+            if name not in names:
                 continue
             index = relocation['Symbol']['Value']
             symbol = symbols[index]
@@ -98,8 +153,8 @@ def inspect_elf(label, path, data, readelf):
                 'symbol_index': index, 'symbol_defined': symbol['defined'],
                 'binding': symbol['binding'], 'addend': relocation.get('Addend'),
             })
-    for name in NAMES:
-        needle = name.encode('ascii')
+    for name in names:
+        needle = name.encode('utf-8')
         start = 0
         while True:
             offset = data.find(needle, start)
@@ -117,8 +172,10 @@ def inspect_elf(label, path, data, readelf):
 
 
 class Scanner:
-    def __init__(self, readelf):
+    def __init__(self, readelf, names=NAMES, runtime_names=()):
+        self.names = names
         self.readelf = readelf
+        self.runtime_names = runtime_names
         self.files = []
         self.errors = []
         self.archives = 0
@@ -132,11 +189,11 @@ class Scanner:
             self.error(label, 'Expected native ELF; file is not ELF')
             return
         try:
-            report = inspect_elf(label, path, data, self.readelf)
+            report = inspect_elf(label, path, data, self.readelf, self.names, self.runtime_names)
             self.files.append(report)
             for issue in report['issues']:
                 self.error(label, issue)
-        except (OSError, ValueError, KeyError, IndexError, TypeError) as exc:
+        except (OSError, ValueError, KeyError, IndexError, TypeError, subprocess.TimeoutExpired) as exc:
             self.error(label, exc)
 
     def archive(self, label, source, depth=0):
@@ -193,7 +250,7 @@ class Scanner:
         if not self.files:
             self.error('<scan>', 'No ELF files successfully inspected')
         summary = {}
-        for name in NAMES:
+        for name in self.names:
             evidence = []
             required = False
             static_reference = False
@@ -217,7 +274,7 @@ class Scanner:
                 'evidence': evidence,
             }
         return {
-            'schema_version': 2,
+            'schema_version': 3,
             'note': 'statically_required means a non-weak external ELF import/reference was '
                     'found, not proof of execution or of which library supplies it. Weak '
                     'imports remain linkage evidence. Definitions and strings alone do not '

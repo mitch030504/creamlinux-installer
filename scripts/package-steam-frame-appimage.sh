@@ -68,6 +68,13 @@ if [ ! -d "${LIBDIR}" ]; then
   exit 1
 fi
 
+# Tauri resolves Linux resources under usr/lib/<product-name>.
+READER_RESOURCE="${LIBDIR}/Creamlinux/compatibility/runtime"
+python3 "${SCRIPT_DIR}/prepare-steam-frame-runtime.py" \
+  --source "${REPO_ROOT}/src-tauri/resources/compatibility/runtime" \
+  --output "$READER_RESOURCE" --restore-appdir-payloads
+python3 "${SCRIPT_DIR}/prepare-steam-frame-runtime.py" --source "$READER_RESOURCE" --verify-only
+
 # 2. Targeted libraries that must be excluded to rely on SteamOS host libraries
 TARGET_LIBS=(
   "libwayland-client.so.0"
@@ -93,8 +100,8 @@ for lib in "${TARGET_LIBS[@]}"; do
   # while strictly preserving unrelated libraries.
   base_pattern="${lib%.so*}"
   
-  # Find matching files in the library directory (without descending into subdirectories)
-  matched_files=$(find "${LIBDIR}" -maxdepth 1 -type f -name "${base_pattern}.so*" -o -type l -name "${base_pattern}.so*" 2>/dev/null || true)
+  # Check the full bundled library tree, including nested plugin directories.
+  matched_files=$(find "${LIBDIR}" \( -type f -o -type l \) -name "${base_pattern}.so*" 2>/dev/null)
   
   if [ -n "${matched_files}" ]; then
     while IFS= read -r file; do
@@ -126,20 +133,53 @@ if [ -z "${APPIMAGETOOL}" ]; then
   fi
 fi
 
-OUTPUT_NAME="Creamlinux_1.7.1_steam-frame-lepton-fixed_aarch64.AppImage"
+RELEASE_VERSION=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "${REPO_ROOT}/package.json")
+OUTPUT_NAME="Creamlinux_${RELEASE_VERSION}_steam-frame-inspector_aarch64.AppImage"
 OUTPUT_DIR="${REPO_ROOT}/.."
 OUTPUT_PATH="${2:-${OUTPUT_DIR}/${OUTPUT_NAME}}"
+
+if [ "${FRAME_PACKAGE_PREPARE_ONLY:-0}" = "1" ]; then
+  echo "AppDir prepared; artifact creation was explicitly not requested."
+  exit 0
+fi
 
 if [ -n "${APPIMAGETOOL}" ] && [ -x "${APPIMAGETOOL}" ]; then
   echo ""
   echo "Packaging final Steam Frame ARM64 AppImage using ${APPIMAGETOOL}..."
-  rm -f "${OUTPUT_PATH}"
-  ARCH=aarch64 "${APPIMAGETOOL}" "${APPDIR}" "${OUTPUT_PATH}"
+  if [ -e "${OUTPUT_PATH}" ]; then
+    echo "ERROR: Output already exists; choose a new output path: ${OUTPUT_PATH}" >&2
+    exit 1
+  fi
+  RUNTIME_FILE="${FRAME_APPIMAGE_RUNTIME:-${REPO_ROOT}/tools/android-steam-proxy/build/release-tools/runtime-aarch64}"
+  # Check pinned packaging tools, exclusions and reproducible timestamps before
+  # invoking appimagetool. Its default moving runtime download is prohibited.
+  python3 - "$SCRIPT_DIR" "$APPDIR" "$APPIMAGETOOL" "$RUNTIME_FILE" <<'PY'
+import os, pathlib, subprocess, sys
+sys.path.insert(0, sys.argv[1])
+from frame_release_utils import FORBIDDEN_FAMILIES, normalize, require_elf, sha256, tool_pins
+appdir, tool, runtime = map(pathlib.Path, sys.argv[2:])
+pins = tool_pins()['tools']
+for path, name in [(tool, 'appimagetool-x86_64.AppImage'), (runtime, 'runtime-aarch64')]:
+    if not path.is_file() or sha256(path) != pins[name]['sha256']:
+        raise SystemExit('Missing/corrupt pinned packaging input: '+str(path)+'; use the high-level release --prepare-tools workflow')
+require_elf(runtime)
+require_elf(appdir/'usr/bin/creamlinux')
+for path in appdir.rglob('*'):
+    if any(path.name.startswith(family+'.so') for family in FORBIDDEN_FAMILIES):
+        raise SystemExit('Forbidden bundled display library remains: '+str(path))
+epoch = int(os.environ.get('SOURCE_DATE_EPOCH') or subprocess.check_output(
+    ['git','-C',str(pathlib.Path(sys.argv[1]).parent),'show','-s','--format=%ct','HEAD']))
+normalize(appdir, epoch)
+PY
+  SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-$(git -C "$REPO_ROOT" show -s --format=%ct HEAD)}" \
+    ARCH=aarch64 APPIMAGE_EXTRACT_AND_RUN=1 "${APPIMAGETOOL}" \
+    --runtime-file "$RUNTIME_FILE" --mksquashfs-opt -processors --mksquashfs-opt 1 \
+    "${APPDIR}" "${OUTPUT_PATH}"
   echo "Successfully packaged: ${OUTPUT_PATH}"
 else
   echo ""
-  echo "NOTE: appimagetool not found automatically. To generate the final AppImage, run:"
-  echo "  ARCH=aarch64 appimagetool \"${APPDIR}\" \"${OUTPUT_PATH}\""
+  echo "ERROR: appimagetool unavailable; prepare checksum-pinned tools with the high-level release workflow." >&2
+  exit 2
 fi
 
 echo ""

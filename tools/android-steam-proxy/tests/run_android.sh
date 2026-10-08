@@ -28,4 +28,7 @@ expect_failure nonexistent 'cannot stat original' ./mock_load_probe "$base/mock/
 expect_failure self_load 'original is proxy itself' ./mock_load_probe "$base/mock/libsteam_api.so" "$base/mock/libsteam_api.so"
 expect_failure missing_symbols 'missing function' ./mock_load_probe "$base/mock/libsteam_api.so" "$base/mock/libempty.so"
 expect_failure dependency_target 'target is not in explicit original' ./mock_load_probe "$base/mock/libsteam_api.so" "$base/mock/libdependency.so"
-echo 'PASS standalone mock ABI and six loader rejection cases; no real Steam API loaded'
+if [ -f "$base/mock/libmissing_weak.so" ]; then
+    expect_failure missing_weak 'missing function' ./mock_load_probe "$base/mock/libsteam_api.so" "$base/mock/libmissing_weak.so"
+fi
+echo 'PASS standalone mock ABI and loader rejection cases; no real Steam API loaded'

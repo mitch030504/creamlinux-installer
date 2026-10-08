@@ -1,5 +1,7 @@
 # CreamLinux
 
+Steam Frame read-only inspector releases: [build workflow and prerequisites](STEAM_FRAME_RELEASE.md).
+
 CreamLinux is a GUI application for Linux that simplifies the management of DLC IDs in Steam games. It provides a user-friendly interface to install and configure CreamAPI (for native Linux games), SmokeAPI (for Windows games running through Proton) and ScreamAPI (Epic Games).
 
 ## Watch the demo here:

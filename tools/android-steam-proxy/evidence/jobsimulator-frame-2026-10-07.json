@@ -1,0 +1,22 @@
+{
+  "abi_checks": 11156,
+  "android_api": 30,
+  "bundle_sha256": "fc8614af167df51b85ec61fe88002845d9a24be11686b65a59543a111e58b3ed",
+  "context": "creamlinux-poc",
+  "device": "Steam Frame",
+  "evidence_kind": "recorded hardware observation; not an attestation",
+  "function_targets": 1156,
+  "global_functions": 1135,
+  "loader_rejections": 8,
+  "measured_at": "2026-10-07T11:23:09.607313+00:00",
+  "provider_sha256": "345f62386d8bd342461195cf4f40214a2f2e0b73aa60a45bf5b683a78fe8c700",
+  "proxy_sha256": "d14dbef4969e32e90564cc15af6b76cc951062629fb415cc2b211d8776eac0e7",
+  "resolution_failures": 0,
+  "results_sha256": "490533c053377003e0c94e7824660be0a9af72e37edc659d0eb0cbf6db370be6",
+  "scope": "Function-only proxy mock ABI/loader/binding and zero-call provider resolution. No real Steam function forwarding calls or game injection were tested.",
+  "source": "/home/mitchell/creamlinux-arm64-from-laptop/creamlinux-arm64/creamlinux-installer/tools/android-steam-proxy/build/frame-hardware-reproducible-2026-10-07",
+  "steam_api_calls_by_resolution_probe": 0,
+  "toolchain": "Android (16134705, +pgo, +bolt, +lto, +mlgo, based on r574158c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 9f872551d3c681d06fd303b36f16ed5c274735eb)",
+  "weak_checks": 420,
+  "weak_functions": 21
+}

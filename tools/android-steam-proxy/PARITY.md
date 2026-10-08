@@ -126,7 +126,6 @@ marker identifies the stage. Stop there. Do not compensate by creating
 `steam_appid.txt`, setting a game's App ID, joining its context, initializing
 Steam, or modifying installed packages.
 
-No real parity result is claimed by a host build. Hardware verification of this
-new harness remains to be performed in an already-running development context.
-The earlier hardware ABI and zero-call resolution successes remain separate
-results. No installed Walkabout files are read or modified by this harness.
+No real parity result is claimed by a host build. Completed hardware parity,
+ABI, and resolution results are recorded separately in
+[HARDWARE_VALIDATION.md](HARDWARE_VALIDATION.md). No installed Walkabout files are read or modified by this harness.

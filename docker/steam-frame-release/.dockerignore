@@ -1,0 +1,7 @@
+*
+!Dockerfile
+!ubuntu.sources
+!packages.tsv
+!sdk-lock.json
+!provision.py
+!.dockerignore

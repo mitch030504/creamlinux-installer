@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
-import { LeptonIntrospection, Game } from '@/types'
+import { LeptonIntrospection, LeptonCompatibility, LeptonArtifactOptions, Game } from '@/types'
+import { open } from '@tauri-apps/plugin-dialog'
+import { LeptonCompatibilityReport } from './LeptonCompatibilityReport'
 import { Button } from '@/components/buttons'
 import { Icon, layers, check, close, refresh, copy, info, warning } from '@/components/icons'
 
@@ -24,27 +26,66 @@ export const LeptonInspectorView: React.FC<LeptonInspectorViewProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [copiedField, setCopiedField] = useState<string | null>(null)
 
+  const [compatibility, setCompatibility] = useState<LeptonCompatibility | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisError, setAnalysisError] = useState<string | null>(null)
+  const [artifacts, setArtifacts] = useState<LeptonArtifactOptions>({ target_proxy_dir: null, hardware_bundle: null, hardware_results: null })
+  const requestGeneration = React.useRef(0)
+
+  useEffect(() => {
+    requestGeneration.current += 1
+    setCompatibility(null)
+    setAnalysisError(null)
+    setIsAnalyzing(false)
+    setArtifacts({ target_proxy_dir: null, hardware_bundle: null, hardware_results: null })
+    return () => { requestGeneration.current += 1 }
+  }, [gameId])
+
+  const analyzeCompatibility = async () => {
+    const generation = ++requestGeneration.current
+    setIsAnalyzing(true)
+    setCompatibility(null)
+    setAnalysisError(null)
+    try {
+      const result = await invoke<LeptonCompatibility>('analyze_lepton_compatibility', { gameId, artifacts })
+      if (generation === requestGeneration.current) setCompatibility(result)
+    } catch (error) {
+      if (generation === requestGeneration.current) setAnalysisError(String(error))
+    } finally {
+      if (generation === requestGeneration.current) setIsAnalyzing(false)
+    }
+  }
+
   // Fetch game title if not provided
   useEffect(() => {
+    let cancelled = false
+    setTitle(gameTitle || `Steam App ${gameId}`)
     if (!gameTitle) {
       invoke<Game>('get_game_info', { gameId })
         .then((g) => {
-          if (g?.title) setTitle(g.title)
+          if (!cancelled && g?.title) setTitle(g.title)
         })
         .catch(() => {
           // Keep fallback title
         })
     }
+    return () => { cancelled = true }
   }, [gameId, gameTitle])
 
   // Introspection query
   const fetchLeptonInfo = React.useCallback(async () => {
+    const generation = ++requestGeneration.current
     setIsLoading(true)
+    setIsAnalyzing(false)
+    setIntrospection(null)
+    setCompatibility(null)
+    setAnalysisError(null)
     setErrorMessage(null)
     try {
       const data = await invoke<LeptonIntrospection>('get_lepton_info', { gameId })
-      setIntrospection(data)
+      if (generation === requestGeneration.current) setIntrospection(data)
     } catch (err) {
+      if (generation !== requestGeneration.current) return
       console.error('Failed to get Lepton info:', err)
       setErrorMessage(typeof err === 'string' ? err : 'Failed to query Lepton runtime info')
       setIntrospection({
@@ -57,9 +98,25 @@ export const LeptonInspectorView: React.FC<LeptonInspectorViewProps> = ({
         steam_api_path: null,
       })
     } finally {
-      setIsLoading(false)
+      if (generation === requestGeneration.current) setIsLoading(false)
     }
   }, [gameId])
+
+  const selectArtifact = async (key: keyof LeptonArtifactOptions) => {
+    const generation = requestGeneration.current
+    try {
+      const selected = await open({ directory: key !== 'hardware_bundle', multiple: false,
+        title: key === 'target_proxy_dir' ? 'Select generated proxy directory' :
+          key === 'hardware_bundle' ? 'Select hardware validation bundle' : 'Select hardware results directory' })
+      if (generation !== requestGeneration.current || typeof selected !== 'string') return
+      requestGeneration.current += 1
+      setCompatibility(null)
+      setAnalysisError(null)
+      setArtifacts(previous => ({ ...previous, [key]: selected }))
+    } catch (error) {
+      if (generation === requestGeneration.current) setAnalysisError(String(error))
+    }
+  }
 
   useEffect(() => {
     fetchLeptonInfo()
@@ -115,7 +172,7 @@ export const LeptonInspectorView: React.FC<LeptonInspectorViewProps> = ({
           <Button
             variant="secondary"
             onClick={fetchLeptonInfo}
-            disabled={isLoading}
+            disabled={isLoading || isAnalyzing}
             className="lepton-btn-refresh"
             title="Re-query Lepton runtime state"
             leftIcon={
@@ -370,6 +427,39 @@ export const LeptonInspectorView: React.FC<LeptonInspectorViewProps> = ({
                 )}
               </div>
             </div>
+          </div>
+        </section>
+        <section className="lepton-section" aria-labelledby="compatibility-title" aria-busy={isAnalyzing}>
+          <div className="lepton-section-header">
+            <h2 id="compatibility-title">Steam API Compatibility</h2>
+            <p>Read-only snapshot of exports and observed static consumers. No game files are changed.</p>
+          </div>
+          <Button variant="secondary" onClick={analyzeCompatibility}
+            disabled={isLoading || isAnalyzing || !isAvailable || !isRunning}>
+            {isAnalyzing ? 'Analyzing compatibility…' : 'Analyze compatibility'}
+          </Button>
+          <details className="lepton-artifact-options">
+            <summary>Inspect existing validation artifacts (optional)</summary>
+            <p>Select artifacts to verify against this game's provider. Nothing is generated or installed.</p>
+            {(['target_proxy_dir', 'hardware_bundle', 'hardware_results'] as const).map(key => <div key={key} className="lepton-artifact-row">
+              <Button variant="secondary" size="small" disabled={isAnalyzing || isLoading} onClick={() => selectArtifact(key)}>
+                {key === 'target_proxy_dir' ? 'Select generated proxy' : key === 'hardware_bundle' ? 'Select hardware bundle' : 'Select results folder'}
+              </Button>
+              <code>{artifacts[key] ?? 'Not selected'}</code>
+            </div>)}
+            <Button variant="secondary" size="small" disabled={isAnalyzing || isLoading} onClick={() => {
+              requestGeneration.current += 1
+              setCompatibility(null)
+              setAnalysisError(null)
+              setArtifacts({ target_proxy_dir: null, hardware_bundle: null, hardware_results: null })
+            }}>Clear artifact selection</Button>
+          </details>
+          <div role="status">
+            {isAnalyzing && <p>Reading APKs and scanning native libraries. Large packages may take several minutes.</p>}
+            {!compatibility && !isAnalyzing && <p>{!isAvailable ? 'Lepton CLI is unavailable.' : !isRunning
+              ? 'The Lepton game must already be running to analyze it.' : 'Compatibility has not been analyzed.'}</p>}
+            {analysisError && <p>Analysis incomplete: {analysisError}</p>}
+            {compatibility && <LeptonCompatibilityReport result={compatibility} />}
           </div>
         </section>
       </main>

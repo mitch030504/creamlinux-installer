@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "base_image": "ubuntu@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
+  "apt_snapshot": "20260927T020000Z",
+  "packages_sha256": "271fcc124fc0ff2ce67ea32014bdd1944d80bd8758ec8191e417fb6fd12fc09a",
+  "node": {
+    "version": "22.16.0",
+    "npm": "10.9.9",
+    "url": "https://nodejs.org/dist/v22.16.0/node-v22.16.0-linux-arm64.tar.xz",
+    "sha256": "eab80cb88f8fda1e65f5e8d0420c9809bdb320b03fd34976ab7161b6e703b910"
+  },
+  "rust": {
+    "version": "1.96.0",
+    "url": "https://static.rust-lang.org/dist/rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz",
+    "sha256": "371eadcca97062219cbd8593628eb5d2802bc370515d085fedce1b56b2baed57"
+  },
+  "binfmt_image": "tonistiigi/binfmt@sha256:400a4873b838d1b89194d982c45e5fb3cda4593fbfd7e08a02e76b03b21166f0",
+  "npm": {
+    "version": "10.9.9",
+    "url": "https://registry.npmjs.org/npm/-/npm-10.9.9.tgz",
+    "sha256": "c80bd097147cce32e31010b791bab8c71a26a5e10668210ec9d2e7f4c7cea2a1"
+  }
+}

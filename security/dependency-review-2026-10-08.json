@@ -1,0 +1,5177 @@
+{
+  "date": "2026-10-08",
+  "node": "22.16.0",
+  "npm_audit_version": "10.9.2",
+  "rust_audit_version": "0.22.2",
+  "initial_npm": {
+    "info": 0,
+    "low": 1,
+    "moderate": 5,
+    "high": 25,
+    "critical": 1,
+    "total": 32
+  },
+  "final_npm": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 12,
+    "critical": 0,
+    "total": 14
+  },
+  "unique_initial_advisories": 71,
+  "unique_fixed_advisories": 59,
+  "unique_unresolved_advisories": 12,
+  "package_findings": [
+    {
+      "package": "@babel/core",
+      "severity": "low",
+      "nodes": [
+        {
+          "path": "node_modules/@babel/core",
+          "installed_before": "7.29.0",
+          "installed_after": "7.29.7",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@babel/core@7.29.0"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@vitejs/plugin-react@4.7.0",
+                "@babel/core@7.29.0"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite-plugin-svgr@4.5.0",
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-4x5r-pxfx-6jf8",
+          "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+          "severity": "low",
+          "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+          "affected_range": "<=7.29.0",
+          "patched_versions": [
+            "7.29.6",
+            "8.0.0-rc.6"
+          ],
+          "exploit_precondition": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "@babel/plugin-transform-modules-systemjs",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@babel/plugin-transform-modules-systemjs",
+          "installed_before": "7.29.0",
+          "installed_after": "7.29.8",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@babel/preset-env@7.29.2",
+                "@babel/plugin-transform-modules-systemjs@7.29.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-fv7c-fp4j-7gwp",
+          "url": "https://github.com/advisories/GHSA-fv7c-fp4j-7gwp",
+          "severity": "high",
+          "title": "@babel/plugin-transform-modules-systemjs generates arbitrary code when compiling malicious input",
+          "affected_range": ">=7.12.0 <=7.29.3",
+          "patched_versions": [
+            "7.29.4",
+            "8.0.0-alpha.13"
+          ],
+          "exploit_precondition": "@babel/plugin-transform-modules-systemjs generates arbitrary code when compiling malicious input",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "@semantic-release/changelog",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/changelog",
+          "installed_before": "6.0.3",
+          "installed_after": "6.0.3",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@semantic-release/changelog@6.0.3"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@semantic-release/commit-analyzer",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/commit-analyzer",
+          "installed_before": "13.0.1",
+          "installed_after": "13.0.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/commit-analyzer@13.0.1"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "micromatch"
+        },
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@semantic-release/git",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/git",
+          "installed_before": "10.0.1",
+          "installed_after": "10.0.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@semantic-release/git@10.0.1"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "micromatch"
+        },
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@semantic-release/github",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/github",
+          "installed_before": "11.0.6",
+          "installed_after": "11.0.6",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@semantic-release/github@11.0.6"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        },
+        {
+          "path": "node_modules/semantic-release/node_modules/@semantic-release/github",
+          "installed_before": "12.0.6",
+          "installed_after": "12.0.6",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/github@12.0.6"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@semantic-release/npm",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/npm",
+          "installed_before": "13.1.5",
+          "installed_after": "13.1.5",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@semantic-release/release-notes-generator",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@semantic-release/release-notes-generator",
+          "installed_before": "14.1.0",
+          "installed_after": "14.1.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/release-notes-generator@14.1.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "semantic-release"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "@sigstore/core",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/@sigstore/core",
+          "installed_before": "3.2.0",
+          "installed_after": "3.2.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "libnpmpublish@11.1.3",
+                "sigstore@4.1.0",
+                "@sigstore/core@3.2.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-jfc7-64v2-mr8c",
+          "url": "https://github.com/advisories/GHSA-jfc7-64v2-mr8c",
+          "severity": "moderate",
+          "title": "@sigstore/core has DSSE payloadType type-binding failure",
+          "affected_range": "<=3.2.0",
+          "patched_versions": [
+            "3.2.1"
+          ],
+          "exploit_precondition": "@sigstore/core has DSSE payloadType type-binding failure",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "@sigstore/verify",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/@sigstore/verify",
+          "installed_before": "3.1.0",
+          "installed_after": "3.1.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "libnpmpublish@11.1.3",
+                "sigstore@4.1.0",
+                "@sigstore/verify@3.1.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-xgjw-pm74-86q4",
+          "url": "https://github.com/advisories/GHSA-xgjw-pm74-86q4",
+          "severity": "moderate",
+          "title": "sigstore-js has Insufficient Verification of Data Authenticity",
+          "affected_range": "=3.1.0",
+          "patched_versions": [
+            "3.1.1"
+          ],
+          "exploit_precondition": "sigstore-js has Insufficient Verification of Data Authenticity",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "baseline-browser-mapping",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/baseline-browser-mapping",
+          "installed_before": "2.10.24",
+          "installed_after": "2.11.27",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2",
+                "baseline-browser-mapping@2.10.24"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2",
+                "baseline-browser-mapping@2.10.24"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@vitejs/plugin-react@4.7.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2",
+                "baseline-browser-mapping@2.10.24"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite-plugin-svgr@4.5.0",
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2",
+                "baseline-browser-mapping@2.10.24"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-w5vr-8v7q-w6rv",
+          "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+          "severity": "moderate",
+          "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+          "affected_range": ">=2.0.0 <2.11.0",
+          "patched_versions": [
+            "2.11.0"
+          ],
+          "exploit_precondition": "baseline-browser-mapping process termination on invalid input causes denial of service",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "brace-expansion",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion",
+          "installed_before": "5.0.5",
+          "installed_after": "5.0.12",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "typescript-eslint@8.59.1",
+                "@typescript-eslint/typescript-estree@8.59.1",
+                "minimatch@10.2.5",
+                "brace-expansion@5.0.5"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        },
+        {
+          "path": "node_modules/brace-expansion",
+          "installed_before": "1.1.14",
+          "installed_after": "1.1.21",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "eslint@9.39.4",
+                "minimatch@3.1.5",
+                "brace-expansion@1.1.14"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        },
+        {
+          "path": "node_modules/glob/node_modules/brace-expansion",
+          "installed_before": "5.0.5",
+          "installed_after": "5.0.12",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "glob@11.1.0",
+                "minimatch@10.2.5",
+                "brace-expansion@5.0.5"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        },
+        {
+          "path": "node_modules/npm/node_modules/brace-expansion",
+          "installed_before": "5.0.5",
+          "installed_after": "5.0.9",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "minimatch@10.2.5",
+                "brace-expansion@5.0.5"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-jxxr-4gwj-5jf2",
+          "url": "https://github.com/advisories/GHSA-jxxr-4gwj-5jf2",
+          "severity": "moderate",
+          "title": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+          "affected_range": ">=5.0.0 <5.0.6",
+          "patched_versions": [
+            "5.0.6"
+          ],
+          "exploit_precondition": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-3jxr-9vmj-r5cp",
+          "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+          "severity": "high",
+          "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "affected_range": "<1.1.16",
+          "patched_versions": [
+            "1.1.16",
+            "2.1.2",
+            "5.0.7"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-3jxr-9vmj-r5cp",
+          "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+          "severity": "high",
+          "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "affected_range": ">=3.0.0 <5.0.7",
+          "patched_versions": [
+            "1.1.16",
+            "2.1.2",
+            "5.0.7"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-mh99-v99m-4gvg",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+          "severity": "high",
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "affected_range": "<1.1.17",
+          "patched_versions": [
+            "1.1.17",
+            "2.1.3",
+            "3.0.3",
+            "5.0.8"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-mh99-v99m-4gvg",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+          "severity": "high",
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "affected_range": ">=4.0.0 <5.0.8",
+          "patched_versions": [
+            "1.1.17",
+            "2.1.3",
+            "3.0.3",
+            "5.0.8"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-rgw5-rvv9-x895",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+          "severity": "high",
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "affected_range": ">=4.0.0 <5.0.9",
+          "patched_versions": [
+            "1.1.18",
+            "2.1.4",
+            "3.0.6",
+            "5.0.9"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-rgw5-rvv9-x895",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+          "severity": "high",
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "affected_range": "<1.1.18",
+          "patched_versions": [
+            "1.1.18",
+            "2.1.4",
+            "3.0.6",
+            "5.0.9"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-q2hr-2g5m-vwhr",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "affected_range": "<1.1.21",
+          "patched_versions": [
+            "1.1.21",
+            "2.1.7",
+            "3.0.9",
+            "5.0.12"
+          ],
+          "exploit_precondition": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-q2hr-2g5m-vwhr",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "affected_range": ">=4.0.0 <5.0.12",
+          "patched_versions": [
+            "1.1.21",
+            "2.1.7",
+            "3.0.9",
+            "5.0.12"
+          ],
+          "exploit_precondition": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-qhr7-859c-m2p7",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "affected_range": "<1.1.20",
+          "patched_versions": [
+            "1.1.20",
+            "2.1.6",
+            "3.0.8",
+            "5.0.11"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-qhr7-859c-m2p7",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "affected_range": ">=4.0.0 <5.0.11",
+          "patched_versions": [
+            "1.1.20",
+            "2.1.6",
+            "3.0.8",
+            "5.0.11"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-6j4f-fj2g-mc7p",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "affected_range": "<1.1.19",
+          "patched_versions": [
+            "1.1.19",
+            "2.1.5",
+            "3.0.7",
+            "5.0.10"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-6j4f-fj2g-mc7p",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "affected_range": ">=4.0.0 <5.0.10",
+          "patched_versions": [
+            "1.1.19",
+            "2.1.5",
+            "3.0.7",
+            "5.0.10"
+          ],
+          "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "status": "unresolved"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "braces",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/braces",
+          "installed_before": "3.0.3",
+          "installed_after": "3.0.3",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@semantic-release/git@10.0.1",
+                "micromatch@4.0.8",
+                "braces@3.0.3"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "micromatch@4.0.8",
+                "braces@3.0.3"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-vfj7-8cjw-p6xm",
+          "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+          "severity": "high",
+          "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "affected_range": "<=3.0.3",
+          "patched_versions": [],
+          "exploit_precondition": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "status": "unresolved"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "browserslist",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/browserslist",
+          "installed_before": "4.28.2",
+          "installed_after": "4.29.3",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@vitejs/plugin-react@4.7.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite-plugin-svgr@4.5.0",
+                "@svgr/core@8.1.0",
+                "@babel/core@7.29.0",
+                "@babel/helper-compilation-targets@7.28.6",
+                "browserslist@4.28.2"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-c83g-rgw3-j3cx",
+          "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+          "severity": "high",
+          "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+          "affected_range": "<=4.28.6",
+          "patched_versions": [
+            "4.28.7"
+          ],
+          "exploit_precondition": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-73wf-gq98-2v4g",
+          "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+          "severity": "high",
+          "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+          "affected_range": "<=4.28.6",
+          "patched_versions": [
+            "4.28.7"
+          ],
+          "exploit_precondition": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "http-cache-semantics",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/http-cache-semantics",
+          "installed_before": "4.2.0",
+          "installed_after": "4.2.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "make-fetch-happen@15.0.5",
+                "http-cache-semantics@4.2.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-ch52-4w7c-c8xp",
+          "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+          "severity": "high",
+          "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+          "affected_range": "<=4.2.0",
+          "patched_versions": [],
+          "exploit_precondition": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+          "status": "unresolved"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "immutable",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/immutable",
+          "installed_before": "5.1.5",
+          "installed_after": "5.1.9",
+          "dependency_ancestry": [
+            {
+              "root_kind": "production",
+              "chain": [
+                "sass@1.99.0",
+                "immutable@5.1.5"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "sass-embedded@1.99.0",
+                "immutable@5.1.5"
+              ]
+            }
+          ],
+          "npm_development": false,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-xvcm-6775-5m9r",
+          "url": "https://github.com/advisories/GHSA-xvcm-6775-5m9r",
+          "severity": "high",
+          "title": "Immutable: Hash-collision algorithmic complexity denial of service in Immutable.Map/Set",
+          "affected_range": ">=5.0.0-beta.1 <5.1.8",
+          "patched_versions": [
+            "3.8.4",
+            "4.3.9",
+            "5.1.8"
+          ],
+          "exploit_precondition": "Immutable: Hash-collision algorithmic complexity denial of service in Immutable.Map/Set",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-v56q-mh7h-f735",
+          "url": "https://github.com/advisories/GHSA-v56q-mh7h-f735",
+          "severity": "high",
+          "title": "Immutable.js `List` 32-bit trie overflow \u2192 unrecoverable DoS",
+          "affected_range": ">=5.0.0-beta.1 <5.1.8",
+          "patched_versions": [
+            "3.8.4",
+            "4.3.9",
+            "5.1.8"
+          ],
+          "exploit_precondition": "Immutable.js `List` 32-bit trie overflow \u2192 unrecoverable DoS",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "ip-address",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/ip-address",
+          "installed_before": "10.1.0",
+          "installed_after": "10.5.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "make-fetch-happen@15.0.5",
+                "@npmcli/agent@4.0.0",
+                "socks-proxy-agent@8.0.5",
+                "socks@2.8.7",
+                "ip-address@10.1.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-v2v4-37r5-5v8g",
+          "url": "https://github.com/advisories/GHSA-v2v4-37r5-5v8g",
+          "severity": "moderate",
+          "title": "ip-address has XSS in Address6 HTML-emitting methods",
+          "affected_range": "<=10.1.0",
+          "patched_versions": [
+            "10.1.1"
+          ],
+          "exploit_precondition": "ip-address has XSS in Address6 HTML-emitting methods",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-mwp4-54f8-5fhr",
+          "url": "https://github.com/advisories/GHSA-mwp4-54f8-5fhr",
+          "severity": "high",
+          "title": "ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass",
+          "affected_range": "<=10.3.0",
+          "patched_versions": [
+            "10.3.1"
+          ],
+          "exploit_precondition": "ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-rpw4-54j3-4h4q",
+          "url": "https://github.com/advisories/GHSA-rpw4-54j3-4h4q",
+          "severity": "moderate",
+          "title": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+          "affected_range": "<=10.5.0",
+          "patched_versions": [
+            "10.5.1"
+          ],
+          "exploit_precondition": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-j6r3-76f7-8jcv",
+          "url": "https://github.com/advisories/GHSA-j6r3-76f7-8jcv",
+          "severity": "moderate",
+          "title": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+          "affected_range": "<=10.7.0",
+          "patched_versions": [
+            "10.7.1"
+          ],
+          "exploit_precondition": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-h3mg-xc3c-68pw",
+          "url": "https://github.com/advisories/GHSA-h3mg-xc3c-68pw",
+          "severity": "moderate",
+          "title": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+          "affected_range": "<=10.7.0",
+          "patched_versions": [
+            "10.7.1"
+          ],
+          "exploit_precondition": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+          "status": "unresolved"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "js-yaml",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/js-yaml",
+          "installed_before": "4.1.1",
+          "installed_after": "4.3.2",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/core@8.1.0",
+                "cosmiconfig@8.3.6",
+                "js-yaml@4.1.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@svgr/core@8.1.0",
+                "cosmiconfig@8.3.6",
+                "js-yaml@4.1.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "eslint@9.39.4",
+                "@eslint/eslintrc@3.3.5",
+                "js-yaml@4.1.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "cosmiconfig@9.0.1",
+                "js-yaml@4.1.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite-plugin-svgr@4.5.0",
+                "@svgr/core@8.1.0",
+                "cosmiconfig@8.3.6",
+                "js-yaml@4.1.1"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-h67p-54hq-rp68",
+          "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+          "severity": "moderate",
+          "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+          "affected_range": ">=4.0.0 <=4.1.1",
+          "patched_versions": [
+            "3.15.0",
+            "4.2.0"
+          ],
+          "exploit_precondition": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-52cp-r559-cp3m",
+          "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+          "severity": "high",
+          "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+          "affected_range": ">=4.0.0 <4.3.0",
+          "patched_versions": [
+            "3.15.0",
+            "4.3.0"
+          ],
+          "exploit_precondition": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-5p4m-2wfm-xmqj",
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+          "severity": "high",
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+          "affected_range": ">=4.0.0 <4.3.1",
+          "patched_versions": [
+            "3.15.1",
+            "4.3.1"
+          ],
+          "exploit_precondition": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-2883-xcg3-v3hh",
+          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+          "severity": "high",
+          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "affected_range": ">=4.0.0 <4.3.2",
+          "patched_versions": [
+            "3.15.2",
+            "4.3.2"
+          ],
+          "exploit_precondition": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "micromatch",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/micromatch",
+          "installed_before": "4.0.8",
+          "installed_after": "4.0.8",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@semantic-release/git@10.0.1",
+                "micromatch@4.0.8"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "micromatch@4.0.8"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "braces"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "nanoid",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/nanoid",
+          "installed_before": "3.3.11",
+          "installed_after": "3.3.20",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite@6.4.2",
+                "postcss@8.5.12",
+                "nanoid@3.3.11"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-28wg-ghj8-5hjv",
+          "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+          "severity": "high",
+          "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+          "affected_range": "<3.3.16",
+          "patched_versions": [
+            "3.3.16",
+            "5.1.16"
+          ],
+          "exploit_precondition": "nanoid: non-secure generators can loop indefinitely with negative size",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-2v37-7h3g-55p8",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+          "severity": "high",
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "affected_range": "<3.3.18",
+          "patched_versions": [
+            "3.3.18",
+            "5.1.6"
+          ],
+          "exploit_precondition": "nanoid: custom generators can loop indefinitely when size is zero",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-xwg4-73v4-xw9w",
+          "url": "https://github.com/advisories/GHSA-xwg4-73v4-xw9w",
+          "severity": "high",
+          "title": "nanoid: Integer Overflow or Wraparound",
+          "affected_range": "<3.3.12",
+          "patched_versions": [
+            "3.3.12",
+            "5.1.11"
+          ],
+          "exploit_precondition": "nanoid: Integer Overflow or Wraparound",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "npm",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm",
+          "installed_before": "11.13.0",
+          "installed_after": "11.21.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "pacote"
+        },
+        {
+          "inherited_from": "tar"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "pacote",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/pacote",
+          "installed_before": "21.5.0",
+          "installed_after": "21.5.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "pacote@21.5.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-w4pp-8pjf-rmxw",
+          "url": "https://github.com/advisories/GHSA-w4pp-8pjf-rmxw",
+          "severity": "high",
+          "title": "pacote is vulnerable to Denial of Service (DoS) via the addGitSha function",
+          "affected_range": ">=11.2.7 <21.5.1",
+          "patched_versions": [
+            "21.5.1"
+          ],
+          "exploit_precondition": "pacote is vulnerable to Denial of Service (DoS) via the addGitSha function",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "postcss",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/postcss",
+          "installed_before": "8.5.12",
+          "installed_after": "8.5.29",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite@6.4.2",
+                "postcss@8.5.12"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-fxqj-rqcc-2cmp",
+          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+          "severity": "moderate",
+          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+          "affected_range": "<=8.5.22",
+          "patched_versions": [
+            "8.5.23"
+          ],
+          "exploit_precondition": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-r28c-9q8g-f849",
+          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+          "severity": "high",
+          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "affected_range": "<=8.5.17",
+          "patched_versions": [
+            "8.5.18"
+          ],
+          "exploit_precondition": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "postcss-selector-parser",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/postcss-selector-parser",
+          "installed_before": "7.1.1",
+          "installed_after": "7.1.4",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "@npmcli/arborist@9.4.3",
+                "@npmcli/query@5.0.0",
+                "postcss-selector-parser@7.1.1"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-w9m9-85wc-3x92",
+          "url": "https://github.com/advisories/GHSA-w9m9-85wc-3x92",
+          "severity": "low",
+          "title": "postcss-selector-parser allows denial of service through uncontrolled AST recursion",
+          "affected_range": ">=7.1.0 <7.1.3",
+          "patched_versions": [
+            "6.1.3",
+            "7.1.3"
+          ],
+          "exploit_precondition": "postcss-selector-parser allows denial of service through uncontrolled AST recursion",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-rj75-hqrm-r3gf",
+          "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+          "severity": "moderate",
+          "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+          "affected_range": "<7.1.6",
+          "patched_versions": [
+            "7.1.6"
+          ],
+          "exploit_precondition": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+          "status": "unresolved"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "semantic-release",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/semantic-release",
+          "installed_before": "25.0.3",
+          "installed_after": "25.0.3",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "inherited_from": "@semantic-release/commit-analyzer"
+        },
+        {
+          "inherited_from": "@semantic-release/github"
+        },
+        {
+          "inherited_from": "@semantic-release/npm"
+        },
+        {
+          "inherited_from": "@semantic-release/release-notes-generator"
+        },
+        {
+          "inherited_from": "micromatch"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "sigstore",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/sigstore",
+          "installed_before": "4.1.0",
+          "installed_after": "4.1.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "libnpmpublish@11.1.3",
+                "sigstore@4.1.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-52v5-jr5w-gjxr",
+          "url": "https://github.com/advisories/GHSA-52v5-jr5w-gjxr",
+          "severity": "high",
+          "title": "sigstore's `certificateOIDs` verification constraints are silently dropped and never enforced",
+          "affected_range": "<=4.1.0",
+          "patched_versions": [
+            "4.1.1"
+          ],
+          "exploit_precondition": "sigstore's `certificateOIDs` verification constraints are silently dropped and never enforced",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "source-map-js",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/source-map-js",
+          "installed_before": "1.2.1",
+          "installed_after": "1.2.2",
+          "dependency_ancestry": [
+            {
+              "root_kind": "production",
+              "chain": [
+                "sass@1.99.0",
+                "source-map-js@1.2.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@svgr/plugin-svgo@8.1.0",
+                "svgo@3.3.3",
+                "css-tree@2.3.1",
+                "source-map-js@1.2.1"
+              ]
+            },
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite@6.4.2",
+                "postcss@8.5.12",
+                "source-map-js@1.2.1"
+              ]
+            }
+          ],
+          "npm_development": false,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-68fv-2mgg-jv7q",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "severity": "high",
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "affected_range": ">=1.0.0 <1.2.2",
+          "patched_versions": [
+            "1.2.2"
+          ],
+          "exploit_precondition": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "svgo",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/svgo",
+          "installed_before": "3.3.3",
+          "installed_after": "3.3.5",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "@svgr/webpack@8.1.0",
+                "@svgr/plugin-svgo@8.1.0",
+                "svgo@3.3.3"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-2p49-hgcm-8545",
+          "url": "https://github.com/advisories/GHSA-2p49-hgcm-8545",
+          "severity": "high",
+          "title": "SVGO removeScripts plugin leaves some executable scripts intact",
+          "affected_range": ">=3.0.0 <3.3.4",
+          "patched_versions": [
+            "2.8.3",
+            "3.3.4",
+            "4.0.2"
+          ],
+          "exploit_precondition": "SVGO removeScripts plugin leaves some executable scripts intact",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-w27v-7q3p-w38r",
+          "url": "https://github.com/advisories/GHSA-w27v-7q3p-w38r",
+          "severity": "high",
+          "title": "SVGO: removeScripts allows executable links through namespace and control-character bypasses",
+          "affected_range": ">=3.0.0 <3.3.5",
+          "patched_versions": [
+            "2.8.4",
+            "3.3.5",
+            "4.1.0"
+          ],
+          "exploit_precondition": "SVGO: removeScripts allows executable links through namespace and control-character bypasses",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-4vpr-x523-8j87",
+          "url": "https://github.com/advisories/GHSA-4vpr-x523-8j87",
+          "severity": "moderate",
+          "title": "SVGO: removeScripts incompletely sanitizes executable HTML in SVG foreignObject elements",
+          "affected_range": ">=3.0.0 <3.3.5",
+          "patched_versions": [
+            "2.8.4",
+            "3.3.5",
+            "4.1.0"
+          ],
+          "exploit_precondition": "SVGO: removeScripts incompletely sanitizes executable HTML in SVG foreignObject elements",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "tar",
+      "severity": "critical",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/tar",
+          "installed_before": "7.5.13",
+          "installed_after": "7.5.22",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "tar@7.5.13"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-vmf3-w455-68vh",
+          "url": "https://github.com/advisories/GHSA-vmf3-w455-68vh",
+          "severity": "moderate",
+          "title": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+          "affected_range": "<=7.5.15",
+          "patched_versions": [
+            "7.5.16"
+          ],
+          "exploit_precondition": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-w8wr-v893-vjvp",
+          "url": "https://github.com/advisories/GHSA-w8wr-v893-vjvp",
+          "severity": "moderate",
+          "title": "node-tar: Process crash via PAX numeric path type confusion",
+          "affected_range": "<=7.5.17",
+          "patched_versions": [
+            "7.5.18"
+          ],
+          "exploit_precondition": "node-tar: Process crash via PAX numeric path type confusion",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-23hp-3jrh-7fpw",
+          "url": "https://github.com/advisories/GHSA-23hp-3jrh-7fpw",
+          "severity": "critical",
+          "title": "node-tar: Decompression/parse DoS via unlimited input",
+          "affected_range": "<=7.5.18",
+          "patched_versions": [
+            "7.5.19"
+          ],
+          "exploit_precondition": "node-tar: Decompression/parse DoS via unlimited input",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-8x88-c5mf-7j5w",
+          "url": "https://github.com/advisories/GHSA-8x88-c5mf-7j5w",
+          "severity": "high",
+          "title": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+          "affected_range": "<=7.5.17",
+          "patched_versions": [
+            "7.5.18"
+          ],
+          "exploit_precondition": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-gvwx-54wh-qm9j",
+          "url": "https://github.com/advisories/GHSA-gvwx-54wh-qm9j",
+          "severity": "moderate",
+          "title": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+          "affected_range": "<=7.5.16",
+          "patched_versions": [
+            "7.5.17"
+          ],
+          "exploit_precondition": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-r292-9mhp-454m",
+          "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+          "severity": "high",
+          "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+          "affected_range": "<=7.5.20",
+          "patched_versions": [
+            "7.5.21"
+          ],
+          "exploit_precondition": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "undici",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/npm/node_modules/undici",
+          "installed_before": "6.25.0",
+          "installed_after": "6.28.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "npm@11.13.0",
+                "node-gyp@12.3.0",
+                "undici@6.25.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": true
+        },
+        {
+          "path": "node_modules/semantic-release/node_modules/undici",
+          "installed_before": "7.25.0",
+          "installed_after": "7.30.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/github@12.0.6",
+                "undici@7.25.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        },
+        {
+          "path": "node_modules/undici",
+          "installed_before": "6.25.0",
+          "installed_after": "6.29.0",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "semantic-release@25.0.3",
+                "@semantic-release/npm@13.1.5",
+                "@actions/core@3.0.1",
+                "@actions/http-client@4.0.1",
+                "undici@6.25.0"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-vmh5-mc38-953g",
+          "url": "https://github.com/advisories/GHSA-vmh5-mc38-953g",
+          "severity": "high",
+          "title": "undici vulnerable to TLS certificate validation bypass via dropped requestTls in SOCKS5 ProxyAgent",
+          "affected_range": ">=7.23.0 <7.28.0",
+          "patched_versions": [
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to TLS certificate validation bypass via dropped requestTls in SOCKS5 ProxyAgent",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-p88m-4jfj-68fv",
+          "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+          "severity": "moderate",
+          "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "affected_range": ">=7.0.0 <7.28.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-p88m-4jfj-68fv",
+          "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+          "severity": "moderate",
+          "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "affected_range": "<6.27.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-vxpw-j846-p89q",
+          "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+          "severity": "high",
+          "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "affected_range": ">=7.0.0 <7.28.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-vxpw-j846-p89q",
+          "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+          "severity": "high",
+          "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "affected_range": "<6.27.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-hm92-r4w5-c3mj",
+          "url": "https://github.com/advisories/GHSA-hm92-r4w5-c3mj",
+          "severity": "high",
+          "title": "undici vulnerable to cross-origin request routing via SOCKS5 proxy pool reuse",
+          "affected_range": ">=7.23.0 <7.28.0",
+          "patched_versions": [
+            "7.28.0",
+            "8.2.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cross-origin request routing via SOCKS5 proxy pool reuse",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-g8m3-5g58-fq7m",
+          "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+          "severity": "low",
+          "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "affected_range": ">=7.0.0 <7.28.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-g8m3-5g58-fq7m",
+          "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+          "severity": "low",
+          "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "affected_range": "<6.27.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-pr7r-676h-xcf6",
+          "url": "https://github.com/advisories/GHSA-pr7r-676h-xcf6",
+          "severity": "moderate",
+          "title": "undici vulnerable to cross-user information disclosure via shared cache whitespace bypass",
+          "affected_range": ">=7.0.0 <7.28.0",
+          "patched_versions": [
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cross-user information disclosure via shared cache whitespace bypass",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-8xcm-r25x-g524",
+          "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+          "severity": "moderate",
+          "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "affected_range": ">=7.0.0 <7.29.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-8xcm-r25x-g524",
+          "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+          "severity": "moderate",
+          "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "affected_range": "<6.28.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to downstream response desynchronization via retry interceptor",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-4cwx-7wf7-3272",
+          "url": "https://github.com/advisories/GHSA-4cwx-7wf7-3272",
+          "severity": "high",
+          "title": "undici vulnerable to cross-user information disclosure and parse-time crash via degenerate private cache directives",
+          "affected_range": ">=7.0.0 <7.29.0",
+          "patched_versions": [
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cross-user information disclosure and parse-time crash via degenerate private cache directives",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-m8rv-5g2x-5cg5",
+          "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+          "severity": "moderate",
+          "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "affected_range": ">=7.0.0 <7.29.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-m8rv-5g2x-5cg5",
+          "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+          "severity": "moderate",
+          "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "affected_range": "<6.28.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-jr45-8vmc-qm54",
+          "url": "https://github.com/advisories/GHSA-jr45-8vmc-qm54",
+          "severity": "moderate",
+          "title": "undici vulnerable to cross-user information disclosure via whitespace around equals in Cache-Control directives",
+          "affected_range": ">=7.0.0 <7.29.0",
+          "patched_versions": [
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cross-user information disclosure via whitespace around equals in Cache-Control directives",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-v3r7-h72x-cjcm",
+          "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+          "severity": "moderate",
+          "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "affected_range": ">=7.0.0 <7.29.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-v3r7-h72x-cjcm",
+          "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+          "severity": "moderate",
+          "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "affected_range": "<6.28.0",
+          "patched_versions": [
+            "6.28.0",
+            "7.29.0",
+            "8.9.0"
+          ],
+          "exploit_precondition": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-35p6-xmwp-9g52",
+          "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+          "severity": "low",
+          "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "affected_range": ">=7.0.0 <7.28.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-35p6-xmwp-9g52",
+          "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+          "severity": "low",
+          "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "affected_range": "<6.27.0",
+          "patched_versions": [
+            "6.27.0",
+            "7.28.0",
+            "8.5.0"
+          ],
+          "exploit_precondition": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-3wwx-pv8p-q78v",
+          "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+          "severity": "moderate",
+          "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+          "affected_range": ">=6.25.0 <6.28.1",
+          "patched_versions": [
+            "6.28.1",
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-pmjh-fq2x-6v4x",
+          "url": "https://github.com/advisories/GHSA-pmjh-fq2x-6v4x",
+          "severity": "moderate",
+          "title": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+          "affected_range": ">=7.11.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-r53p-7pc4-xj5r",
+          "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+          "severity": "low",
+          "title": "undici vulnerable to downstream response splitting via retry interceptor",
+          "affected_range": ">=7.0.0 <7.29.1",
+          "patched_versions": [
+            "6.28.1",
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to downstream response splitting via retry interceptor",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-r53p-7pc4-xj5r",
+          "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+          "severity": "low",
+          "title": "undici vulnerable to downstream response splitting via retry interceptor",
+          "affected_range": "<6.28.1",
+          "patched_versions": [
+            "6.28.1",
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to downstream response splitting via retry interceptor",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-rfgv-xxqx-mfg5",
+          "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+          "severity": "high",
+          "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+          "affected_range": ">=7.0.0 <7.29.1",
+          "patched_versions": [
+            "6.28.1",
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-rfgv-xxqx-mfg5",
+          "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+          "severity": "high",
+          "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+          "affected_range": ">=6.7.0 <6.28.1",
+          "patched_versions": [
+            "6.28.1",
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+          "status": "unresolved"
+        },
+        {
+          "id": "GHSA-3xpg-4rpp-hhhm",
+          "url": "https://github.com/advisories/GHSA-3xpg-4rpp-hhhm",
+          "severity": "moderate",
+          "title": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+          "affected_range": ">=7.15.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-2jfj-6hjv-fm6j",
+          "url": "https://github.com/advisories/GHSA-2jfj-6hjv-fm6j",
+          "severity": "moderate",
+          "title": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+          "affected_range": ">=7.0.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-2gqq-gqf2-x968",
+          "url": "https://github.com/advisories/GHSA-2gqq-gqf2-x968",
+          "severity": "low",
+          "title": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+          "affected_range": ">=7.1.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-w293-vg96-wgc3",
+          "url": "https://github.com/advisories/GHSA-w293-vg96-wgc3",
+          "severity": "high",
+          "title": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+          "affected_range": ">=7.24.1 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-8436-99hf-9mmv",
+          "url": "https://github.com/advisories/GHSA-8436-99hf-9mmv",
+          "severity": "low",
+          "title": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+          "affected_range": ">=7.0.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-rx4f-c7p8-82vq",
+          "url": "https://github.com/advisories/GHSA-rx4f-c7p8-82vq",
+          "severity": "moderate",
+          "title": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+          "affected_range": ">=7.0.0 <7.29.1",
+          "patched_versions": [
+            "7.29.1",
+            "8.10.2"
+          ],
+          "exploit_precondition": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs. semantic-release and its bundled npm are not invoked by the canonical release scripts; npm install lifecycle can execute dependencies, so development status alone is not a mitigation.",
+      "status": "unresolved",
+      "remediation": "no upstream braces patch or affected copies remain inside npm vendor bundle; do not force overrides or downgrade parents"
+    },
+    {
+      "package": "uuid",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/uuid",
+          "installed_before": "11.1.0",
+          "installed_after": "11.1.1",
+          "dependency_ancestry": [
+            {
+              "root_kind": "production",
+              "chain": [
+                "uuid@11.1.0"
+              ]
+            }
+          ],
+          "npm_development": false,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-w5hq-g745-h8pq",
+          "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+          "severity": "moderate",
+          "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+          "affected_range": "<11.1.1",
+          "patched_versions": [
+            "11.1.1",
+            "12.0.1",
+            "13.0.1"
+          ],
+          "exploit_precondition": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "frontend runtime (uuid v4 toast identifiers); vulnerable buffer-taking v3/v5/v6 functions are not used",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    },
+    {
+      "package": "vite",
+      "severity": "high",
+      "nodes": [
+        {
+          "path": "node_modules/vite",
+          "installed_before": "6.4.2",
+          "installed_after": "6.4.4",
+          "dependency_ancestry": [
+            {
+              "root_kind": "development",
+              "chain": [
+                "vite@6.4.2"
+              ]
+            }
+          ],
+          "npm_development": true,
+          "npm_bundled": false
+        }
+      ],
+      "via": [
+        {
+          "id": "GHSA-v6wh-96g9-6wx3",
+          "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+          "severity": "moderate",
+          "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+          "affected_range": "<=6.4.2",
+          "patched_versions": [
+            "6.4.3",
+            "7.3.5",
+            "8.0.16"
+          ],
+          "exploit_precondition": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+          "status": "fixed"
+        },
+        {
+          "id": "GHSA-fx2h-pf6j-xcff",
+          "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+          "severity": "high",
+          "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+          "affected_range": "<=6.4.2",
+          "patched_versions": [
+            "6.4.3",
+            "7.3.5",
+            "8.0.16"
+          ],
+          "exploit_precondition": "vite: `server.fs.deny` bypass on Windows alternate paths",
+          "status": "fixed"
+        }
+      ],
+      "appimage_exposure": "build tooling only; installed Node modules are not distributed",
+      "ci_exposure": "Installed during trusted manual release and untrusted PR CI. No secrets in Frame build/test jobs.",
+      "status": "fixed",
+      "remediation": "compatible lockfile updates"
+    }
+  ],
+  "advisories": [
+    {
+      "id": "GHSA-4x5r-pxfx-6jf8",
+      "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+      "severity": "low",
+      "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "affected_range": "<=7.29.0",
+      "patched_versions": [
+        "7.29.6",
+        "8.0.0-rc.6"
+      ],
+      "exploit_precondition": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-fv7c-fp4j-7gwp",
+      "url": "https://github.com/advisories/GHSA-fv7c-fp4j-7gwp",
+      "severity": "high",
+      "title": "@babel/plugin-transform-modules-systemjs generates arbitrary code when compiling malicious input",
+      "affected_range": ">=7.12.0 <=7.29.3",
+      "patched_versions": [
+        "7.29.4",
+        "8.0.0-alpha.13"
+      ],
+      "exploit_precondition": "@babel/plugin-transform-modules-systemjs generates arbitrary code when compiling malicious input",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-jfc7-64v2-mr8c",
+      "url": "https://github.com/advisories/GHSA-jfc7-64v2-mr8c",
+      "severity": "moderate",
+      "title": "@sigstore/core has DSSE payloadType type-binding failure",
+      "affected_range": "<=3.2.0",
+      "patched_versions": [
+        "3.2.1"
+      ],
+      "exploit_precondition": "@sigstore/core has DSSE payloadType type-binding failure",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-xgjw-pm74-86q4",
+      "url": "https://github.com/advisories/GHSA-xgjw-pm74-86q4",
+      "severity": "moderate",
+      "title": "sigstore-js has Insufficient Verification of Data Authenticity",
+      "affected_range": "=3.1.0",
+      "patched_versions": [
+        "3.1.1"
+      ],
+      "exploit_precondition": "sigstore-js has Insufficient Verification of Data Authenticity",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w5vr-8v7q-w6rv",
+      "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+      "severity": "moderate",
+      "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+      "affected_range": ">=2.0.0 <2.11.0",
+      "patched_versions": [
+        "2.11.0"
+      ],
+      "exploit_precondition": "baseline-browser-mapping process termination on invalid input causes denial of service",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-jxxr-4gwj-5jf2",
+      "url": "https://github.com/advisories/GHSA-jxxr-4gwj-5jf2",
+      "severity": "moderate",
+      "title": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+      "affected_range": ">=5.0.0 <5.0.6",
+      "patched_versions": [
+        "5.0.6"
+      ],
+      "exploit_precondition": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-3jxr-9vmj-r5cp",
+      "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+      "severity": "high",
+      "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+      "affected_range": ">=3.0.0 <5.0.7",
+      "patched_versions": [
+        "1.1.16",
+        "2.1.2",
+        "5.0.7"
+      ],
+      "exploit_precondition": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-mh99-v99m-4gvg",
+      "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "affected_range": ">=4.0.0 <5.0.8",
+      "patched_versions": [
+        "1.1.17",
+        "2.1.3",
+        "3.0.3",
+        "5.0.8"
+      ],
+      "exploit_precondition": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-rgw5-rvv9-x895",
+      "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+      "affected_range": "<1.1.18",
+      "patched_versions": [
+        "1.1.18",
+        "2.1.4",
+        "3.0.6",
+        "5.0.9"
+      ],
+      "exploit_precondition": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-q2hr-2g5m-vwhr",
+      "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+      "severity": "moderate",
+      "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "affected_range": ">=4.0.0 <5.0.12",
+      "patched_versions": [
+        "1.1.21",
+        "2.1.7",
+        "3.0.9",
+        "5.0.12"
+      ],
+      "exploit_precondition": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-qhr7-859c-m2p7",
+      "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "affected_range": ">=4.0.0 <5.0.11",
+      "patched_versions": [
+        "1.1.20",
+        "2.1.6",
+        "3.0.8",
+        "5.0.11"
+      ],
+      "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-6j4f-fj2g-mc7p",
+      "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "affected_range": ">=4.0.0 <5.0.10",
+      "patched_versions": [
+        "1.1.19",
+        "2.1.5",
+        "3.0.7",
+        "5.0.10"
+      ],
+      "exploit_precondition": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "severity": "high",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "affected_range": "<=3.0.3",
+      "patched_versions": [],
+      "exploit_precondition": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-c83g-rgw3-j3cx",
+      "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+      "severity": "high",
+      "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "affected_range": "<=4.28.6",
+      "patched_versions": [
+        "4.28.7"
+      ],
+      "exploit_precondition": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-73wf-gq98-2v4g",
+      "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+      "severity": "high",
+      "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "affected_range": "<=4.28.6",
+      "patched_versions": [
+        "4.28.7"
+      ],
+      "exploit_precondition": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-ch52-4w7c-c8xp",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "severity": "high",
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "affected_range": "<=4.2.0",
+      "patched_versions": [],
+      "exploit_precondition": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-xvcm-6775-5m9r",
+      "url": "https://github.com/advisories/GHSA-xvcm-6775-5m9r",
+      "severity": "high",
+      "title": "Immutable: Hash-collision algorithmic complexity denial of service in Immutable.Map/Set",
+      "affected_range": ">=5.0.0-beta.1 <5.1.8",
+      "patched_versions": [
+        "3.8.4",
+        "4.3.9",
+        "5.1.8"
+      ],
+      "exploit_precondition": "Immutable: Hash-collision algorithmic complexity denial of service in Immutable.Map/Set",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-v56q-mh7h-f735",
+      "url": "https://github.com/advisories/GHSA-v56q-mh7h-f735",
+      "severity": "high",
+      "title": "Immutable.js `List` 32-bit trie overflow \u2192 unrecoverable DoS",
+      "affected_range": ">=5.0.0-beta.1 <5.1.8",
+      "patched_versions": [
+        "3.8.4",
+        "4.3.9",
+        "5.1.8"
+      ],
+      "exploit_precondition": "Immutable.js `List` 32-bit trie overflow \u2192 unrecoverable DoS",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-v2v4-37r5-5v8g",
+      "url": "https://github.com/advisories/GHSA-v2v4-37r5-5v8g",
+      "severity": "moderate",
+      "title": "ip-address has XSS in Address6 HTML-emitting methods",
+      "affected_range": "<=10.1.0",
+      "patched_versions": [
+        "10.1.1"
+      ],
+      "exploit_precondition": "ip-address has XSS in Address6 HTML-emitting methods",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-mwp4-54f8-5fhr",
+      "url": "https://github.com/advisories/GHSA-mwp4-54f8-5fhr",
+      "severity": "high",
+      "title": "ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass",
+      "affected_range": "<=10.3.0",
+      "patched_versions": [
+        "10.3.1"
+      ],
+      "exploit_precondition": "ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-rpw4-54j3-4h4q",
+      "url": "https://github.com/advisories/GHSA-rpw4-54j3-4h4q",
+      "severity": "moderate",
+      "title": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+      "affected_range": "<=10.5.0",
+      "patched_versions": [
+        "10.5.1"
+      ],
+      "exploit_precondition": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-j6r3-76f7-8jcv",
+      "url": "https://github.com/advisories/GHSA-j6r3-76f7-8jcv",
+      "severity": "moderate",
+      "title": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+      "affected_range": "<=10.7.0",
+      "patched_versions": [
+        "10.7.1"
+      ],
+      "exploit_precondition": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-h3mg-xc3c-68pw",
+      "url": "https://github.com/advisories/GHSA-h3mg-xc3c-68pw",
+      "severity": "moderate",
+      "title": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+      "affected_range": "<=10.7.0",
+      "patched_versions": [
+        "10.7.1"
+      ],
+      "exploit_precondition": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-h67p-54hq-rp68",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+      "severity": "moderate",
+      "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "affected_range": ">=4.0.0 <=4.1.1",
+      "patched_versions": [
+        "3.15.0",
+        "4.2.0"
+      ],
+      "exploit_precondition": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-52cp-r559-cp3m",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "severity": "high",
+      "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "affected_range": ">=4.0.0 <4.3.0",
+      "patched_versions": [
+        "3.15.0",
+        "4.3.0"
+      ],
+      "exploit_precondition": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-5p4m-2wfm-xmqj",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "severity": "high",
+      "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+      "affected_range": ">=4.0.0 <4.3.1",
+      "patched_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "exploit_precondition": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-2883-xcg3-v3hh",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "severity": "high",
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "affected_range": ">=4.0.0 <4.3.2",
+      "patched_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "exploit_precondition": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-28wg-ghj8-5hjv",
+      "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+      "severity": "high",
+      "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+      "affected_range": "<3.3.16",
+      "patched_versions": [
+        "3.3.16",
+        "5.1.16"
+      ],
+      "exploit_precondition": "nanoid: non-secure generators can loop indefinitely with negative size",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-2v37-7h3g-55p8",
+      "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+      "severity": "high",
+      "title": "nanoid: custom generators can loop indefinitely when size is zero",
+      "affected_range": "<3.3.18",
+      "patched_versions": [
+        "3.3.18",
+        "5.1.6"
+      ],
+      "exploit_precondition": "nanoid: custom generators can loop indefinitely when size is zero",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-xwg4-73v4-xw9w",
+      "url": "https://github.com/advisories/GHSA-xwg4-73v4-xw9w",
+      "severity": "high",
+      "title": "nanoid: Integer Overflow or Wraparound",
+      "affected_range": "<3.3.12",
+      "patched_versions": [
+        "3.3.12",
+        "5.1.11"
+      ],
+      "exploit_precondition": "nanoid: Integer Overflow or Wraparound",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w4pp-8pjf-rmxw",
+      "url": "https://github.com/advisories/GHSA-w4pp-8pjf-rmxw",
+      "severity": "high",
+      "title": "pacote is vulnerable to Denial of Service (DoS) via the addGitSha function",
+      "affected_range": ">=11.2.7 <21.5.1",
+      "patched_versions": [
+        "21.5.1"
+      ],
+      "exploit_precondition": "pacote is vulnerable to Denial of Service (DoS) via the addGitSha function",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-fxqj-rqcc-2cmp",
+      "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+      "severity": "moderate",
+      "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "affected_range": "<=8.5.22",
+      "patched_versions": [
+        "8.5.23"
+      ],
+      "exploit_precondition": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-r28c-9q8g-f849",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "severity": "high",
+      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "affected_range": "<=8.5.17",
+      "patched_versions": [
+        "8.5.18"
+      ],
+      "exploit_precondition": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w9m9-85wc-3x92",
+      "url": "https://github.com/advisories/GHSA-w9m9-85wc-3x92",
+      "severity": "low",
+      "title": "postcss-selector-parser allows denial of service through uncontrolled AST recursion",
+      "affected_range": ">=7.1.0 <7.1.3",
+      "patched_versions": [
+        "6.1.3",
+        "7.1.3"
+      ],
+      "exploit_precondition": "postcss-selector-parser allows denial of service through uncontrolled AST recursion",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-rj75-hqrm-r3gf",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "severity": "moderate",
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "affected_range": "<7.1.6",
+      "patched_versions": [
+        "7.1.6"
+      ],
+      "exploit_precondition": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-52v5-jr5w-gjxr",
+      "url": "https://github.com/advisories/GHSA-52v5-jr5w-gjxr",
+      "severity": "high",
+      "title": "sigstore's `certificateOIDs` verification constraints are silently dropped and never enforced",
+      "affected_range": "<=4.1.0",
+      "patched_versions": [
+        "4.1.1"
+      ],
+      "exploit_precondition": "sigstore's `certificateOIDs` verification constraints are silently dropped and never enforced",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-68fv-2mgg-jv7q",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "severity": "high",
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "affected_range": ">=1.0.0 <1.2.2",
+      "patched_versions": [
+        "1.2.2"
+      ],
+      "exploit_precondition": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-2p49-hgcm-8545",
+      "url": "https://github.com/advisories/GHSA-2p49-hgcm-8545",
+      "severity": "high",
+      "title": "SVGO removeScripts plugin leaves some executable scripts intact",
+      "affected_range": ">=3.0.0 <3.3.4",
+      "patched_versions": [
+        "2.8.3",
+        "3.3.4",
+        "4.0.2"
+      ],
+      "exploit_precondition": "SVGO removeScripts plugin leaves some executable scripts intact",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w27v-7q3p-w38r",
+      "url": "https://github.com/advisories/GHSA-w27v-7q3p-w38r",
+      "severity": "high",
+      "title": "SVGO: removeScripts allows executable links through namespace and control-character bypasses",
+      "affected_range": ">=3.0.0 <3.3.5",
+      "patched_versions": [
+        "2.8.4",
+        "3.3.5",
+        "4.1.0"
+      ],
+      "exploit_precondition": "SVGO: removeScripts allows executable links through namespace and control-character bypasses",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-4vpr-x523-8j87",
+      "url": "https://github.com/advisories/GHSA-4vpr-x523-8j87",
+      "severity": "moderate",
+      "title": "SVGO: removeScripts incompletely sanitizes executable HTML in SVG foreignObject elements",
+      "affected_range": ">=3.0.0 <3.3.5",
+      "patched_versions": [
+        "2.8.4",
+        "3.3.5",
+        "4.1.0"
+      ],
+      "exploit_precondition": "SVGO: removeScripts incompletely sanitizes executable HTML in SVG foreignObject elements",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-vmf3-w455-68vh",
+      "url": "https://github.com/advisories/GHSA-vmf3-w455-68vh",
+      "severity": "moderate",
+      "title": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+      "affected_range": "<=7.5.15",
+      "patched_versions": [
+        "7.5.16"
+      ],
+      "exploit_precondition": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w8wr-v893-vjvp",
+      "url": "https://github.com/advisories/GHSA-w8wr-v893-vjvp",
+      "severity": "moderate",
+      "title": "node-tar: Process crash via PAX numeric path type confusion",
+      "affected_range": "<=7.5.17",
+      "patched_versions": [
+        "7.5.18"
+      ],
+      "exploit_precondition": "node-tar: Process crash via PAX numeric path type confusion",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-23hp-3jrh-7fpw",
+      "url": "https://github.com/advisories/GHSA-23hp-3jrh-7fpw",
+      "severity": "critical",
+      "title": "node-tar: Decompression/parse DoS via unlimited input",
+      "affected_range": "<=7.5.18",
+      "patched_versions": [
+        "7.5.19"
+      ],
+      "exploit_precondition": "node-tar: Decompression/parse DoS via unlimited input",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-8x88-c5mf-7j5w",
+      "url": "https://github.com/advisories/GHSA-8x88-c5mf-7j5w",
+      "severity": "high",
+      "title": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+      "affected_range": "<=7.5.17",
+      "patched_versions": [
+        "7.5.18"
+      ],
+      "exploit_precondition": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-gvwx-54wh-qm9j",
+      "url": "https://github.com/advisories/GHSA-gvwx-54wh-qm9j",
+      "severity": "moderate",
+      "title": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+      "affected_range": "<=7.5.16",
+      "patched_versions": [
+        "7.5.17"
+      ],
+      "exploit_precondition": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-r292-9mhp-454m",
+      "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+      "severity": "high",
+      "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+      "affected_range": "<=7.5.20",
+      "patched_versions": [
+        "7.5.21"
+      ],
+      "exploit_precondition": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-vmh5-mc38-953g",
+      "url": "https://github.com/advisories/GHSA-vmh5-mc38-953g",
+      "severity": "high",
+      "title": "undici vulnerable to TLS certificate validation bypass via dropped requestTls in SOCKS5 ProxyAgent",
+      "affected_range": ">=7.23.0 <7.28.0",
+      "patched_versions": [
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici vulnerable to TLS certificate validation bypass via dropped requestTls in SOCKS5 ProxyAgent",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-p88m-4jfj-68fv",
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "severity": "moderate",
+      "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "affected_range": "<6.27.0",
+      "patched_versions": [
+        "6.27.0",
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-vxpw-j846-p89q",
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "severity": "high",
+      "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "affected_range": "<6.27.0",
+      "patched_versions": [
+        "6.27.0",
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-hm92-r4w5-c3mj",
+      "url": "https://github.com/advisories/GHSA-hm92-r4w5-c3mj",
+      "severity": "high",
+      "title": "undici vulnerable to cross-origin request routing via SOCKS5 proxy pool reuse",
+      "affected_range": ">=7.23.0 <7.28.0",
+      "patched_versions": [
+        "7.28.0",
+        "8.2.0"
+      ],
+      "exploit_precondition": "undici vulnerable to cross-origin request routing via SOCKS5 proxy pool reuse",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-g8m3-5g58-fq7m",
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "severity": "low",
+      "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "affected_range": "<6.27.0",
+      "patched_versions": [
+        "6.27.0",
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-pr7r-676h-xcf6",
+      "url": "https://github.com/advisories/GHSA-pr7r-676h-xcf6",
+      "severity": "moderate",
+      "title": "undici vulnerable to cross-user information disclosure via shared cache whitespace bypass",
+      "affected_range": ">=7.0.0 <7.28.0",
+      "patched_versions": [
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici vulnerable to cross-user information disclosure via shared cache whitespace bypass",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-8xcm-r25x-g524",
+      "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+      "severity": "moderate",
+      "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+      "affected_range": "<6.28.0",
+      "patched_versions": [
+        "6.28.0",
+        "7.29.0",
+        "8.9.0"
+      ],
+      "exploit_precondition": "undici vulnerable to downstream response desynchronization via retry interceptor",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-4cwx-7wf7-3272",
+      "url": "https://github.com/advisories/GHSA-4cwx-7wf7-3272",
+      "severity": "high",
+      "title": "undici vulnerable to cross-user information disclosure and parse-time crash via degenerate private cache directives",
+      "affected_range": ">=7.0.0 <7.29.0",
+      "patched_versions": [
+        "7.29.0",
+        "8.9.0"
+      ],
+      "exploit_precondition": "undici vulnerable to cross-user information disclosure and parse-time crash via degenerate private cache directives",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-m8rv-5g2x-5cg5",
+      "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+      "severity": "moderate",
+      "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+      "affected_range": "<6.28.0",
+      "patched_versions": [
+        "6.28.0",
+        "7.29.0",
+        "8.9.0"
+      ],
+      "exploit_precondition": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-jr45-8vmc-qm54",
+      "url": "https://github.com/advisories/GHSA-jr45-8vmc-qm54",
+      "severity": "moderate",
+      "title": "undici vulnerable to cross-user information disclosure via whitespace around equals in Cache-Control directives",
+      "affected_range": ">=7.0.0 <7.29.0",
+      "patched_versions": [
+        "7.29.0",
+        "8.9.0"
+      ],
+      "exploit_precondition": "undici vulnerable to cross-user information disclosure via whitespace around equals in Cache-Control directives",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-v3r7-h72x-cjcm",
+      "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+      "severity": "moderate",
+      "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+      "affected_range": "<6.28.0",
+      "patched_versions": [
+        "6.28.0",
+        "7.29.0",
+        "8.9.0"
+      ],
+      "exploit_precondition": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-35p6-xmwp-9g52",
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+      "severity": "low",
+      "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "affected_range": "<6.27.0",
+      "patched_versions": [
+        "6.27.0",
+        "7.28.0",
+        "8.5.0"
+      ],
+      "exploit_precondition": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-3wwx-pv8p-q78v",
+      "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "affected_range": ">=6.25.0 <6.28.1",
+      "patched_versions": [
+        "6.28.1",
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-pmjh-fq2x-6v4x",
+      "url": "https://github.com/advisories/GHSA-pmjh-fq2x-6v4x",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+      "affected_range": ">=7.11.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-r53p-7pc4-xj5r",
+      "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+      "severity": "low",
+      "title": "undici vulnerable to downstream response splitting via retry interceptor",
+      "affected_range": "<6.28.1",
+      "patched_versions": [
+        "6.28.1",
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to downstream response splitting via retry interceptor",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-rfgv-xxqx-mfg5",
+      "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+      "severity": "high",
+      "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "affected_range": ">=6.7.0 <6.28.1",
+      "patched_versions": [
+        "6.28.1",
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "status": "unresolved"
+    },
+    {
+      "id": "GHSA-3xpg-4rpp-hhhm",
+      "url": "https://github.com/advisories/GHSA-3xpg-4rpp-hhhm",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+      "affected_range": ">=7.15.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-2jfj-6hjv-fm6j",
+      "url": "https://github.com/advisories/GHSA-2jfj-6hjv-fm6j",
+      "severity": "moderate",
+      "title": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+      "affected_range": ">=7.0.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-2gqq-gqf2-x968",
+      "url": "https://github.com/advisories/GHSA-2gqq-gqf2-x968",
+      "severity": "low",
+      "title": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+      "affected_range": ">=7.1.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w293-vg96-wgc3",
+      "url": "https://github.com/advisories/GHSA-w293-vg96-wgc3",
+      "severity": "high",
+      "title": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+      "affected_range": ">=7.24.1 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-8436-99hf-9mmv",
+      "url": "https://github.com/advisories/GHSA-8436-99hf-9mmv",
+      "severity": "low",
+      "title": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+      "affected_range": ">=7.0.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-rx4f-c7p8-82vq",
+      "url": "https://github.com/advisories/GHSA-rx4f-c7p8-82vq",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+      "affected_range": ">=7.0.0 <7.29.1",
+      "patched_versions": [
+        "7.29.1",
+        "8.10.2"
+      ],
+      "exploit_precondition": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-w5hq-g745-h8pq",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "affected_range": "<11.1.1",
+      "patched_versions": [
+        "11.1.1",
+        "12.0.1",
+        "13.0.1"
+      ],
+      "exploit_precondition": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-v6wh-96g9-6wx3",
+      "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+      "severity": "moderate",
+      "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+      "affected_range": "<=6.4.2",
+      "patched_versions": [
+        "6.4.3",
+        "7.3.5",
+        "8.0.16"
+      ],
+      "exploit_precondition": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+      "status": "fixed"
+    },
+    {
+      "id": "GHSA-fx2h-pf6j-xcff",
+      "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+      "severity": "high",
+      "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+      "affected_range": "<=6.4.2",
+      "patched_versions": [
+        "6.4.3",
+        "7.3.5",
+        "8.0.16"
+      ],
+      "exploit_precondition": "vite: `server.fs.deny` bypass on Windows alternate paths",
+      "status": "fixed"
+    }
+  ],
+  "rust_before": {
+    "database": {
+      "advisory-count": 1295,
+      "last-commit": "550efd3d587a29b2e2c2b21b17a440da4fede999",
+      "last-updated": "2026-10-08T16:47:14+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 554
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": {
+      "found": true,
+      "count": 2,
+      "list": [
+        {
+          "advisory": {
+            "id": "RUSTSEC-2026-0258",
+            "package": "h2",
+            "title": "h2 unbounded empty DATA frames",
+            "description": "The h2 crate, used internally by hyper, had a flaw that would accept and queue empty DATA frames without limit.\nIf streams were not actively drained, this could lead to unbounded memory usage, or a panic if the length overflows.\n\nLow severity.\n\nPatched in v0.4.16.",
+            "date": "2026-08-17",
+            "aliases": [
+              "GHSA-q83h-524g-xf6h"
+            ],
+            "related": [],
+            "collection": "crates",
+            "categories": [
+              "denial-of-service"
+            ],
+            "keywords": [
+              "http",
+              "http2",
+              "h2"
+            ],
+            "cvss": null,
+            "informational": null,
+            "references": [],
+            "source": null,
+            "url": "https://github.com/hyperium/hyper/security/advisories/GHSA-q83h-524g-xf6h",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "versions": {
+            "patched": [
+              ">=0.4.16"
+            ],
+            "unaffected": []
+          },
+          "affected": null,
+          "package": {
+            "name": "h2",
+            "version": "0.3.27",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "0beca50380b1fc32983fc1cb4587bfa4bb9e78fc259aad4a0032d2080309222d",
+            "dependencies": [
+              {
+                "name": "bytes",
+                "version": "1.12.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "fnv",
+                "version": "1.0.7",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-core",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-sink",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-util",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "http",
+                "version": "0.2.12",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "indexmap",
+                "version": "2.14.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "slab",
+                "version": "0.4.12",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "tokio",
+                "version": "1.52.3",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "tokio-util",
+                "version": "0.7.18",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "tracing",
+                "version": "0.1.44",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          }
+        },
+        {
+          "advisory": {
+            "id": "RUSTSEC-2026-0285",
+            "package": "rustls",
+            "title": "TLS 1.3 handshake messages incorrectly accepted across encryption level boundaries",
+            "description": "Rustls accepted TLS 1.3 handshake messages sent at the wrong encryption level\nwhen they followed a key-changing message in the same record. For example,\na plaintext `EncryptedExtensions` message packed into the same record as the\n`ServerHello` was accepted.\n\nRFC 8446 section 5.1 requires that handshake messages do not span key changes,\nand that implementations terminate the connection with an \"unexpected_message\"\nalert if they do.\n\nThe handshake transcript is still authenticated, so a network-position attacker\ncannot use this to alter or complete a handshake; the practical effect is that\na peer could send handshake messages that should be encrypted in plaintext\nwithout rustls rejecting the connection.\n\nThis is functionally the same bug as Go's\n[GO-2026-4340](https://pkg.go.dev/vuln/GO-2026-4340) (CVE-2025-61730).",
+            "date": "2026-09-14",
+            "aliases": [
+              "GHSA-2mjx-qc3c-rqvc"
+            ],
+            "related": [],
+            "collection": "crates",
+            "categories": [
+              "crypto-failure"
+            ],
+            "keywords": [],
+            "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "informational": null,
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustls/rustls/security/advisories/GHSA-2mjx-qc3c-rqvc",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "versions": {
+            "patched": [
+              ">=0.23.45"
+            ],
+            "unaffected": [
+              "<0.23.13"
+            ]
+          },
+          "affected": null,
+          "package": {
+            "name": "rustls",
+            "version": "0.23.41",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "6b92b125634d9b795e7beca796cc790df15a7fb38323bf3196fda83292d06b1f",
+            "dependencies": [
+              {
+                "name": "once_cell",
+                "version": "1.21.4",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "ring",
+                "version": "0.17.14",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "rustls-pki-types",
+                "version": "1.15.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "rustls-webpki",
+                "version": "0.103.13",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "subtle",
+                "version": "2.6.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "zeroize",
+                "version": "1.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          }
+        }
+      ]
+    },
+    "warnings": {
+      "unmaintained": [
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "proc-macro-error",
+            "version": "1.0.4",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c",
+            "dependencies": [
+              {
+                "name": "proc-macro-error-attr",
+                "version": "1.0.4",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "proc-macro2",
+                "version": "1.0.106",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "quote",
+                "version": "1.0.46",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "syn",
+                "version": "1.0.109",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "version_check",
+                "version": "0.9.5",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2024-0370",
+            "package": "proc-macro-error",
+            "title": "proc-macro-error is unmaintained",
+            "description": "proc-macro-error's maintainer seems to be unreachable, with no commits for 2 years, no releases pushed for 4 years, and no activity on the GitLab repo or response to email.\n\nproc-macro-error also depends on `syn 1.x`, which may be bringing duplicate dependencies into dependant build trees.\n\n## Possible Alternative(s)\n\n- [manyhow](https://crates.io/crates/manyhow)\n- [proc-macro2-diagnostics](https://github.com/SergioBenitez/proc-macro2-diagnostics)",
+            "date": "2024-09-01",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "rustls-pemfile",
+            "version": "1.0.4",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "1c74cae0a4cf6ccbbf5f359f08efdf8ee7e1dc532573bf0db71968cb56b1448c",
+            "dependencies": [
+              {
+                "name": "base64",
+                "version": "0.21.7",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0134",
+            "package": "rustls-pemfile",
+            "title": "rustls-pemfile is unmaintained",
+            "description": "The rustls-pemfile crate is no longer maintained. The repository has been archived since August\n2025, and users are encouraged to depend directly on the underlying PEM parsing code included\nin rustls-pki-types since 1.9.0. The latest version of rustls-pemfile is in fact a thin wrapper\naround the same code used in rustls-pki-types, so migrating should be straightforward.\n\nThe new API is represented by the [`PemObject`][PemObject] trait, which provides methods for\nreading a single or multiple PEM objects from a file or byte slice.\n\n[PemObject]: https://docs.rs/rustls-pki-types/latest/rustls_pki_types/pem/trait.PemObject.html",
+            "date": "2025-11-28",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustls/pemfile/issues/61",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-char-property",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "a8c57a407d9b6fa02b4795eb81c5b6652060a15a7903ea981f3d723e6c0be221",
+            "dependencies": [
+              {
+                "name": "unic-char-range",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0081",
+            "package": "unic-char-property",
+            "title": "`unic-char-property` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- [`icu_properties`](https://crates.io/crates/icu_properties)",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-char-range",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "0398022d5f700414f6b899e10b8348231abf9173fa93144cbc1a43b9793c1fbc",
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0075",
+            "package": "unic-char-range",
+            "title": "`unic-char-range` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- Since version [1.45.0](https://releases.rs/docs/1.45.0/#libraries) Rust [supports](https://github.com/rust-lang/rust/pull/72413/) using `char` with `ops::{Range, RangeFrom, RangeFull, RangeInclusive, RangeTo}` to iterate over a range of codepoints.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-common",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "80d7ff825a6a654ee85a63e80f92f054f904f21e7d12da4e22f9834a4aaa35bc",
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0080",
+            "package": "unic-common",
+            "title": "`unic-common` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-ucd-ident",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "e230a37c0381caa9219d67cf063aa3a375ffed5bf541a452db16e744bdab6987",
+            "dependencies": [
+              {
+                "name": "unic-char-property",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "unic-char-range",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "unic-ucd-version",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0100",
+            "package": "unic-ucd-ident",
+            "title": "`unic-ucd-ident` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- [`icu_properties`](https://crates.io/crates/icu_properties)\n- [`unicode-ident`](https://crates.io/crates/unicode-ident)",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-ucd-version",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "96bd2f2237fe450fcd0a1d2f5f4e91711124f7857ba2e964247776ebeeb7b0c4",
+            "dependencies": [
+              {
+                "name": "unic-common",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0098",
+            "package": "unic-ucd-version",
+            "title": "`unic-ucd-version` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        }
+      ],
+      "unsound": [
+        {
+          "kind": "unsound",
+          "package": {
+            "name": "glib",
+            "version": "0.18.5",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+            "dependencies": [
+              {
+                "name": "bitflags",
+                "version": "2.13.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-channel",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-core",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-executor",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-task",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-util",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "gio-sys",
+                "version": "0.18.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "glib-macros",
+                "version": "0.18.5",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "glib-sys",
+                "version": "0.18.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "gobject-sys",
+                "version": "0.18.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "libc",
+                "version": "0.2.186",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "memchr",
+                "version": "2.8.3",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "once_cell",
+                "version": "1.21.4",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "smallvec",
+                "version": "1.15.2",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "thiserror",
+                "version": "1.0.69",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2024-0429",
+            "package": "glib",
+            "title": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+            "description": "The `VariantStrIter::impl_get` function (called internally by implementations of the `Iterator` and `DoubleEndedIterator` traits for this type) was unsound, resulting in undefined behaviour.\n\nAn immutable reference `&p` to a `*mut libc::c_char` pointer initialized to `NULL` was passed as an argument to a C function that that mutates the pointer behind `&p` in-place (i.e. as an out-argument), which was unsound. After changes in recent versions of the Rust compiler, these unsound writes through `&p` now seem to be completely disregarded when building the `glib` crate with optimizations.\n\nThis subsequently caused all calls of `VariantStrIter::impl_get` to violate the safety requirements of the `std::ffi::CStr::from_ptr` function - which requires its argument to be a valid pointer to a C-style string - resulting in crashes due to `NULL` pointer dereferences.\n\nThis was fixed by passing the out-argument pointer explitly as `&mut p` instead of `&p`.\n\nThis issue has been present since this code was initially added in `glib` v0.15.0. The mismatch in mutability was likely missed (and not raised as an error by the compiler) because the C function wrapped by `VariantStrIter::impl_get` is variadic (`glib_sys::g_variant_get_child`), and the pointer in question is one of the variadic arguments.",
+            "date": "2024-03-30",
+            "aliases": [
+              "GHSA-wrw7-89jp-8q8g"
+            ],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unsound",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/gtk-rs/gtk-rs-core/pull/1343",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": {
+            "arch": [],
+            "os": [],
+            "functions": {
+              "glib::VariantStrIter::last": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::next": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::next_back": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::nth": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::nth_back": [
+                ">=0.15.0, <0.20.0"
+              ]
+            }
+          },
+          "versions": {
+            "patched": [
+              ">=0.20.0"
+            ],
+            "unaffected": [
+              "<0.15.0"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rust_after": {
+    "database": {
+      "advisory-count": 1295,
+      "last-commit": "550efd3d587a29b2e2c2b21b17a440da4fede999",
+      "last-updated": "2026-10-08T16:47:14+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 538
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": {
+      "found": false,
+      "count": 0,
+      "list": []
+    },
+    "warnings": {
+      "unmaintained": [
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "proc-macro-error",
+            "version": "1.0.4",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c",
+            "dependencies": [
+              {
+                "name": "proc-macro-error-attr",
+                "version": "1.0.4",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "proc-macro2",
+                "version": "1.0.106",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "quote",
+                "version": "1.0.46",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "syn",
+                "version": "1.0.109",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "version_check",
+                "version": "0.9.5",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2024-0370",
+            "package": "proc-macro-error",
+            "title": "proc-macro-error is unmaintained",
+            "description": "proc-macro-error's maintainer seems to be unreachable, with no commits for 2 years, no releases pushed for 4 years, and no activity on the GitLab repo or response to email.\n\nproc-macro-error also depends on `syn 1.x`, which may be bringing duplicate dependencies into dependant build trees.\n\n## Possible Alternative(s)\n\n- [manyhow](https://crates.io/crates/manyhow)\n- [proc-macro2-diagnostics](https://github.com/SergioBenitez/proc-macro2-diagnostics)",
+            "date": "2024-09-01",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-char-property",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "a8c57a407d9b6fa02b4795eb81c5b6652060a15a7903ea981f3d723e6c0be221",
+            "dependencies": [
+              {
+                "name": "unic-char-range",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0081",
+            "package": "unic-char-property",
+            "title": "`unic-char-property` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- [`icu_properties`](https://crates.io/crates/icu_properties)",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-char-range",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "0398022d5f700414f6b899e10b8348231abf9173fa93144cbc1a43b9793c1fbc",
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0075",
+            "package": "unic-char-range",
+            "title": "`unic-char-range` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- Since version [1.45.0](https://releases.rs/docs/1.45.0/#libraries) Rust [supports](https://github.com/rust-lang/rust/pull/72413/) using `char` with `ops::{Range, RangeFrom, RangeFull, RangeInclusive, RangeTo}` to iterate over a range of codepoints.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-common",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "80d7ff825a6a654ee85a63e80f92f054f904f21e7d12da4e22f9834a4aaa35bc",
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0080",
+            "package": "unic-common",
+            "title": "`unic-common` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-ucd-ident",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "e230a37c0381caa9219d67cf063aa3a375ffed5bf541a452db16e744bdab6987",
+            "dependencies": [
+              {
+                "name": "unic-char-property",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "unic-char-range",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "unic-ucd-version",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0100",
+            "package": "unic-ucd-ident",
+            "title": "`unic-ucd-ident` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.\n\n## Recommended alternatives\n\n- [`icu_properties`](https://crates.io/crates/icu_properties)\n- [`unicode-ident`](https://crates.io/crates/unicode-ident)",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        },
+        {
+          "kind": "unmaintained",
+          "package": {
+            "name": "unic-ucd-version",
+            "version": "0.9.0",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "96bd2f2237fe450fcd0a1d2f5f4e91711124f7857ba2e964247776ebeeb7b0c4",
+            "dependencies": [
+              {
+                "name": "unic-common",
+                "version": "0.9.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2025-0098",
+            "package": "unic-ucd-version",
+            "title": "`unic-ucd-version` is unmaintained",
+            "description": "All Unicode crates that are part of https://github.com/open-i18n/rust-unic are unmaintained.",
+            "date": "2025-10-18",
+            "aliases": [],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unmaintained",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/rustsec/advisory-db/issues/2414",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": null,
+          "versions": {
+            "patched": [],
+            "unaffected": []
+          }
+        }
+      ],
+      "unsound": [
+        {
+          "kind": "unsound",
+          "package": {
+            "name": "glib",
+            "version": "0.18.5",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "checksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+            "dependencies": [
+              {
+                "name": "bitflags",
+                "version": "2.13.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-channel",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-core",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-executor",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-task",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "futures-util",
+                "version": "0.3.32",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "gio-sys",
+                "version": "0.18.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "glib-macros",
+                "version": "0.18.5",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "glib-sys",
+                "version": "0.18.1",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "gobject-sys",
+                "version": "0.18.0",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "libc",
+                "version": "0.2.186",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "memchr",
+                "version": "2.8.3",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "once_cell",
+                "version": "1.21.4",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "smallvec",
+                "version": "1.15.2",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              },
+              {
+                "name": "thiserror",
+                "version": "1.0.69",
+                "source": "registry+https://github.com/rust-lang/crates.io-index"
+              }
+            ],
+            "replace": null
+          },
+          "advisory": {
+            "id": "RUSTSEC-2024-0429",
+            "package": "glib",
+            "title": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+            "description": "The `VariantStrIter::impl_get` function (called internally by implementations of the `Iterator` and `DoubleEndedIterator` traits for this type) was unsound, resulting in undefined behaviour.\n\nAn immutable reference `&p` to a `*mut libc::c_char` pointer initialized to `NULL` was passed as an argument to a C function that that mutates the pointer behind `&p` in-place (i.e. as an out-argument), which was unsound. After changes in recent versions of the Rust compiler, these unsound writes through `&p` now seem to be completely disregarded when building the `glib` crate with optimizations.\n\nThis subsequently caused all calls of `VariantStrIter::impl_get` to violate the safety requirements of the `std::ffi::CStr::from_ptr` function - which requires its argument to be a valid pointer to a C-style string - resulting in crashes due to `NULL` pointer dereferences.\n\nThis was fixed by passing the out-argument pointer explitly as `&mut p` instead of `&p`.\n\nThis issue has been present since this code was initially added in `glib` v0.15.0. The mismatch in mutability was likely missed (and not raised as an error by the compiler) because the C function wrapped by `VariantStrIter::impl_get` is variadic (`glib_sys::g_variant_get_child`), and the pointer in question is one of the variadic arguments.",
+            "date": "2024-03-30",
+            "aliases": [
+              "GHSA-wrw7-89jp-8q8g"
+            ],
+            "related": [],
+            "collection": "crates",
+            "categories": [],
+            "keywords": [],
+            "cvss": null,
+            "informational": "unsound",
+            "references": [],
+            "source": null,
+            "url": "https://github.com/gtk-rs/gtk-rs-core/pull/1343",
+            "withdrawn": null,
+            "license": "CC0-1.0",
+            "expect-deleted": false
+          },
+          "affected": {
+            "arch": [],
+            "os": [],
+            "functions": {
+              "glib::VariantStrIter::last": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::next": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::next_back": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::nth": [
+                ">=0.15.0, <0.20.0"
+              ],
+              "glib::VariantStrIter::nth_back": [
+                ">=0.15.0, <0.20.0"
+              ]
+            }
+          },
+          "versions": {
+            "patched": [
+              ">=0.20.0"
+            ],
+            "unaffected": [
+              "<0.15.0"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "sdk_npm_after": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {
+      "@npmcli/arborist": {
+        "name": "@npmcli/arborist",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@npmcli/metavuln-calculator",
+          "pacote"
+        ],
+        "effects": [
+          "libnpmdiff",
+          "libnpmexec",
+          "libnpmfund",
+          "libnpmpack",
+          "npm"
+        ],
+        "range": "2.8.0 - 9.0.0-pre.1",
+        "nodes": [
+          "node_modules/npm/node_modules/@npmcli/arborist"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "@npmcli/metavuln-calculator": {
+        "name": "@npmcli/metavuln-calculator",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "pacote"
+        ],
+        "effects": [
+          "@npmcli/arborist"
+        ],
+        "range": "2.0.0 - 8.0.1",
+        "nodes": [
+          "node_modules/npm/node_modules/@npmcli/metavuln-calculator"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "@sigstore/core": {
+        "name": "@sigstore/core",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1121792,
+            "name": "@sigstore/core",
+            "dependency": "@sigstore/core",
+            "title": "@sigstore/core has DSSE payloadType type-binding failure",
+            "url": "https://github.com/advisories/GHSA-jfc7-64v2-mr8c",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-347"
+            ],
+            "cvss": {
+              "score": 5.4,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L"
+            },
+            "range": "<=3.2.0"
+          }
+        ],
+        "effects": [
+          "@sigstore/sign",
+          "@sigstore/verify",
+          "sigstore"
+        ],
+        "range": "<=3.2.0",
+        "nodes": [
+          "node_modules/npm/node_modules/@sigstore/core"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "@sigstore/sign": {
+        "name": "@sigstore/sign",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          "@sigstore/core"
+        ],
+        "effects": [],
+        "range": "2.2.1 - 3.1.0",
+        "nodes": [
+          "node_modules/npm/node_modules/@sigstore/sign"
+        ],
+        "fixAvailable": true
+      },
+      "@sigstore/verify": {
+        "name": "@sigstore/verify",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          "@sigstore/core"
+        ],
+        "effects": [],
+        "range": "<=2.1.1",
+        "nodes": [
+          "node_modules/npm/node_modules/@sigstore/verify"
+        ],
+        "fixAvailable": true
+      },
+      "brace-expansion": {
+        "name": "brace-expansion",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1115541,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: Zero-step sequence causes process hang and memory exhaustion",
+            "url": "https://github.com/advisories/GHSA-f886-m6hf-6m8v",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-400"
+            ],
+            "cvss": {
+              "score": 6.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=2.0.0 <2.0.3"
+          },
+          {
+            "source": 1123896,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+            "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-407"
+            ],
+            "cvss": {
+              "score": 5.3,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+            },
+            "range": ">=2.0.0 <2.1.2"
+          },
+          {
+            "source": 1130589,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+            "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-770"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=2.0.0 <2.1.3"
+          },
+          {
+            "source": 1130736,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+            "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-770"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=2.0.0 <2.1.4"
+          },
+          {
+            "source": 1240101,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+            "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-400",
+              "CWE-407"
+            ],
+            "cvss": {
+              "score": 5.3,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+            },
+            "range": ">=2.0.0 <2.1.7"
+          },
+          {
+            "source": 1240105,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+            "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-674"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=2.0.0 <2.1.6"
+          },
+          {
+            "source": 1240109,
+            "name": "brace-expansion",
+            "dependency": "brace-expansion",
+            "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+            "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-674"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=2.0.0 <2.1.5"
+          }
+        ],
+        "effects": [],
+        "range": "2.0.0 - 2.1.6",
+        "nodes": [
+          "node_modules/npm/node_modules/brace-expansion"
+        ],
+        "fixAvailable": true
+      },
+      "http-cache-semantics": {
+        "name": "http-cache-semantics",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1240991,
+            "name": "http-cache-semantics",
+            "dependency": "http-cache-semantics",
+            "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+            "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+            "severity": "high",
+            "cwe": [
+              "CWE-524"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+            },
+            "range": "<=4.2.0"
+          }
+        ],
+        "effects": [],
+        "range": "<=4.2.0",
+        "nodes": [
+          "node_modules/npm/node_modules/http-cache-semantics"
+        ],
+        "fixAvailable": true
+      },
+      "ip-address": {
+        "name": "ip-address",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1118827,
+            "name": "ip-address",
+            "dependency": "ip-address",
+            "title": "ip-address has XSS in Address6 HTML-emitting methods",
+            "url": "https://github.com/advisories/GHSA-v2v4-37r5-5v8g",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-79"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=10.1.0"
+          },
+          {
+            "source": 1130722,
+            "name": "ip-address",
+            "dependency": "ip-address",
+            "title": "ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass",
+            "url": "https://github.com/advisories/GHSA-mwp4-54f8-5fhr",
+            "severity": "high",
+            "cwe": [
+              "CWE-20",
+              "CWE-918"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=10.3.0"
+          },
+          {
+            "source": 1239948,
+            "name": "ip-address",
+            "dependency": "ip-address",
+            "title": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+            "url": "https://github.com/advisories/GHSA-rpw4-54j3-4h4q",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-697",
+              "CWE-918"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=10.5.0"
+          },
+          {
+            "source": 1240097,
+            "name": "ip-address",
+            "dependency": "ip-address",
+            "title": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+            "url": "https://github.com/advisories/GHSA-j6r3-76f7-8jcv",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-697",
+              "CWE-843"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=10.7.0"
+          },
+          {
+            "source": 1240098,
+            "name": "ip-address",
+            "dependency": "ip-address",
+            "title": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+            "url": "https://github.com/advisories/GHSA-h3mg-xc3c-68pw",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-400",
+              "CWE-770"
+            ],
+            "cvss": {
+              "score": 0,
+              "vectorString": null
+            },
+            "range": "<=10.7.0"
+          }
+        ],
+        "effects": [],
+        "range": "<=10.7.0",
+        "nodes": [
+          "node_modules/npm/node_modules/ip-address"
+        ],
+        "fixAvailable": true
+      },
+      "libnpmdiff": {
+        "name": "libnpmdiff",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@npmcli/arborist",
+          "pacote"
+        ],
+        "effects": [
+          "npm"
+        ],
+        "range": "2.0.4 - 8.0.0-pre.1",
+        "nodes": [
+          "node_modules/npm/node_modules/libnpmdiff"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "libnpmexec": {
+        "name": "libnpmexec",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@npmcli/arborist",
+          "pacote"
+        ],
+        "effects": [
+          "npm"
+        ],
+        "range": "<=10.0.0-pre.1",
+        "nodes": [
+          "node_modules/npm/node_modules/libnpmexec"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "libnpmfund": {
+        "name": "libnpmfund",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@npmcli/arborist"
+        ],
+        "effects": [
+          "npm"
+        ],
+        "range": "2.0.0 - 6.0.5",
+        "nodes": [
+          "node_modules/npm/node_modules/libnpmfund"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "libnpmpack": {
+        "name": "libnpmpack",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@npmcli/arborist",
+          "pacote"
+        ],
+        "effects": [
+          "npm"
+        ],
+        "range": "3.0.0 - 9.0.0-pre.1",
+        "nodes": [
+          "node_modules/npm/node_modules/libnpmpack"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "libnpmpublish": {
+        "name": "libnpmpublish",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "sigstore"
+        ],
+        "effects": [
+          "npm"
+        ],
+        "range": "7.1.0 - 11.1.0",
+        "nodes": [
+          "node_modules/npm/node_modules/libnpmpublish"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "npm": {
+        "name": "npm",
+        "severity": "high",
+        "isDirect": true,
+        "via": [
+          "@npmcli/arborist",
+          "libnpmdiff",
+          "libnpmexec",
+          "libnpmfund",
+          "libnpmpack",
+          "libnpmpublish",
+          "pacote"
+        ],
+        "effects": [],
+        "range": "7.0.0-beta.0 - 11.16.0 || 12.0.0-pre.0.0 - 12.0.0-pre.3",
+        "nodes": [
+          "node_modules/npm"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "pacote": {
+        "name": "pacote",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1146559,
+            "name": "pacote",
+            "dependency": "pacote",
+            "title": "pacote is vulnerable to Denial of Service (DoS) via the addGitSha function",
+            "url": "https://github.com/advisories/GHSA-w4pp-8pjf-rmxw",
+            "severity": "high",
+            "cwe": [
+              "CWE-400",
+              "CWE-1333"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=11.2.7 <21.5.1"
+          },
+          "sigstore"
+        ],
+        "effects": [
+          "@npmcli/arborist",
+          "@npmcli/metavuln-calculator",
+          "libnpmdiff",
+          "libnpmexec",
+          "libnpmpack",
+          "npm"
+        ],
+        "range": "11.2.7 - 21.5.0",
+        "nodes": [
+          "node_modules/npm/node_modules/@npmcli/metavuln-calculator/node_modules/pacote",
+          "node_modules/npm/node_modules/pacote"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      },
+      "picomatch": {
+        "name": "picomatch",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1115551,
+            "name": "picomatch",
+            "dependency": "picomatch",
+            "title": "Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching",
+            "url": "https://github.com/advisories/GHSA-3v7f-55p6-f55p",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-1321"
+            ],
+            "cvss": {
+              "score": 5.3,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+            },
+            "range": ">=4.0.0 <4.0.4"
+          },
+          {
+            "source": 1115554,
+            "name": "picomatch",
+            "dependency": "picomatch",
+            "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
+            "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
+            "severity": "high",
+            "cwe": [
+              "CWE-1333"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=4.0.0 <4.0.4"
+          }
+        ],
+        "effects": [],
+        "range": "4.0.0 - 4.0.3",
+        "nodes": [
+          "node_modules/npm/node_modules/picomatch"
+        ],
+        "fixAvailable": true
+      },
+      "postcss-selector-parser": {
+        "name": "postcss-selector-parser",
+        "severity": "moderate",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1153169,
+            "name": "postcss-selector-parser",
+            "dependency": "postcss-selector-parser",
+            "title": "postcss-selector-parser allows denial of service through uncontrolled AST recursion",
+            "url": "https://github.com/advisories/GHSA-w9m9-85wc-3x92",
+            "severity": "low",
+            "cwe": [
+              "CWE-404"
+            ],
+            "cvss": {
+              "score": 4.3,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L"
+            },
+            "range": ">=7.1.0 <7.1.3"
+          },
+          {
+            "source": 1241232,
+            "name": "postcss-selector-parser",
+            "dependency": "postcss-selector-parser",
+            "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+            "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+            "severity": "moderate",
+            "cwe": [
+              "CWE-400",
+              "CWE-407"
+            ],
+            "cvss": {
+              "score": 5.9,
+              "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": "<7.1.6"
+          }
+        ],
+        "effects": [],
+        "range": "<=7.1.5",
+        "nodes": [
+          "node_modules/npm/node_modules/postcss-selector-parser"
+        ],
+        "fixAvailable": true
+      },
+      "sigstore": {
+        "name": "sigstore",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          "@sigstore/core",
+          "@sigstore/sign",
+          "@sigstore/verify",
+          {
+            "source": 1122163,
+            "name": "sigstore",
+            "dependency": "sigstore",
+            "title": "sigstore's `certificateOIDs` verification constraints are silently dropped and never enforced",
+            "url": "https://github.com/advisories/GHSA-52v5-jr5w-gjxr",
+            "severity": "high",
+            "cwe": [
+              "CWE-347"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+            },
+            "range": "<=4.1.0"
+          }
+        ],
+        "effects": [
+          "libnpmpublish",
+          "pacote"
+        ],
+        "range": "<=4.1.0",
+        "nodes": [
+          "node_modules/npm/node_modules/sigstore"
+        ],
+        "fixAvailable": {
+          "name": "npm",
+          "version": "11.21.0",
+          "isSemVerMajor": true
+        }
+      }
+    },
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 4,
+        "high": 14,
+        "critical": 0,
+        "total": 18
+      },
+      "dependencies": {
+        "prod": 193,
+        "dev": 0,
+        "optional": 4,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 196
+      }
+    }
+  },
+  "additional_advisories": [
+    {
+      "scope": "project-after",
+      "package": "ip-address",
+      "id": "GHSA-2vr4-cq9g-pvrc",
+      "severity": "moderate",
+      "title": "ip-address: no classifier recognizes the NAT64 local-use range 64:ff9b:1::/48, allowing SSRF and trust-boundary bypass",
+      "affected_range": ">=10.2.0 <=10.5.0",
+      "patched_versions": [
+        "10.5.1"
+      ],
+      "url": "https://github.com/advisories/GHSA-2vr4-cq9g-pvrc",
+      "status": "unresolved"
+    },
+    {
+      "scope": "sdk-npm-10.9.9",
+      "package": "brace-expansion",
+      "id": "GHSA-f886-m6hf-6m8v",
+      "severity": "moderate",
+      "title": "brace-expansion: Zero-step sequence causes process hang and memory exhaustion",
+      "affected_range": ">=2.0.0 <2.0.3",
+      "patched_versions": [
+        "5.0.5",
+        "3.0.2",
+        "2.0.3",
+        "1.1.13"
+      ],
+      "url": "https://github.com/advisories/GHSA-f886-m6hf-6m8v",
+      "status": "unresolved"
+    },
+    {
+      "scope": "sdk-npm-10.9.9",
+      "package": "picomatch",
+      "id": "GHSA-3v7f-55p6-f55p",
+      "severity": "moderate",
+      "title": "Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching",
+      "affected_range": ">=4.0.0 <4.0.4",
+      "patched_versions": [
+        "4.0.4",
+        "3.0.2",
+        "2.3.2"
+      ],
+      "url": "https://github.com/advisories/GHSA-3v7f-55p6-f55p",
+      "status": "unresolved"
+    },
+    {
+      "scope": "sdk-npm-10.9.9",
+      "package": "picomatch",
+      "id": "GHSA-c2c7-rcm5-vvqj",
+      "severity": "high",
+      "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
+      "affected_range": ">=4.0.0 <4.0.4",
+      "patched_versions": [
+        "4.0.4",
+        "3.0.2",
+        "2.3.2"
+      ],
+      "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
+      "status": "unresolved"
+    }
+  ]
+}

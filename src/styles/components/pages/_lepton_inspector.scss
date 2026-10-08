@@ -540,3 +540,47 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
 }
+
+.lepton-compatibility-data {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr);
+  gap: 0.75rem 1rem;
+
+  dt { color: var(--text-secondary); }
+  dd { margin: 0; overflow-wrap: anywhere; }
+}
+
+.lepton-section details {
+  margin-block: 0.75rem;
+  overflow-wrap: anywhere;
+  summary { cursor: pointer; }
+  summary:focus-visible { outline: 2px solid var(--lepton); }
+}
+
+.lepton-compatibility-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+
+.lepton-compatibility-panel {
+  padding: 1rem;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  border-radius: var(--radius-md);
+  h3 { margin-top: 0; }
+}
+
+.lepton-compatibility-status {
+  font-weight: var(--bold);
+  &.compatible { color: var(--lepton); }
+  &.incompatible { color: var(--danger); }
+}
+
+.lepton-artifact-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block: 0.75rem;
+  code { flex: 1; min-width: 12rem; overflow-wrap: anywhere; }
+}

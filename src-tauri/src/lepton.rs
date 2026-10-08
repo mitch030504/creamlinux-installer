@@ -249,7 +249,7 @@ pub async fn inspect_game(game: &Game) -> LeptonIntrospection {
     inspect_game_with_cli(game, lepton_cli.as_deref()).await
 }
 
-async fn inspect_game_with_cli(game: &Game, lepton_cli: Option<&Path>) -> LeptonIntrospection {
+pub(crate) async fn inspect_game_with_cli(game: &Game, lepton_cli: Option<&Path>) -> LeptonIntrospection {
     let context = game
         .lepton_context
         .clone()
@@ -673,6 +673,11 @@ steamlaunch-1408230 (10.88.0.2, adb on 5555, gdb on 6666, lldb on 7777, packages
         use super::*;
         use std::os::unix::fs::PermissionsExt;
 
+        // Concurrent fork/exec can briefly inherit another fixture's writable
+        // script descriptor before CLOEXEC, causing ETXTBSY on Linux. Keep the
+        // fixture creation and subprocess lifetime together; assertions stay unchanged.
+        static CLI_FIXTURE_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
         const PROBE: &str = "exec steamlaunch-1408230 true\n";
 
         // Exercise the real subprocess runner and inspection flow, recording every
@@ -717,6 +722,7 @@ esac
 
         #[tokio::test]
         async fn probe_exit_zero_runs_android_inspection_in_order_without_ps() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             let dir = fake_cli("exit 0", "exit 99");
             let result =
                 inspect_game_with_cli(&walkabout_game(), Some(&dir.path().join("lepton"))).await;
@@ -744,6 +750,7 @@ esac
 
         #[tokio::test]
         async fn probe_not_running_skips_all_android_inspection() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             // A listed context must not override the authoritative exec result.
             let dir = fake_cli(
                 "echo \"ERROR: 'steamlaunch-1408230' is not a running context\" >&2; exit 1",
@@ -758,6 +765,7 @@ esac
 
         #[tokio::test]
         async fn arbitrary_probe_failure_is_non_fatal_and_skips_inspection() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             let dir = fake_cli(
                 "echo 'partial output'; echo 'transport unavailable' >&2; exit 42",
                 "exit 99",
@@ -771,6 +779,7 @@ esac
 
         #[tokio::test]
         async fn probe_spawn_failure_is_non_fatal() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             let dir = fake_cli("exit 0", "exit 99");
             let path = dir.path().join("lepton");
             std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o600)).unwrap();
@@ -782,6 +791,7 @@ esac
 
         #[tokio::test]
         async fn optional_ps_failure_cannot_override_successful_probe() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             let dir = fake_cli("exit 0", "exit 99");
             let mut game = walkabout_game();
             game.android_package = None;
@@ -804,6 +814,7 @@ esac
 
         #[tokio::test]
         async fn optional_ps_package_metadata_is_preserved_after_probe() {
+            let _fixture_guard = CLI_FIXTURE_LOCK.lock().unwrap();
             let dir = fake_cli(
                 "exit 0",
                 "echo 'steamlaunch-1408230 (packages: com.MightyCoconut.WalkaboutMiniGolf)'",

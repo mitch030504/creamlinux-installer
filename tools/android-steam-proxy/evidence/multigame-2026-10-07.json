@@ -1,0 +1,98 @@
+[
+  {
+    "apk_sha256": "8f60439ef2f343b0c8a6c11955ab69ed70409578ae6bc041b1372d05e18b4654",
+    "appid": "438100",
+    "consumer_count": 39,
+    "deterministic_json_repeat": true,
+    "direct_consumers": 0,
+    "fixed_proxy_covered": 1043,
+    "fixed_targets_absent": [
+      "SteamAPI_SteamApps_v008",
+      "SteamAPI_SteamRemotePlay_v003"
+    ],
+    "function_exports": 1146,
+    "game": "VRChat",
+    "hardware_validation_status": "not_run",
+    "native_frame_evidence_matches_workstation": true,
+    "non_function_exports": 209,
+    "package": "com.vrchat.android",
+    "provider_sha256": "de0ffad291557797b30e1abd153481cca46225720410f8c8f8709811f9029bb1",
+    "public_exports": 1355,
+    "required_unsupported_exports": [],
+    "strong_runtime_candidates": 1,
+    "target_function_proxy_status": "locally_validated",
+    "uncovered_functions": 103
+  },
+  {
+    "apk_sha256": "5a5ee33d0077a274d54f98ecc6d6793d403e21bb03064083eb82aad59f1fa7a2",
+    "appid": "3606610",
+    "consumer_count": 15,
+    "deterministic_json_repeat": true,
+    "direct_consumers": 0,
+    "fixed_proxy_covered": 1043,
+    "fixed_targets_absent": [
+      "SteamAPI_SteamApps_v008",
+      "SteamAPI_SteamRemotePlay_v003"
+    ],
+    "function_exports": 1146,
+    "game": "Into Black",
+    "hardware_validation_status": "not_run",
+    "native_frame_evidence_matches_workstation": true,
+    "non_function_exports": 209,
+    "package": "com.thebinarymill.intoblack",
+    "provider_sha256": "ee573a79ad0bf0fa4e6530fa35a4e2911e9f473141a7580b83a3d79fd1679646",
+    "public_exports": 1355,
+    "required_unsupported_exports": [],
+    "strong_runtime_candidates": 1,
+    "target_function_proxy_status": "locally_validated",
+    "uncovered_functions": 103
+  },
+  {
+    "apk_sha256": "0a2e5a49bad64023bbeebc7bc487269157c5e42c8333a89d020a441dc389dc21",
+    "appid": "801550",
+    "consumer_count": 37,
+    "deterministic_json_repeat": true,
+    "direct_consumers": 1,
+    "fixed_proxy_covered": 1043,
+    "fixed_targets_absent": [
+      "SteamAPI_SteamApps_v008",
+      "SteamAPI_SteamRemotePlay_v003"
+    ],
+    "function_exports": 1146,
+    "game": "VAIL",
+    "hardware_validation_status": "not_run",
+    "native_frame_evidence_matches_workstation": true,
+    "non_function_exports": 209,
+    "package": "com.AEXLAB.VAIL",
+    "provider_sha256": "de0ffad291557797b30e1abd153481cca46225720410f8c8f8709811f9029bb1",
+    "public_exports": 1355,
+    "required_unsupported_exports": [],
+    "strong_runtime_candidates": 1,
+    "target_function_proxy_status": "locally_validated",
+    "uncovered_functions": 103
+  },
+  {
+    "apk_sha256": "2ff2340dbc82337908b2c1239d8ef19528e03f47d3315660b8004636702f2cb5",
+    "appid": "3189340",
+    "consumer_count": 21,
+    "deterministic_json_repeat": true,
+    "direct_consumers": 0,
+    "fixed_proxy_covered": 1043,
+    "fixed_targets_absent": [
+      "SteamAPI_SteamApps_v008",
+      "SteamAPI_SteamRemotePlay_v003"
+    ],
+    "function_exports": 1146,
+    "game": "Dungeons of Eternity",
+    "hardware_validation_status": "not_run",
+    "native_frame_evidence_matches_workstation": true,
+    "non_function_exports": 209,
+    "package": "com.othergate.doe",
+    "provider_sha256": "ee573a79ad0bf0fa4e6530fa35a4e2911e9f473141a7580b83a3d79fd1679646",
+    "public_exports": 1355,
+    "required_unsupported_exports": [],
+    "strong_runtime_candidates": 1,
+    "target_function_proxy_status": "locally_validated",
+    "uncovered_functions": 103
+  }
+]

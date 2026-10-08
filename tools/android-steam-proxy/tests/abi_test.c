@@ -6,19 +6,27 @@
 #include <string.h>
 static int checks;
 #define CHECK(x) do { ++checks; if (!(x)) { fprintf(stderr,"FAIL line %d: %s\n",__LINE__,#x); exit(1); } } while(0)
+#ifdef TARGET_SURFACE_TEST
+#include "abi_names.h"
+#else
+#define abi_lookup_name(name) (name)
+#endif
 #ifdef STATIC_ABI
 void initialize_static_targets(void);
 void *static_lookup(const char *);
-#define lookup(h,n) static_lookup(n)
+#define lookup(h,n) static_lookup(abi_lookup_name(n))
 #else
-static void *lookup(void *h,const char *n) { void *p=dlsym(h,n); if (!p) { fprintf(stderr,"dlsym %s: %s\n",n,dlerror()); exit(1); } return p; }
+static void *lookup(void *h,const char *n) { void *p=dlsym(h,abi_lookup_name(n)); if (!p) { fprintf(stderr,"dlsym %s: %s\n",n,dlerror()); exit(1); } return p; }
 #endif
 #define LOAD(name) __typeof__(&name) p_##name = (__typeof__(&name))lookup(h,#name)
+#ifndef MOCK_PAD_COUNT
+#define MOCK_PAD_COUNT 1030
+#endif
 static uint64_t callback(uint64_t n) { return n*17; }
 int main(int argc, char **argv) {
 #ifdef STATIC_ABI
     if (argc==2 && !strcmp(argv[1],"--uninitialized")) {
-        ((int32_t (*)(int32_t,int32_t))static_lookup("mock_int"))(1,2);
+        ((int32_t (*)(int32_t,int32_t))static_lookup(abi_lookup_name("mock_int")))(1,2);
         return 1; /* Must exit 127 in the initial slot target. */
     }
     void *h=NULL; (void)h;
@@ -47,12 +55,12 @@ int main(int argc, char **argv) {
     LOAD(mock_callback); CHECK(p_mock_callback(callback,19)==324);
     LOAD(mock_indirect_arg); CHECK(p_mock_indirect_arg((Big){1,2,3,4},7)==37);
     /* Repeat and reach table slots across 4 KiB page boundaries. */
-    for (unsigned i=0;i<1030;i++) {
+    for (unsigned i=0;i<MOCK_PAD_COUNT;i++) {
         char name[40]; snprintf(name,sizeof(name),"mock_pad_%04u",i);
         uint64_t (*f)(uint64_t)=(uint64_t (*)(uint64_t))lookup(h,name);
         CHECK(f(0x1234567800000000ULL)==0x1234567800000000ULL+i);
     }
     for (unsigned i=0;i<10000;i++) CHECK(p_mock_i12(1,2,3,4,5,6,7,8,9,10,11,i)==506+12ULL*i);
-    printf("PASS %d ABI checks (17 signature cases, 1030 slot probes, 10000 repeated calls)\n",checks);
+    printf("PASS %d ABI checks (17 signature cases, %u slot probes, 10000 repeated calls)\n",checks,(unsigned)MOCK_PAD_COUNT);
     return 0;
 }

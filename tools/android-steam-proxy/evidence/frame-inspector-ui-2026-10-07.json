@@ -1,0 +1,28 @@
+{
+  "measured_at": "2026-10-07T12:55:10.149995+00:00",
+  "mechanism": "native AT-SPI actions, real GTK/WebKit inspector",
+  "harness_sha256": "c1b4760283c067bc68a0903202b64976fa7254e99976b446825933f5239b5d25",
+  "appid": "448280",
+  "stopped_appid": "1408230",
+  "passed": [
+    "running context and package metadata rendered",
+    "scrolling brings Analyze button into viewport",
+    "real Analyze button preserves fixed false and default artifact status",
+    "native folder chooser cancellation preserves previous result",
+    "native generated-folder selection clears stale analysis",
+    "generated-only analysis reports local validation separately",
+    "native file chooser selects existing hardware bundle",
+    "partial evidence produces incomplete result without compatibility claim",
+    "native results-folder chooser selects existing logs",
+    "real UI analysis verifies matching hardware evidence and exposes precise identities",
+    "Refresh clears verified snapshot and reruns live introspection",
+    "Clear artifact selection removes paths and result",
+    "native Close button exits isolated inspector cleanly",
+    "stopped-context UI disables Analyze and explains prerequisite",
+    "stopped-context Refresh and Close work without starting a game"
+  ],
+  "status": "passed",
+  "appimage_sha256": "cb5f6616e264139aa9bbc1bcecd49004c00a61afb0965e2777328435a575ec85",
+  "source": "build/frame-inspector-results/native-ui-console.log and ui-*.json",
+  "scope": "Observed native read-only inspector workflows only; not gameplay or proxy installation validation."
+}

@@ -1,0 +1,63 @@
+--- linuxdeploy-plugin-gtk.sh
++++ linuxdeploy-plugin-gtk.sh
+@@ -20,9 +20,9 @@
+     echo
+     echo "Required variables:"
+     echo "  LINUXDEPLOY=\".../linuxdeploy\" path to linuxdeploy (e.g., AppImage); set automatically when plugin is run directly by linuxdeploy"
+-    echo
+-    echo "Optional variables:"
+-    echo "  DEPLOY_GTK_VERSION (major version of GTK to deploy, e.g. '2', '3' or '4'; auto-detect by default)"
++    #echo
++    #echo "Optional variables:"
++    #echo "  DEPLOY_GTK_VERSION (major version of GTK to deploy, e.g. '2', '3' or '4'; auto-detect by default)"
+ }
+ 
+ variable_is_true() {
+@@ -125,7 +125,8 @@
+     done
+ }
+ 
+-DEPLOY_GTK_VERSION="${DEPLOY_GTK_VERSION:-0}" # When not set by user, this variable use the integer '0' as a sentinel value
++#DEPLOY_GTK_VERSION="${DEPLOY_GTK_VERSION:-0}" # When not set by user, this variable use the integer '0' as a sentinel value
++DEPLOY_GTK_VERSION=3 # Force GTK3 for tauri apps
+ APPDIR=
+ 
+ while [ "$1" != "" ]; do
+@@ -159,6 +160,8 @@
+ 
+ APPDIR="$(realpath "$APPDIR")"
+ mkdir -p "$APPDIR"
++# make lib64 writable again.
++chmod +w "$APPDIR"/usr/lib64 || true
+ 
+ . /etc/os-release
+ if [ "$ID" = "debian" ] || [ "$ID" = "ubuntu" ]; then
+@@ -240,7 +243,7 @@
+ export APPDIR="${APPDIR:-"$(dirname "$(realpath "$0")")"}" # Workaround to run extracted AppImage
+ export GTK_DATA_PREFIX="$APPDIR"
+ export GTK_THEME="$APPIMAGE_GTK_THEME" # Custom themes are broken
+-export GDK_BACKEND=x11 # Crash with Wayland backend on Wayland
++export GDK_BACKEND=x11 # Crash with Wayland backend on Wayland - We tested it without it and ended up with this: https://github.com/tauri-apps/tauri/issues/8541
+ export XDG_DATA_DIRS="$APPDIR/usr/share:/usr/share:$XDG_DATA_DIRS" # g_get_system_data_dirs() from GLib
+ EOF
+ 
+@@ -371,3 +374,19 @@
+         ln $verbose -sf "${file/$LD_GTK_LIBRARY_PATH\//}" "$APPDIR/usr/lib"
+     done < <(find "$directory" -name '*.so' -print0)
+ done
++
++# set write permission on lib64 again to make it deletable.
++chmod +w "$APPDIR"/usr/lib64 || true
++
++# We have to copy the files first to not get permission errors when we assign gio_extras_dir
++find /usr/lib* -name libgiognutls.so -exec mkdir -p "$APPDIR"/"$(dirname '{}')" \; -exec cp --parents '{}' "$APPDIR/" \; || true
++# related files that we seemingly don't need:
++# libgiolibproxy.so - libgiognomeproxy.so - glib-pacrunner
++
++gio_extras_dir=$(find "$APPDIR"/usr/lib* -name libgiognutls.so -exec dirname '{}' \; 2>/dev/null)
++cat >> "$HOOKFILE" <<EOF
++export GIO_EXTRA_MODULES="\$APPDIR/${gio_extras_dir#"$APPDIR"/}"
++EOF
++
++#binary patch absolute paths in libwebkit files
++find "$APPDIR"/usr/lib* -name 'libwebkit*' -exec sed -i -e "s|/usr|././|g" '{}' \;

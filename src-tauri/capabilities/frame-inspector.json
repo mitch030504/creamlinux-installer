@@ -1,0 +1,14 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "frame-inspector",
+  "description": "Read-only Steam Frame inspector; no updater or installer launch",
+  "windows": [
+    "main",
+    "lepton-inspect-*"
+  ],
+  "permissions": [
+    "core:default",
+    "dialog:allow-open",
+    "core:window:allow-close"
+  ]
+}

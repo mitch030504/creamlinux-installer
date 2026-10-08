@@ -69,7 +69,8 @@ absent` lines, and `PASS resolved 1045 proxy functions; zero Steam API calls`.
 This is a loader/resolution test, **not** a test of actual Steam function behavior.
 
 The bundle provides the r30 ARM64 `libc++_shared.so` for a standalone namespace.
-Its compatibility with this r21-built reference is unproven until this test runs.
+Its observed compatibility with this r21-built reference is recorded in
+[HARDWARE_VALIDATION.md](HARDWARE_VALIDATION.md).
 Android must provide `libandroid.so`, `liblog.so`, `libdl.so`, and `libc.so`.
 If loading fails, retain the complete error; do not replace system/game runtimes,
 change namespace configuration, preload the proxy, or patch the reference.
