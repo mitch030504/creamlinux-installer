@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -49,6 +50,9 @@ class ProcessTests(unittest.TestCase):
         self.assertIn('Compiling fixture',log.read_text());self.assertIn('release-heartbeat',log.read_text())
         self.assertIn('release-command-terminated',log.read_text());self.assertIsNone(other.poll())
         status=Path('/proc')/pid.read_text()/'stat'
+        deadline=time.monotonic()+2
+        while status.exists() and status.read_text().rsplit(')',1)[1].split()[0]!='Z' and time.monotonic()<deadline:
+            time.sleep(.01)
         if status.exists():self.assertEqual(status.read_text().rsplit(')',1)[1].split()[0],'Z')
 
     def test_stale_identity_never_kills_another_process(self):

@@ -352,3 +352,12 @@ class ReleaseTests(unittest.TestCase):
                 obj.run()
         self.assertEqual(marker.read_text(),original)
         self.assertIsNone(obj.output)
+
+    def test_fresh_checkout_creates_missing_build_parents(self):
+        obj=builder.Builder(builder.arguments([],{}));obj.packages='fixture\t1'
+        with patch.object(builder,'ROOT',self.root), \
+                patch.object(builder,'source_identity',return_value={'snapshot_sha256':'fixture'}):
+            obj.reserve()
+        self.assertTrue(obj.stage.is_dir())
+        self.assertTrue((obj.output/'source-inputs.json').is_file())
+        self.assertTrue((obj.output/'build-packages.tsv').is_file())

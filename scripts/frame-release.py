@@ -250,7 +250,7 @@ class Builder:
 
     def reserve(self):
         base = ROOT/'tools/android-steam-proxy/build'
-        (base/'release-work').mkdir(exist_ok=True)
+        (base/'release-work').mkdir(parents=True,exist_ok=True)
         self.stage = Path(tempfile.mkdtemp(prefix='run-',dir=base/'release-work'))
         destination = (self.args.output_dir or base/'releases'/self.stage.name).resolve()
         if destination.exists():
