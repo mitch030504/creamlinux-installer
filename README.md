@@ -1,185 +1,151 @@
-# CreamLinux
+# CreamLinux — Steam Frame / Lepton fork
 
-CreamLinux is a GUI application for Linux that simplifies the management of DLC IDs in Steam games. It provides a user-friendly interface to install and configure CreamAPI (for native Linux games), SmokeAPI (for Windows games running through Proton) and ScreamAPI (Epic Games).
+> **Experimental, unofficial fork. Not a complete CreamLinux port for Steam Frame.**
+>
+> This fork extends [Novattz/CreamLinux](https://github.com/Novattz/creamlinux-installer) with research and tooling for Valve's **Steam Frame**, **SteamOS (Linux ARM64)**, and the **Lepton Android compatibility environment**. The Steam Frame-specific application currently operates as a **read-only compatibility inspector**. It does **not** install CreamAPI into Lepton games, enable DLC, replace a game's Steam API, or provide feature parity with the original Linux desktop installer.
 
-## Watch the demo here:
+**Project status (9 October 2026):** The Steam Frame test workflow has passed on GitHub Actions. A complete hosted AppImage release build is still being debugged; no public Frame release has been published. Previously built inspector artifacts and function-forwarding experiments have been tested on actual Steam Frame hardware, but those results must not be attributed to future builds without revalidation.
 
-[![Watch the demo](./src/assets/screenshot1.png)](https://www.youtube.com/watch?v=neUDotrqnDM)
+| Navigate | Link |
+| --- | --- |
+| **Current Steam Frame development source** | [`test/steam-frame-inspector-security-ci`](https://github.com/mitch030504/creamlinux-installer/tree/test/steam-frame-inspector-security-ci) |
+| **Open development review** | [Draft PR #1](https://github.com/mitch030504/creamlinux-installer/pull/1) |
+| **Hosted inspector tests** | [Latest verified passing test run](https://github.com/mitch030504/creamlinux-installer/actions/runs/37906375947) |
+| **AppImage build validation** | [Release-validation workflow](https://github.com/mitch030504/creamlinux-installer/actions/workflows/steam-frame-release.yml) |
+| **Original desktop project** | [Novattz/creamlinux-installer](https://github.com/Novattz/creamlinux-installer) |
 
-## Features
+## Which branch contains what?
 
-- **Auto-discovery**: Automatically finds Steam games installed on your system
-- **Native support**: Installs CreamLinux for native Linux games
-- **Proton support**: Installs SmokeAPI for Windows games running through Proton
-- **Epic Games support**: Installs ScreamAPI for games running through Heroic/Legendary
-- **DLC management**: Easily select which DLCs to enable
-- **Modern UI**: Clean, responsive interface that's easy to use
+- **`main` (the default branch):** original/inherited CreamLinux desktop source, this fork status README, and registration of the non-publishing Steam Frame CI workflows. **It is not the complete Steam Frame implementation.**
+- **`test/steam-frame-inspector-security-ci`:** the actual Steam Frame inspector, Lepton backend integration, compatibility scanner, ARM64 function-forwarding research, pinned build infrastructure, regression tests, and technical documentation. **Use this branch to evaluate or contribute to the Frame work.**
+- **Draft PR #1:** a development review, **not** an approved merge or a release. Workflow-registration differences have caused a merge conflict; the branch can still be tested by explicitly dispatching workflows.
 
-## Installation
+## What is implemented?
 
-### AppImage (Recommended)
+The statuses below describe the **Steam Frame development branch**, except where explicitly labelled *inherited*. “Validated” describes the stated test scope, not general compatibility with all games.
 
-1. Download the latest `creamlinux.AppImage` from the [Releases](https://github.com/Novattz/creamlinux-installer/releases) page
-2. Make it executable:
-   ```bash
-   chmod +x creamlinux.AppImage
-   ```
-3. Run it:
+| Component / capability | Status | Actual scope |
+| --- | --- | --- |
+| Original Linux desktop CreamLinux GUI and Steam/Proton/Epic integrations | **Inherited; not revalidated here** | Upstream desktop code remains available. Original workflows and supported environments should be checked against upstream documentation. |
+| Steam Frame / Lepton game and package discovery | **Implemented and tested** | Inspects installed metadata through the Lepton CLI and validates relevant context identity without starting stopped games. |
+| Read-only Steam API compatibility inspector | **Implemented and device-tested** | Analyzes the installed `libsteam_api.so` and native consumers in base/split APKs. Distinguishes compatible, incompatible, and incomplete results. |
+| Native Steam Frame inspector GUI | **Implemented and device-tested** | Inspector window, analysis, evidence selection, refresh and close interactions; historical packaged UI validation covered 15/15 checks. |
+| Host-side ARM64 ELF analysis | **Implemented and tested** | Uses a privately bundled, pinned LLVM 20.1.8 reader on SteamOS; handles supported Android ELF metadata without modifying packages. |
+| Six-game static compatibility evidence | **Analyzed** | Walkabout Mini Golf, Job Simulator, VRChat, VAIL, Into Black, and Dungeons of Eternity. These are scoped ELF/APK analyses, **not** evidence of running modified games. |
+| Android ARM64 Steam API **function forwarding** | **Experimental; hardware-validated in isolated tests** | Target-specific generator and fail-closed loader. Job Simulator's synthetic/mock test surface covered **1,156/1,156 functions** and **11,156 ABI assertions**, with controlled zero-call resolution checks. This is **not** complete Steam API or CreamAPI equivalence. |
+| Generated proxy data/object exports | **Not implemented** | In particular, Job Simulator's provider exposes **209 non-function symbols** outside the current function-only approach. |
+| Frozen ARM64 SDK, pinned toolchains, source/artifact provenance | **Implemented** | Locked SDK, LLVM/runtime and controller inputs, manifests, integrity checks and non-publishing release tooling. |
+| GitHub-hosted Python, Rust and rendering tests | **Passing** | [Verified test run](https://github.com/mitch030504/creamlinux-installer/actions/runs/37906375947). Test results do not prove completed release packaging or device behavior for a new artifact. |
+| Full GitHub-hosted ARM64 AppImage assembly | **In progress** | Compilation/packaging infrastructure is being repaired and measured. [Workflow runs](https://github.com/mitch030504/creamlinux-installer/actions/workflows/steam-frame-release.yml) show the current status. |
+| Steam Frame installer, live game integration, CreamAPI port, DLC management | **Not implemented for Lepton** | No supported install/uninstall or activation flow; existing inspector actions remain read-only. |
+| Production signing, public Frame releases and automatic updates | **Not available** | No production signing key or published Frame artifact. Legacy desktop release actions must not be used as Frame releases. |
 
-   ```bash
-   ./creamlinux.AppImage
-   ```
+### Important distinction: SteamOS host vs. Lepton Android
 
-   For Nvidia users use this command:
+The inspector is a **Linux ARM64 application on the Steam Frame's SteamOS host**. It queries and reads information from games managed by **Lepton**, which provides an Android environment. It does not mean the Linux CreamLinux desktop application or CreamAPI has been ported to Android/Bionic.
 
-   ```
-   WEBKIT_DISABLE_DMABUF_RENDERER=1 ./creamlinux.AppImage
-   ```
+The **Android ARM64 proxy generator** is a separate compatibility experiment. It forwards supported native functions to the original provider in controlled tests; it neither reproduces arbitrary ELF data-symbol semantics nor establishes reliable gameplay integration or Steam entitlement behavior.
 
-### Nix
-You can add this package to your configuration using `pkgs.fetchFromGitHub`:
-```nix
-let
-  creamlinux = import (pkgs.fetchFromGitHub {
-    owner = "Novattz";
-    repo = "creamlinux-installer";
-    rev = "main"; # replace with a commit hash to pin the version
-    hash = ""; # paste the value returned by the error your rebuild will output
-  }) { inherit pkgs; };
-in
-{
-  environment.systemPackages = [ creamlinux ];
-}
-```
-or, using `builtins.fetchTarball`:
-```nix
-let
-  creamlinux = import (builtins.fetchTarball {
-    url = "https://github.com/Novattz/creamlinux-installer/archive/main.tar.gz";
-    sha256 = ""; # See above
-  }) { inherit pkgs; };
-in
-{
-  environment.systemPackages = [ creamlinux ];
-}
-```
-alternatively and if you want to pin the package version, using [npins](https://github.com/andir/npins):
-```bash
-npins add github Novattz creamlinux-installer --branch main
-```
-```nix
-let
-  sources = import ./npins;
-in
-{
-  environment.systemPackages = [
-    (import sources.creamlinux-installer { inherit pkgs; })
-  ];
-}
-```
-Those are the recommended methods to add creamlinux-installer to your environment. However, you could also add it as an input of your flake, like so:
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    creamlinux-installer = {
-      type = "github";
-      owner = "Novattz";
-      repo = "creamlinux-installer";
-      flake = false;
-    };
-  };
-}
-```
-Then, in your configuration:
-```nix
-environment.systemPackages = [
-  (import inputs.creamlinux-installer { inherit pkgs; })
-];
-```
-Similarly to running the AppImage, you will need to set `WEBKIT_DISABLE_DMABUF_RENDERER=1` if your GPU is from Nvidia in order to run the package.
+A result such as **“Compatible for observed static consumers”** is limited to the inspected files and identified symbols. It is not a promise that a game will run with a proxy installed. In the documented captures, Walkabout meets that limited criterion for the fixed proxy; Job Simulator does not.
 
-### Building from Source
+## What is not included / not yet supported?
 
-#### Prerequisites
+- **No full CreamLinux or CreamAPI functionality on Steam Frame.** The upstream desktop capabilities must not be confused with Frame compatibility.
+- **No installed-game patching, injection, or replacement** of Steam API libraries. Real production Lepton game contexts and their files are not altered by the inspector workflow.
+- **No complete ABI parity.** Function forwarding alone does not preserve data-object identity, every linker-visible export, all dynamic lookup behavior, or arbitrary application runtime requirements.
+- **No broad game compatibility guarantee.** Six-game static analysis and isolated mock/forwarding validation do not replace live end-to-end game testing.
+- **No consumer-ready Frame installation package or public download.** Existing Frame build outputs are validation artifacts, not supported upstream releases.
+- **No claim of a current clean security audit.** See the dependency/security review for outstanding advisories and release gates.
+- **No proprietary APKs, game binaries, entitlement material, production signing credentials or private game captures** are distributed in this repository.
 
-- Rust 1.77.2 or later
-- Node.js 18 or later
-- webkit2gtk-4.1 (libwebkit2gtk-4.1 for debian)
-- npm or yarn
+## Roadmap / TODO
 
-#### Steps
+This is a working roadmap, not a promised release schedule. Tasks require separate evidence and review before they are marked complete.
 
-1. Clone the repository:
+### A. Stabilize the inspector release
 
-   ```bash
-   git clone https://github.com/Novattz/creamlinux-installer.git
-   cd creamlinux-installer
-   ```
+- [x] Implement read-only Lepton discovery, analyzer and inspector UI.
+- [x] Validate the inspector and controlled forwarding experiments on real Steam Frame hardware.
+- [x] Establish pinned LLVM 20.1.8 tooling and frozen ARM64 build/test inputs.
+- [x] Obtain a successful hosted Python/Rust/rendering test run.
+- [ ] Finish a **successful end-to-end hosted ARM64 AppImage build** on the exact test branch revision.
+- [ ] Verify the produced artifact, AppDir inventory, hashes and source provenance.
+- [ ] Repeat the build and demonstrate reproducibility for that **exact** source/toolchain combination.
+- [ ] Perform an exact-artifact Steam Frame smoke test for the new hosted build.
+- [ ] Resolve the development PR's workflow-registration merge conflict before any considered merge.
 
-2. Install dependencies:
+### B. Feature parity and ARM64 compatibility research
 
-   ```bash
-   npm install # or yarn
-   ```
+- [ ] Create a complete upstream **CreamLinux/CreamAPI/SmokeAPI/ScreamAPI feature inventory** and mark each item implemented, partial, unsupported or unverified on Steam Frame.
+- [ ] Investigate the architectural requirements and feasibility of an **ARM64/Bionic CreamAPI port**, including compatibility with Lepton and the original Steamworks interfaces.
+- [ ] Resolve required non-function exports, data-symbol identity, versioning, symbol visibility, loading order and Android linker-namespace differences.
+- [ ] Extend target-specific function forwarding beyond isolated fixtures only after demonstrating the exact target ABI and loader behavior.
+- [ ] Build explicit per-game compatibility and evidence reports, including split APKs and runtime-generated consumers.
+- [ ] Define safe, explicit opt-in integration, verification, backup and rollback requirements; **do not assume live game modification is supported**.
+- [ ] Investigate whether and how upstream desktop features can be adapted to Steam Frame while respecting licensing and platform constraints.
 
-3. Build the application:
+### C. User experience and hardware testing
 
-   ```bash
-   NO_STRIP=true npm run tauri build
-   ```
+- [ ] Add a user-friendly launcher/game selector so users do not need to supply an AppID manually.
+- [ ] Improve inspector feedback for missing contexts, incomplete APK scans, incompatible providers and stale evidence.
+- [ ] Validate additional game versions, devices and SteamOS/Lepton updates.
+- [ ] Add regression coverage for any new integration behavior and collect exact-artifact device results.
+- [ ] Design and validate any future installation/rollback UI independently of the read-only inspector.
 
-4. The compiled binary will be available in `src-tauri/target/release/creamlinux`
+### D. Security, distribution and maintenance
 
-### Desktop Integration
+- [ ] Reassess outstanding project/SDK dependency advisories before public distribution.
+- [ ] Finish non-publishing CI release verification and documented resource/runner requirements.
+- [ ] Audit the complete Frame-specific package contents, permissions and update behavior.
+- [ ] Establish a separately approved signing identity and distribution process if a public inspector release is planned.
+- [ ] Maintain upstream credit, license compliance, technical documentation and release notes.
 
-If you're using the AppImage version, you can integrate it into your desktop environment:
+## Try the development branch (developers)
 
-1. Create a desktop entry file:
-
-   ```bash
-   mkdir -p ~/.local/share/applications
-   ```
-
-2. Create `~/.local/share/applications/creamlinux.desktop` with the following content (adjust the path to your AppImage):
-
-   ```
-   [Desktop Entry]
-   Name=Creamlinux
-   Exec=/absolute/path/to/CreamLinux.AppImage
-   Icon=/absolute/path/to/creamlinux-icon.png
-   Type=Application
-   Categories=Game;Utility;
-   Comment=DLC Manager for Steam games on Linux
-   ```
-
-3. Update your desktop database so creamlinux appears in your app launcher:
+Clone the branch containing the Steam Frame code:
 
 ```bash
-update-desktop-database ~/.local/share/applications
+git clone --branch test/steam-frame-inspector-security-ci --single-branch \
+  https://github.com/mitch030504/creamlinux-installer.git
+cd creamlinux-installer
 ```
 
-## Troubleshooting
+**Do not run the old desktop installation instructions expecting a Lepton-capable CreamAPI installer.** Follow the branch's [Steam Frame release guide](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/STEAM_FRAME_RELEASE.md) for exact pinned prerequisites and build procedures.
 
-### Common Issues
+The purpose-built inspector AppImage, **when built and deployed onto a compatible Steam Frame host**, uses explicit read-only launch modes:
 
-- **Game doesn't load**: Make sure the launch options are correctly set in Steam
-- **DLCs not showing up**: Try refreshing the game list and reinstalling
-- **Cannot find Steam**: Ensure Steam is installed and you've launched it at least once
+```bash
+./Creamlinux_1.7.1_steam-frame-inspector_aarch64.AppImage --lepton-release-info
+./Creamlinux_1.7.1_steam-frame-inspector_aarch64.AppImage --lepton-inspector 448280
+./Creamlinux_1.7.1_steam-frame-inspector_aarch64.AppImage --lepton-compatibility 448280
+```
 
-### Debug Logs
+The filename is an example of the documented local validation artifact, **not a download link or a guarantee that this exact binary is published**. AppIDs must correspond to games available to the inspector. Argumentless execution of the Frame-specific application deliberately rejects legacy startup.
 
-Logs are stored at: `~/.cache/creamlinux/creamlinux.log`
+## Technical documentation
 
-Found a bug? Please report it on the [GitHub Issues page](https://github.com/Novattz/creamlinux-installer/issues).
+The following files live on the **development branch**:
 
-## License
+| Document | Subject |
+| --- | --- |
+| [Steam Frame release workflow](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/STEAM_FRAME_RELEASE.md) | Build controller, frozen ARM64 SDK, AppImage output, smoke validation and release limitations |
+| [CI and security architecture](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/STEAM_FRAME_CI.md) | Non-publishing workflows, pinned inputs, provenance and diagnostic boundaries |
+| [Security review](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/STEAM_FRAME_SECURITY_REVIEW.md) | Dependency advisories, mitigations and outstanding release risks |
+| [Inspector integration](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/tools/android-steam-proxy/INSPECTOR_INTEGRATION.md) | Native packaged inspector GUI/backend results and limitations |
+| [Proxy validation status](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/tools/android-steam-proxy/VALIDATION_STATUS.md) | Target-specific function coverage, Bionic tests, six-game analysis and gaps |
+| [LLVM runtime](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/tools/android-steam-proxy/LLVM_RUNTIME.md) | ARM64 private LLVM reader, dependencies, native measurements |
+| [Android forwarding research](https://github.com/mitch030504/creamlinux-installer/blob/test/steam-frame-inspector-security-ci/tools/android-steam-proxy/README.md) | Detailed standalone proxy design, ABI verification and experimental boundaries |
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+## Original CreamLinux desktop project
 
-## Credits
+This fork preserves code originating from [Novattz/creamlinux-installer](https://github.com/Novattz/creamlinux-installer). Upstream describes a Linux desktop GUI for managing Steam DLC-related configurations with CreamAPI, SmokeAPI (Proton) and ScreamAPI (Epic/Heroic/Legendary), alongside game discovery and a Tauri/React interface.
 
-- [Creamlinux](https://github.com/anticitizn/creamlinux) - Native support
-- [SmokeAPI](https://github.com/acidicoala/SmokeAPI) - Proton support
-- [Tauri](https://tauri.app/) - Framework for building the desktop application
-- [React](https://reactjs.org/) - UI library
+See the **[upstream README](https://github.com/Novattz/creamlinux-installer#readme)** for the original desktop installation, Nix, builds, usage and troubleshooting instructions. **Those instructions describe the original desktop software, not a finished Lepton/Steam Frame port.** This fork does not guarantee that upstream behaviors have been independently tested or adapted to ARM64.
+
+## License, attribution and contributions
+
+See [LICENSE.md](LICENSE.md) for the repository license and preserve the notices applicable to upstream and included third-party components. Original CreamLinux, the referenced API projects, [Tauri](https://tauri.app/) and [React](https://react.dev/) remain credited to their respective authors.
+
+For Frame-specific bugs or improvements, use [this fork's issues](https://github.com/mitch030504/creamlinux-installer/issues) and include the branch/commit, SteamOS and Lepton versions, exact CLI mode and a redacted diagnostic report. Never upload proprietary game files, private captures, or credentials.
+
+**Valve, Steam, SteamOS, Steam Frame, Lepton and the referenced games belong to their respective owners. This project is an unofficial experiment and is not affiliated with or endorsed by Valve.**
