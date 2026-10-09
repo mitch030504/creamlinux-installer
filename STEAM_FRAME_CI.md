@@ -66,6 +66,17 @@ file contents against the pinned archive. A fresh controller extraction is teste
 with the actual API-21 ARM64 compiler. Ordinary ZIP extraction loses compiler
 symlinks and must not replace this implementation.
 
+The same lock pins a **separate x86_64 LLVM 20.1.8 controller reader** from
+apt.llvm.org's Noble packages. `prepare-llvm-reader.py` verifies exact package
+sizes and SHA256s, reuses `build_llvm_runtime.py`'s selected-member extractor and
+private-library launcher, and retains both package copyright files. Only
+`llvm-readobj` and `libLLVM.so.20.1` are selected; no LLVM package is installed.
+Ubuntu 24.04 provides libedit2, libtinfo6, libxml2 and their runtime dependencies.
+This controller bundle is not the ARM64 runtime shipped in the AppImage, whose
+pins remain unchanged. Both package sets use `data.tar.zst`: the shared extractor
+decodes verified bytes with the controller's `zstd` before selecting tar members,
+so it works with hosted Python 3.12 as well as newer Python versions.
+
 Strict mode executes only the approved /opt Node/Rust paths without home-bin
 wrappers or login startup files, rejects compiler/Node/loader/shell override
 variables, and records development override names without values. Malformed
@@ -114,7 +125,8 @@ Hosted disk/runtime limits may require a provisioned x86_64 self-hosted runner
 with ample free disk (recommend 30 GB) and Docker. No such runner is assumed to
 exist. The assembled SDK is deliberately large; no unrelated host caches are
 silently deleted to make room. Fresh-container local integration is the acceptance
-proof; hosted workflows cannot be executed without pushing these definitions.
+proof. The first hosted PR run exposed controller-reader and test-environment
+issues described below; a successful hosted rerun is still required.
 
 All new action references use actual resolved commit SHAs with version comments.
 No pull_request_target, release publication, signing secret, mutable action ref,
@@ -123,6 +135,68 @@ jobs receive contents:read only. Signing rehearsal receives actions:read solely
 to retrieve a selected run; downloaded artifact contents are never executed.
 The build executes source with Docker access on an ephemeral runner; do not give
 these jobs a persistent sensitive self-hosted machine or signing credentials.
+
+## Troubleshooting the first hosted test failure
+
+[Run 37818104779](https://github.com/mitch030504/creamlinux-installer/actions/runs/37818104779)
+executed 285 Python tests with 60 failures, 39 errors and two skips. The Ubuntu
+`llvm` metapackage selected LLVM 18, whose JSON representation does not satisfy
+the analyzer: a real AArch64 shared library produces malformed JSON with the
+scanner's combined options, and the sectionless protocol probe lacks
+`DynamicSection`. Exit 0 from the reader alone does not establish compatibility.
+Rendering and Rust steps were not reached. GNU readelf is not a substitute.
+
+Both Frame workflows now prepare the checksum-pinned x86_64 reader into a fresh
+RUNNER_TEMP prefix, then append its **bin directory to GITHUB_PATH**. This
+prepends it to subsequent steps' PATH, covering `shutil.which('llvm-readelf')`,
+literal command names and analyzer CLI subprocesses. An environment override
+alone would miss tests that discover or invoke the reader directly. Existing
+explicit-missing-reader and invalid-reader tests still exercise real failures;
+there is no fallback that turns those failures into successful inspection.
+
+Preparation probes the selected executable before publishing the prefix. A
+separate preflight step then checks the **actual PATH executable** before the
+Python suite: exact LLVM 20.1.8 version, real compiler-produced AArch64 provider
+exports (GLOBAL/WEAK/functions/object/SONAME) and consumer evidence
+(DT_NEEDED/imports/Android packed relocations) using the existing scanner. A
+version mismatch, malformed/missing JSON fields, absent host library/compiler,
+checksum mismatch or failed evidence probe stops the workflow. Neither fixture
+is executed or loaded; no Steam API functions are called.
+
+For a Ubuntu 24.04 controller, the equivalent diagnostic preparation is:
+
+```bash
+# Requires clang, lld, binutils, zstd, libedit2, libtinfo6 and libxml2.
+llvm_bin="$(python3 scripts/release/prepare-llvm-reader.py /tmp/frame-llvm-reader \
+  --cache /tmp/frame-llvm-packages)"
+export PATH="$llvm_bin:$PATH"
+python3 scripts/release/prepare-llvm-reader.py --preflight-only
+python3 -m unittest discover -s tools/android-steam-proxy/tests -p 'test_*.py'
+```
+
+Choose a fresh output directory; existing output is refused. Downloads are
+HTTPS plus locked size/SHA256, not a moving package install. Preparation failures
+return exit 2 on stderr without a traceback or a successful-looking prefix.
+Keep NDK/reader shell assignments separate from `echo`, so preparation errors
+propagate instead of being masked by a successful echo command.
+
+The same failed run also exposed synthetic artifact tests inheriting
+`GITHUB_ACTIONS=true`/`GITHUB_SHA`. Their fixture source is intentionally not the
+workflow commit. Only those unit fixtures now isolate the inherited flag; tests
+explicitly opt into hosted behavior to verify matching commit/snapshot acceptance
+and wrong commit/checkout rejection. The production provenance guards are unchanged.
+
+Local validation in a fresh **x86_64 Ubuntu 24.04 / Python 3.12** container with
+the prepared reader and hosted-style environment ran 326 tests: 326 passed,
+zero failures/errors/skips with the two private captures available. The second
+run without captures ran 326 tests: **324 passed, two `local capture unavailable`
+skips, zero failures/errors**; those proprietary captures are not uploaded or
+provisioned in CI. Pinned ARM64 SDK validation passed 8 rendering tests, the
+frontend production build and 53 Rust tests in each of the Frame/default feature
+modes. Actionlint 1.7.7 across all five workflows and whitespace checks passed.
+Fresh-download and cached x86_64 reader payload hashes match, and building the
+ARM64 runtime under Python 3.12 retains its previously validated manifest/hashes.
+These local results do not claim a successful hosted rerun.
 
 ## Provenance, captures and hardware
 

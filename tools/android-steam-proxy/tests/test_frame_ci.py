@@ -75,6 +75,10 @@ class FrozenSdkTests(unittest.TestCase):
 
 class CiArtifactTests(unittest.TestCase):
     def setUp(self):
+        # Synthetic artifacts must not inherit the hosted runner's real commit.
+        # Tests of the CI guards below explicitly opt back into hosted behavior.
+        environment = patch.dict(os.environ, {'GITHUB_ACTIONS': 'false'})
+        environment.start(); self.addCleanup(environment.stop)
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name);self.artifact=self.root/'Test_aarch64.AppImage';self.artifact.write_bytes(b'unit artifact')
         self.report={'status':'passed','artifact_filename':self.artifact.name,'artifact_sha256':sha256(self.artifact),'artifact_size_bytes':self.artifact.stat().st_size,
@@ -101,6 +105,14 @@ class CiArtifactTests(unittest.TestCase):
     def test_wrong_ci_commit_rejected(self):
         with patch.dict(os.environ,{'GITHUB_ACTIONS':'true','GITHUB_SHA':'different'}):
             with self.assertRaisesRegex(ValueError,'workflow commit'):ci.verify(self.root)
+    def test_matching_ci_commit_and_checkout_accepted(self):
+        with patch.dict(os.environ, {'GITHUB_ACTIONS':'true', 'GITHUB_SHA':'commit'}), \
+                patch('frame_release_utils.source_identity', return_value=self.report['source']):
+            self.assertEqual(ci.verify(self.root)['source']['head'], 'commit')
+    def test_matching_ci_commit_with_different_checkout_rejected(self):
+        with patch.dict(os.environ, {'GITHUB_ACTIONS':'true', 'GITHUB_SHA':'commit'}), \
+                patch('frame_release_utils.source_identity', return_value={'snapshot_sha256':'different'}):
+            with self.assertRaisesRegex(ValueError,'exact checkout'):ci.verify(self.root)
     def test_capture_status_cannot_inherit_pass(self):
         self.report['captured_game_regressions']['performed']=True;self.save()
         with self.assertRaisesRegex(ValueError,'fixture status'):ci.verify(self.root)

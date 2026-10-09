@@ -99,6 +99,29 @@ class RuntimeTests(unittest.TestCase):
             self.build()
         self.assertFalse(self.output.exists())
 
+    def test_zstd_payload_is_decoded_before_selected_member_scan(self):
+        data = io.BytesIO()
+        with tarfile.open(fileobj=data, mode='w') as archive:
+            member = tarfile.TarInfo('./selected'); member.size = 7
+            archive.addfile(member, io.BytesIO(b'payload'))
+            member = tarfile.TarInfo('./unselected'); member.size = 6
+            archive.addfile(member, io.BytesIO(b'ignore'))
+        with mock.patch.object(runtime.shutil, 'which', return_value='/usr/bin/zstd'), \
+                mock.patch.object(runtime.subprocess, 'run', side_effect=[
+                    mock.Mock(stdout='data.tar.zst\n'), mock.Mock(stdout=b'compressed'),
+                    mock.Mock(stdout=data.getvalue())]) as run:
+            self.assertEqual(runtime.payload(self.root/'fixture.deb', {'./selected':'safe'}),
+                             {'./selected':b'payload'})
+        self.assertEqual(run.call_args.args[0], ['zstd', '--decompress', '--stdout', '-M256MB'])
+        self.assertEqual(run.call_args.kwargs['input'], b'compressed')
+
+    def test_missing_zstd_fails_clearly_on_python_without_zstd_tar_support(self):
+        with mock.patch.object(runtime.shutil, 'which', return_value=None), \
+                mock.patch.object(runtime.subprocess, 'run', side_effect=[
+                    mock.Mock(stdout='data.tar.zst\n'), mock.Mock(stdout=b'compressed')]):
+            with self.assertRaisesRegex(ValueError, 'zstd is required'):
+                runtime.payload(self.root/'fixture.deb', {'./selected':'safe'})
+
     def test_installed_game_root_and_descendants_are_rejected(self):
         for output in ('/data/app', '/data/app/reader'):
             with self.subTest(output=output), self.assertRaisesRegex(ValueError, 'installed games'):

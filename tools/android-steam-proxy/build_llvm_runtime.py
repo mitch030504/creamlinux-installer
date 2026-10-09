@@ -9,6 +9,7 @@ import hashlib
 import io
 import json
 import pathlib
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -54,6 +55,13 @@ def payload(path, selection):
         raise ValueError('expected exactly one Debian data archive')
     raw = subprocess.run(['ar', 'p', str(path), archives[0]], check=True,
                          capture_output=True, timeout=60).stdout
+    # Python 3.12 on hosted Ubuntu cannot open data.tar.zst directly. Decode
+    # verified package bytes only; tar member selection remains unchanged.
+    if archives[0].endswith('.zst'):
+        if not shutil.which('zstd'):
+            raise ValueError('zstd is required to read pinned LLVM Debian payloads')
+        raw = subprocess.run(['zstd', '--decompress', '--stdout', '-M256MB'],
+                             input=raw, check=True, capture_output=True, timeout=60).stdout
     result = {}
     with tarfile.open(fileobj=io.BytesIO(raw)) as archive:
         for member in archive:

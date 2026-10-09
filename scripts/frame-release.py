@@ -110,7 +110,7 @@ class Builder:
     def preflight(self):
         if platform.machine() != 'x86_64':
             raise ValueError('This workflow requires an x86_64 controller for pinned appimagetool/NDK; use a documented x86_64 build host')
-        for name in ['python3', 'docker', 'git', 'ar', 'patch', 'clang', 'ld.lld', 'llvm-readelf', 'readelf']:
+        for name in ['python3', 'docker', 'git', 'ar', 'patch', 'zstd', 'clang', 'ld.lld', 'llvm-readelf', 'readelf']:
             if not shutil.which(name):
                 raise ValueError(f'Missing required host tool {name}; install documented controller prerequisites before building')
         if sys.version_info < (3,11):

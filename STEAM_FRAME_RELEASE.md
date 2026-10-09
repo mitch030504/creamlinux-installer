@@ -12,11 +12,16 @@ Security review and residual dependency risks: [STEAM_FRAME_SECURITY_REVIEW.md](
 ## Build controller and external dependencies
 
 Use an x86_64 Linux controller with Python 3.11+, Git, Docker access, binutils
-(`ar`, `readelf`), `patch`, LLVM (`clang`, `ld.lld`, JSON-capable `llvm-readelf`),
+(`ar`, `readelf`), `patch`, `zstd`, LLVM (`clang`, `ld.lld`, JSON-capable `llvm-readelf`),
 and the Android NDK at `ANDROID_NDK_HOME` (tested `/opt/android-ndk`, r30).
 The NDK and host LLVM are required by the complete proxy regression gate, not
 by the shipped inspector. Docker must execute ARM64 containers through working
 QEMU/binfmt. Install/configure those **on the build controller**, never SteamOS.
+CI pins the controller reader to LLVM 20.1.8 and probes actual JSON evidence
+before the test gate. Ubuntu's default LLVM 18 is incompatible; use
+`scripts/release/prepare-llvm-reader.py` on Ubuntu 24.04 as documented in
+[STEAM_FRAME_CI.md](STEAM_FRAME_CI.md#troubleshooting-the-first-hosted-test-failure).
+The shipped private ARM64 reader is separate and retains its existing package pins.
 
 **Historical provisioning reference:** prefer the frozen SDK in STEAM_FRAME_CI.md.
 Provide an ARM64 Ubuntu 24.04 build container with this live repository mounted

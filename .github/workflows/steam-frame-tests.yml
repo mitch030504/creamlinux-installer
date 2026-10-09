@@ -33,8 +33,15 @@ jobs:
       - name: Controller test dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang lld llvm libgtk-3-dev libwebkit2gtk-4.1-dev libssl-dev librsvg2-dev
-          echo "ANDROID_NDK_HOME=$(python3 scripts/release/prepare-controller.py "$RUNNER_TEMP/ndk")" >> "$GITHUB_ENV"
+          sudo apt-get install -y clang lld binutils zstd libedit2 libtinfo6 libxml2 libgtk-3-dev libwebkit2gtk-4.1-dev libssl-dev librsvg2-dev
+          ndk_home="$(python3 scripts/release/prepare-controller.py "$RUNNER_TEMP/ndk")"
+          echo "ANDROID_NDK_HOME=$ndk_home" >> "$GITHUB_ENV"
+      - name: Prepare checksum-pinned LLVM 20.1.8 reader (no package installation)
+        run: |
+          llvm_bin="$(python3 scripts/release/prepare-llvm-reader.py "$RUNNER_TEMP/frame-llvm" --cache "$RUNNER_TEMP/frame-llvm-packages")"
+          echo "$llvm_bin" >> "$GITHUB_PATH"
+      - name: Preflight PATH reader version and representative LLVM JSON
+        run: python3 scripts/release/prepare-llvm-reader.py --preflight-only --report "$RUNNER_TEMP/frame-llvm-preflight.json"
       - run: python3 -m unittest discover -s tools/android-steam-proxy/tests -p 'test_*.py'
       - run: npm ci && npm run test:lepton-ui
       - run: cargo test --locked --manifest-path src-tauri/Cargo.toml --features frame-inspector-only

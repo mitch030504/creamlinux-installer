@@ -37,8 +37,15 @@ jobs:
       - name: Provision x86 controller (no signing credentials)
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang lld llvm binutils patch
-          echo "ANDROID_NDK_HOME=$(python3 scripts/release/prepare-controller.py "$RUNNER_TEMP/ndk")" >> "$GITHUB_ENV"
+          sudo apt-get install -y clang lld binutils patch zstd libedit2 libtinfo6 libxml2
+          ndk_home="$(python3 scripts/release/prepare-controller.py "$RUNNER_TEMP/ndk")"
+          echo "ANDROID_NDK_HOME=$ndk_home" >> "$GITHUB_ENV"
+      - name: Prepare checksum-pinned LLVM 20.1.8 reader (no package installation)
+        run: |
+          llvm_bin="$(python3 scripts/release/prepare-llvm-reader.py "$RUNNER_TEMP/frame-llvm" --cache "$RUNNER_TEMP/frame-llvm-packages")"
+          echo "$llvm_bin" >> "$GITHUB_PATH"
+      - name: Preflight PATH reader version and representative LLVM JSON
+        run: python3 scripts/release/prepare-llvm-reader.py --preflight-only --report "$RUNNER_TEMP/frame-llvm-preflight.json"
       - name: Provision ARM64 emulation (privilege isolated here)
         run: docker run --rm --privileged tonistiigi/binfmt@sha256:400a4873b838d1b89194d982c45e5fb3cda4593fbfd7e08a02e76b03b21166f0 --install arm64
       - name: Build approved SDK and fresh container

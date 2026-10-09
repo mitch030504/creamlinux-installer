@@ -1,4 +1,29 @@
 {
+  "llvm_reader": {
+    "version": "20.1.8",
+    "architecture": "x86_64",
+    "package_version": "20.1.8~++20250804090239+87f0227cb601-1~exp1~20250804210352.139",
+    "packages": {
+      "llvm-20": {
+        "url": "https://apt.llvm.org/noble/pool/main/l/llvm-toolchain-20/llvm-20_20.1.8~++20250804090239+87f0227cb601-1~exp1~20250804210352.139_amd64.deb",
+        "sha256": "48911311c972fa02d2d20978d0f7b8360f1681fbd0308560bdc06632583e60e5",
+        "size_bytes": 19777670,
+        "members": {
+          "./usr/lib/llvm-20/bin/llvm-readobj": "libexec/llvm-readobj",
+          "./usr/share/doc/llvm-20/copyright": "licenses/llvm-20-copyright"
+        }
+      },
+      "libllvm20": {
+        "url": "https://apt.llvm.org/noble/pool/main/l/llvm-toolchain-20/libllvm20_20.1.8~++20250804090239+87f0227cb601-1~exp1~20250804210352.139_amd64.deb",
+        "sha256": "d9be126777d635a040d1b3627dd14b04dc10573c46fd8d00b3a7632e5de0d0fc",
+        "size_bytes": 30574282,
+        "members": {
+          "./usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": "lib/libLLVM.so.20.1",
+          "./usr/share/doc/libllvm20/copyright": "licenses/libllvm20-copyright"
+        }
+      }
+    }
+  },
   "ndk": {
     "version": "30.0.16248370",
     "url": "https://dl.google.com/android/repository/android-ndk-r30-linux.zip",
