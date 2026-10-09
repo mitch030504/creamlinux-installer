@@ -1,5 +1,14 @@
 # CreamLinux — Steam Frame / Lepton fork
 
+> [!IMPORTANT]
+> **AI-assisted development notice**
+>
+> The Steam Frame/Lepton work in this fork has been developed with substantial assistance from AI tools, including **OpenAI Codex and ChatGPT**. AI has been used for code generation and modification, architecture research, debugging, test development, CI configuration, and documentation.
+>
+> **AI-generated or AI-assisted contributions may contain mistakes, security weaknesses, or unverified assumptions.** Passing automated tests or selected Steam Frame hardware checks does not constitute a complete security audit or guarantee functionality. Review the source, validate important behavior independently, and use experimental builds at your own risk.
+>
+> This disclosure applies to **work carried out in this fork**; it does not imply that the original upstream CreamLinux project was AI-generated.
+
 > **Experimental, unofficial fork. Not a complete CreamLinux port for Steam Frame.**
 >
 > This fork extends [Novattz/CreamLinux](https://github.com/Novattz/creamlinux-installer) with research and tooling for Valve's **Steam Frame**, **SteamOS (Linux ARM64)**, and the **Lepton Android compatibility environment**. The Steam Frame-specific application currently operates as a **read-only compatibility inspector**. It does **not** install CreamAPI into Lepton games, enable DLC, replace a game's Steam API, or provide feature parity with the original Linux desktop installer.
