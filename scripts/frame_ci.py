@@ -21,6 +21,8 @@ def provenance(report, output):
             'ci':report.get('ci',{}),'builder':report.get('builder_identity',{}),
             **({'unsafe_runtime_override_names':report['unsafe_runtime_override_names']} if 'unsafe_runtime_override_names' in report else {}),
             'tools':report.get('tool_versions',{}),'cargo_environment':report.get('cargo_environment',{}),
+            **({'native_compilation':report['native_compilation']} if 'native_compilation' in report else {}),
+            **({'timeout_policy_seconds':report['timeout_policy_seconds']} if 'timeout_policy_seconds' in report else {}),
             'controller_pins':report.get('pinned_controller_inputs',{}),'dependency_pins':report.get('pinned_build_tools',{}),
             'llvm_runtime':report.get('llvm_runtime',{}),'source_date_epoch':report.get('source_date_epoch'),
             'appdir_inventory_sha256':sha256(output/'appdir-inventory.json') if (output/'appdir-inventory.json').is_file() else None,

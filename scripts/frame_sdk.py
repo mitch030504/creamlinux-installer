@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import sys
 from frame_release_utils import ROOT, sha256, write_json
+from frame_process import run
 
 SDK = ROOT/'docker/steam-frame-release'
 SDK_FILES = ('.dockerignore','Dockerfile','provision.py','ubuntu.sources','packages.tsv','sdk-lock.json')
@@ -46,10 +47,12 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--image',default='creamlinux-frame-sdk:locked')
     p.add_argument('--add-host',action='append',default=[],help='Isolated Docker build DNS override, never a global network change')
+    p.add_argument('--timeout',type=int,default=1800,help='SDK build deadline in seconds (1..21600)')
     a=p.parse_args()
+    if not 1<=a.timeout<=21600:p.error('--timeout must be between 1 and 21600 seconds')
     cmd=['docker','build','--platform','linux/arm64','--build-arg','SDK_SOURCE_SHA256='+source_hash(),'-t',a.image]
     for host in a.add_host: cmd+=['--add-host',host]
-    subprocess.run(cmd+[str(SDK)],check=True)
+    run(cmd+[str(SDK)],ROOT,timeout=a.timeout,passthrough=True)
     image=json.loads(subprocess.check_output(['docker','image','inspect',a.image]))[0]
     print(json.dumps({'image_id':image['Id'],'repo_digests':image['RepoDigests'],'sdk_source_sha256':source_hash()},indent=2))
 

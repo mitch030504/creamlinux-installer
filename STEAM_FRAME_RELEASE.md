@@ -96,8 +96,22 @@ Missing prerequisites require provisioning before retrying.
 | `--artifact-name` | `FRAME_RELEASE_NAME` | Safe basename ending `_aarch64.AppImage` |
 | `--source-date-epoch` | `SOURCE_DATE_EPOCH`, otherwise HEAD commit time | AppDir/SquashFS timestamps |
 | `--prepare-tools` | Off | Fetch missing pinned inputs at build time |
+| `--compile-only` | Off | Canonical ARM64 SDK compilation/Rust/rendering handoff; no AppImage success claim |
+| `--compiled-input` | Off | Verify same-source frozen-SDK compilation before x86_64 packaging |
+| `--tool-timeout` | `FRAME_TOOL_TIMEOUT=600` | Short tool/preflight budget in seconds |
+| `--test-timeout` | `FRAME_TEST_TIMEOUT=3600` | Total test/capture-stage budget in seconds |
+| `--build-timeout` | `FRAME_BUILD_TIMEOUT=7200` | Total Tauri compilation/import budget in seconds |
+| `--package-timeout` | `FRAME_PACKAGE_TIMEOUT=1800` | AppDir and static-validation stage budgets in seconds |
+| `--heartbeat-seconds` | `FRAME_HEARTBEAT_SECONDS=60` | Resource/progress reporting interval |
+| `--build-jobs` | `FRAME_BUILD_JOBS=2` | Bounded Cargo parallelism (1..64) |
 | `--smoke` | Off | Test exact new AppImage on Frame |
 | `--ssh-target` | `FRAME_SSH_TARGET` | Optional Frame SSH user/host |
+
+Timeout/heartbeat values must be 1..21600 seconds; invalid configuration fails
+before building. The old 1800-second blanket command limit no longer applies.
+Long native compilation and x86_64 packaging jobs share the canonical script,
+frozen SDK and source lock; see STEAM_FRAME_CI.md for the handoff checks and
+diagnostics. Required test and runtime checks remain gates in both modes.
 | `--ssh-control` | `FRAME_SSH_CONTROL` | Existing authenticated SSH control socket |
 | `--smoke-fixtures` | `FRAME_SMOKE_FIXTURES`, default previous validation archive | Generated proxy/bundle/log evidence, never original games |
 

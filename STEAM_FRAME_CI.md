@@ -111,12 +111,28 @@ available. Never edit a checksum merely to silence drift. Record new evidence.
   commit. It rejects PR producers and wrong workflows before download, validates
   artifact/provenance again, and never reads production signing variables.
 
-GitHub documents native `ubuntu-24.04-arm` runners, but the proven controller
-requires the x86_64 NDK and x86_64 appimagetool. This workflow therefore uses
-`ubuntu-24.04` with only ARM64 binfmt provisioned by an immutable tonistiigi image.
-Privilege is confined to that provisioning step, never release scripts. A native
-controller port needs separately pinned ARM64 controller/test dependencies and
-validation; it cannot be obtained simply by changing the runner label.
+The release workflow now separates compilation from the x86_64 controller:
+`ubuntu-24.04-arm` compiles and runs Rust/rendering tests natively inside the
+unchanged frozen ARM64 SDK. It invokes the canonical release script with
+`--compile-only`, prepares the existing pinned ARM64 LLVM reader, builds the
+production frontend and exports the binary plus checksummed test logs and a
+compilation manifest. No binfmt privilege is needed in this job.
+The dependent `ubuntu-24.04` job retains the pinned x86_64 NDK, reader and
+appimagetool. It invokes the same script with `--compiled-input`, runs the full
+Python gate, validates native test evidence and assembles/validates the AppImage
+in the frozen ARM64 SDK under QEMU. Privilege remains confined to the existing
+immutable binfmt provisioning step, never release scripts. Cross-compilation
+was not selected: it would add a new linker/sysroot/toolchain trust boundary.
+
+Download is restricted to this workflow run's named immutable compilation
+artifact. Before consumption, the script checks source HEAD/snapshot, version,
+epoch, Cargo environment/jobs, private reader identity, all payload checksums,
+AArch64 ELF, approved SDK definition/inventory/tool versions, clean SDK rootfs,
+nonempty passing Rust/rendering gates and zero ignored/skipped cases. In CI,
+repository/run ID/commit must match too. The final manifest and unsigned
+provenance retain the native producer, test evidence and both SDK identities.
+Compilation success is explicitly `native_compilation_only`, not an AppImage or
+hardware-validation claim. The six-game/private-capture policy is unchanged.
 CI disables test/dev debug information and incremental compilation to reduce
 disk use; these settings are forwarded and recorded, without skipping tests or
 changing release optimization. The manual runner choice also offers `steam-frame-release-x64`, which requires
@@ -197,6 +213,38 @@ modes. Actionlint 1.7.7 across all five workflows and whitespace checks passed.
 Fresh-download and cached x86_64 reader payload hashes match, and building the
 ARM64 runtime under Python 3.12 retains its previously validated manifest/hashes.
 These local results do not claim a successful hosted rerun.
+
+## Release timeout and resource diagnostics
+
+[Release run 37889969234](https://github.com/mitch030504/creamlinux-installer/actions/runs/37889969234)
+passed Python/Rust/rendering and the frozen SDK checks. The test stage took
+1,770 seconds under QEMU; release compilation was then killed by the old blanket
+1,800-second command timeout while still compiling dependencies around `ring`.
+No compiler error was demonstrated, and old logs lacked memory/CPU samples.
+Increasing that single timeout would retain the slow emulated compiler. Native
+compilation preserves the same ARM64 SDK and ABI without adding a cross linker.
+
+The canonical script has configurable tool/test/build/package budgets (defaults
+600/3600/7200/1800 seconds), validated to 1..21600. Heartbeats default to 60
+seconds and Cargo uses two build jobs by default. Native CI has a 240-minute job
+budget; packaging retains 180 minutes with shorter 900-second test and
+1800-second import budgets. SDK construction has its own configurable
+`frame_sdk.py --timeout` (1800 seconds by default). See release options below.
+Logs preserve compiler output, stage/command elapsed time, CPU/load/process
+state, RAM/swap, cgroup OOM counters and free/used disk. Process command lines
+and environment values are not logged. Diagnostics go to stderr and remain
+separate from captured JSON stdout. A synthetic slow JSON subprocess regression
+guards this separation; an early local capture run exposed the issue before CI.
+
+Each command has an owned process group. Container commands also have an
+internal deadline and private PID/start-time record; controller cancellation
+can terminate that exact group without killing unrelated container processes.
+Timeouts send TERM then KILL, reap the owned child, retain partial logs and
+record termination state. Failed stages record their elapsed time and reason.
+No required test, checksum, source lock, display-library exclusion, production
+asset/ACL check or hardware-evidence boundary is disabled by this architecture.
+Optional reproducibility rebuilds packaging from the same verified compilation
+input; independent cold compiler reproducibility needs comparison across runs.
 
 ## Provenance, captures and hardware
 
